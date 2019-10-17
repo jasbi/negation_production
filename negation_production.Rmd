@@ -47,18 +47,23 @@ output            : papaja::apa6_pdf
 
 ```{r setup, include = FALSE}
 library("papaja")
+library(devtools)
+library(childesr)
+library(tidyverse)
 ```
-
-```{r analysis-preferences}
-# Seed for random number generation
-set.seed(42)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
-```
-
-
 
 # Methods
-We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+
+```{r}
+english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
+
+english_negation <-
+  english_negation %>%
+  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
+  filter(!grepl('not yet transcribed need to fix', gloss))
+
+write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+```
 
 ## Participants
 
@@ -67,8 +72,6 @@ We report how we determined our sample size, all data exclusions (if any), all m
 ## Procedure
 
 ## Data analysis
-We used `r cite_r("r-references.bib")` for all our analyses.
-
 
 # Results
 
