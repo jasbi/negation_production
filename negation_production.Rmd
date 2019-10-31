@@ -80,11 +80,108 @@ english_negation <-
   mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
   mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 
-
-
-
 write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 ```
+
+```{r}
+undertwo_neg <- read.csv("raw_data/eng_negation_undertwo.csv")
+```
+
+```{r population}
+undertwo_neg$speaker_id %>%
+  unique() %>% length()
+```
+
+Participant information:
+1. what is the distribution of words per participant?
+2. what proportion of children in each monthly age bin produce negative morphemes?
+
+```{r construction}
+constructions <- plyr::count(undertwo_neg$part_of_speech) %>%
+  arrange(desc(freq))
+
+constructions %>%
+  filter(freq>10, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="") %>%
+  ggplot(aes(reorder(x, -freq), freq)) + 
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+filter(undertwo_neg, part_of_speech == "qn n")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "qn qn n")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "co n")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "co n:prop")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "mod v pro:per")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "qn pro:indef")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "mod")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "pro:sub mod")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "mod v")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "mod v pro:dem")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "pro:sub mod v")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "co v")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "pro:sub mod v pro:per")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "neg adv")$clean_utterances %>%
+  unique
+
+filter(undertwo_neg, part_of_speech == "co v n")$clean_utterances %>%
+  unique
+
+```
+
+```{r}
+undertwo_neg %>%
+  filter(part_of_speech!="co", part_of_speech!="co co", part_of_speech!="co co co", part_of_speech!="co co co co", part_of_speech!="co co co co co", part_of_speech!="co co co co co co", part_of_speech!="") %>%
+  group_by(part_of_speech) %>%
+  summarise(utterances = paste(clean_utterances, collapse =","))
+```
+
+```{r}
+top30 <- filter(constructions, freq>10, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="")$freq %>%
+  sum()
+
+all <- filter(constructions, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="")$freq %>%
+  sum()
+
+top30/all
+```
+
+Susan's Questions:
+Are you sure it is a quantifier or a marker of non-existence?
+Check the difference between no+N and no-more+N
+how about single "no"s?
+
+To do:
+1. cluster the most frequent categories
+2. look at the age distribution for the cluster (what about the distribution of age in communicative function: nonexistence, nondesire, imperative)
+
 
 ## Participants
 
