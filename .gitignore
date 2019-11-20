@@ -42,5 +42,6 @@ negation_production.log
 
 raw_data/english_tokens.feather
 raw_data/eng_utterances.feather
+processed_data/english_tokens_processed.feather
 
 papers/
