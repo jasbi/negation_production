@@ -53,6 +53,31 @@ library(tidyverse)
 library(tm)
 ```
 
+# Introduction
+
+Claim: Children start producing all types of English negation by age 18 months and by 36 months, they produce them at the rate parents do.
+  types of negation in English: no, sentential (not, nt), lexical (nothing, nobody, nowhere, none, un-in-de-dis-).
+  For no: higher frequency in imperatives
+  For sentential negation: ...
+  For lexical negatoin: ...
+
+* How frequent are different negative forms in children's input?
+  
+* What is the developmental trajectory of different negative forms?
+* How prevelant are different negative forms in different sentence types (imperative, declerative, interrogative)?
+
+* Do lexical negatives develop first or sentential negatives? Could one help the other?
+
+* What percentage of children at each age produce negation? different forms?
+
+Study 2:
+* What syntactic constructions host negative forms?
+* How productive are negative morphemes?
+
+# Literature Review
+
+Formal and functional development of negation
+
 # Methods
 
 ```{r}
@@ -192,6 +217,14 @@ To do:
 ## Data analysis
 
 # Results
+
+```{r}
+freqTable_bySpeaker %>%
+  filter(negative_form!="pos") %>%
+ggplot(aes(speaker,ppt)) +
+  geom_bar(stat="identity", aes(fill=negative_form)) +
+  theme_classic()
+```
 
 # Discussion
 
