@@ -182,6 +182,17 @@ filter(undertwo_neg, part_of_speech == "co v n")$clean_utterances %>%
 ```
 
 ```{r}
+# Arbitrary, judgement-based distinction; how to actually split them up?
+non_sentential <- c("qn n", "qn qn n", "co n", "co n:prop", "co v", "co n:prop n n", "n co", "neg n", "neg v", "co pro:pos")
+sentential <- c("pro:sub mod v pro:per", "pro:sub mod v pro:dem", "pro:sub mod v prep", "pro:sub mod v n", "pro:sub mod v", "mod v pro:per", "mod v n", "mod v adv", "neg adv", "co adv")
+ns_count <- filter(undertwo_neg, part_of_speech %in% non_sentential)$clean_utterances %>%
+  length()
+s_count <-  filter(undertwo_neg, part_of_speech %in% sentential)$clean_utterances %>%
+  length()
+
+```
+
+```{r}
 undertwo_neg %>%
   filter(part_of_speech!="co", part_of_speech!="co co", part_of_speech!="co co co", part_of_speech!="co co co co", part_of_speech!="co co co co co", part_of_speech!="co co co co co co", part_of_speech!="") %>%
   group_by(part_of_speech) %>%
