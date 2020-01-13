@@ -36,14 +36,13 @@ speaker_stats <- get_speaker_statistics(collection = c("Eng-NA","Eng-UK"),
 eng_utterances <- get_utterances(collection = c("Eng-NA","Eng-UK"), 
                                  role = c("target_child","Mother", "Father"))
 
-#Store CHILDES-DB imports in the locel folder 1_raw_data
+#Store CHILDES-DB imports in the local folder 1_raw_data
 write_csv(english_tokens, "../raw_data/english_tokens.csv")
 write_feather(english_tokens, "../raw_data/english_tokens.feather")
 
 write_csv(speaker_stats, "../raw_data/speaker_stats.csv")
 write_csv(d_transcripts, "../raw_data/corpora_info.csv")
 
-#write_csv(all_utterances, "../raw_data/emg_utterances.csv")
 write_feather(eng_utterances, "../raw_data/eng_utterances.feather")
 ```
 
