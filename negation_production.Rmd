@@ -131,6 +131,15 @@ constructions %>%
   geom_bar(stat = "identity") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+filtered_constructions <- constructions %>%
+  filter(freq>10, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="")
+
+undertwo_neg %>%
+  filter(part_of_speech %in% filtered_constructions$x) %>%
+  ggplot(mapping = aes(x =part_of_speech, y =target_child_age)) +
+  geom_violin()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r}
