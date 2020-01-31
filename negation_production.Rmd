@@ -122,24 +122,45 @@ Participant information:
 2. what proportion of children in each monthly age bin produce negative morphemes?
 
 ```{r construction}
-constructions <- plyr::count(undertwo_neg$part_of_speech) %>%
+undertwo_neg <- undertwo_neg %>%
+  mutate(condensed_p_o_s = 
+           (part_of_speech %>%
+              str_replace_all(c('co|qn'), 'no') %>%
+              str_replace_all(c('pro:\\w*|n:prop'), 'n') %>%
+              str_replace_all('neg', 'not') %>%
+              str_replace_all('adv:\\w*', 'adv') %>%
+              str_replace_all('det:\\w*', 'det')
+             )
+           )
+constructions <- plyr::count(undertwo_neg$condensed_p_o_s) %>%
   arrange(desc(freq))
 
-constructions %>%
-  filter(freq>10, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="") %>%
+filtered_constructions <- constructions %>%
+  filter(freq>10, x!="no", x!="no no", x!="no no no", x!="no no no no", x!="")
+
+filtered_constructions %>%
   ggplot(aes(reorder(x, -freq), freq)) + 
   geom_bar(stat = "identity") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-filtered_constructions <- constructions %>%
-  filter(freq>10, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="")
-
 undertwo_neg %>%
-  filter(part_of_speech %in% filtered_constructions$x) %>%
-  ggplot(mapping = aes(x =part_of_speech, y =target_child_age)) +
-  geom_violin()+
+  filter(condensed_p_o_s %in% filtered_constructions$x) %>%
+  ggplot(mapping = aes(x =condensed_p_o_s, y =target_child_age)) +
+  geom_boxplot(color = 'red')+
+  geom_jitter(size = .5, width = .2) +
+  stat_summary(geom = "crossbar", width=0.65, fatten=2, color="red", fun.data = function(x){ return(c(y=median(x), ymin=median(x), ymax=median(x))) })+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+filter(undertwo_neg, condensed_p_o_s == 'no n v')$clean_utterances %>%
+unique()
+
+# 12
+constructions %>%
+  filter(x == 'no n v')
+
+#3495
+sum(constructions$freq)
 ```
 
 ```{r}
