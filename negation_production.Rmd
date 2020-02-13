@@ -152,15 +152,15 @@ undertwo_neg %>%
   stat_summary(geom = "crossbar", width=0.65, fatten=2, color="red", fun.data = function(x){ return(c(y=median(x), ymin=median(x), ymax=median(x))) })+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-filter(undertwo_neg, condensed_p_o_s == 'no n v')$clean_utterances %>%
-unique()
+#filter(undertwo_neg, condensed_p_o_s == 'no n v')$clean_utterances %>%
+#unique()
 
-# 12
-constructions %>%
-  filter(x == 'no n v')
+# 12; and based on the graph it's late
+# constructions %>%
+  #filter(x == 'no n v')
 
 #3495
-sum(constructions$freq)
+#sum(constructions$freq)
 ```
 
 ```{r}
