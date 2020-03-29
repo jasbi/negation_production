@@ -147,7 +147,7 @@ filtered_constructions %>%
 undertwo_neg %>%
   filter(condensed_p_o_s %in% filtered_constructions$x) %>%
   ggplot(mapping = aes(x =condensed_p_o_s, y =target_child_age)) +
-  geom_boxplot(color = 'red')+
+  #geom_boxplot(color = 'red')+
   geom_jitter(size = .5, width = .2) +
   stat_summary(geom = "crossbar", width=0.65, fatten=2, color="red", fun.data = function(x){ return(c(y=median(x), ymin=median(x), ymax=median(x))) })+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -156,12 +156,21 @@ undertwo_neg %>%
 #unique()
 
 # 12; and based on the graph it's late
+# Even counting utterances containing 'no n v' only like 50 
 # constructions %>%
   #filter(x == 'no n v')
 
 #3495
 #sum(constructions$freq)
 ```
+
+$$
+\begin{table}[]
+\begin{tabular}{ll}
+mod v & can't catch, don't talk  \\
+\end{tabular}
+\end{table}
+$$
 
 ```{r}
 filter(undertwo_neg, part_of_speech == "qn n")$clean_utterances %>%
@@ -260,11 +269,11 @@ To do:
 # Results
 
 ```{r}
-freqTable_bySpeaker %>%
-  filter(negative_form!="pos") %>%
-ggplot(aes(speaker,ppt)) +
-  geom_bar(stat="identity", aes(fill=negative_form)) +
-  theme_classic()
+#freqTable_bySpeaker %>%
+#  filter(negative_form!="pos") %>%
+#ggplot(aes(speaker,ppt)) +
+#  geom_bar(stat="identity", aes(fill=negative_form)) +
+#  theme_classic()
 ```
 
 # Discussion
