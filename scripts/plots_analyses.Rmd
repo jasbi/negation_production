@@ -1,0 +1,179 @@
+---
+title: "Negation Production Plots and Analyses"
+author: "Masoud Jasbi"
+date: "2/21/2018"
+output: html_document
+---
+
+```{r load_library}
+library(tidyverse)
+library(magrittr)
+library(feather)
+library(binom)
+library(childesr)
+library(lubridate)
+```
+
+```{r read_processed_data}
+english_tokens <- read_feather("../processed_data/english_tokens_processed.feather")
+```
+
+```{r polarityTable}
+polairty_table <-
+  english_tokens %>%
+  group_by(speaker, polarity, age) %>%
+  summarize(count = n()) %>%
+  group_by(speaker, age) %>%
+  mutate(total = sum(count), proportion = count / total, percent = proportion * 100)
+```
+
+```{r polarityPlot}
+polairty_table %>%
+  filter(polarity=="negative") %>%
+ggplot(aes(age, percent, color=speaker)) +
+  geom_point(aes(color=speaker)) +
+  geom_smooth(aes(fill = speaker), span=0.7) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic() + ggtitle("Production of Negative Words")
+```
+
+```{r categoryTable}
+category_table <-
+  english_tokens %>%
+  group_by(speaker, category, polarity, age) %>%
+  summarize(count = n()) %>%
+  group_by(speaker, age) %>%
+  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+```
+
+```{r noNotPlot}
+category_table %>%
+  filter(category=="no" | category=="not") %>%
+  ggplot(aes(age,ppt)) +
+  geom_point(aes(color=speaker)) +
+  facet_wrap(.~category) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  geom_smooth(aes(color=speaker), span=0.6) +
+  theme_classic()
+```
+
+```{r aux}
+category_table %>%
+  filter(category=="auxiliary") %>%
+  ggplot(aes(age,ppt)) +
+  geom_point(aes(color=speaker, shape=polarity)) +
+  geom_line(aes(color=speaker, shape=polarity)) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+#  geom_smooth(aes(color=speaker), span=0.7) +
+  theme_classic()
+```
+
+```{r adverb}
+category_table %>%
+  filter(category=="adverb") %>%
+  ggplot(aes(age,ppt)) +
+  geom_point(aes(color=speaker)) +
+  facet_wrap(.~polarity, scales="free_y") +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  geom_smooth(aes(color=speaker), span=0.7) +
+  theme_classic()
+```
+
+```{r categoriesPlot}
+category_table %>%
+  filter(category!="other") %>%
+  ggplot(aes(age,ppt)) +
+  geom_point(aes(color=speaker)) +
+  facet_wrap(polarity~category, scales="free_y") +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  geom_smooth(aes(color=speaker), span=0.7) +
+  theme_classic()
+```
+
+```{r UnderTwoNegWords}
+undertwo_negwords <-
+  english_tokens %>%
+  filter(age<25, speaker=="child", polarity=="negative", word!="other") %>%
+  group_by(word) %>%
+  summarize(count = n()) %>%
+  filter(count>10) %>%
+  arrange(desc(count))
+
+undertwo_negwords
+```
+
+Let us assume an early representation of negation. The fact that "cant" appears suggests children can apply negation to representations of abilities. The fact that "didn't", "doesn't", "wont", "never", "isn't" appears suggests that negation can also operate over representations of time. "nothing" as well as many "no noun" instances show the role of negation in representing nonexistence. Many instances of "don't" also suggest negation can apply to representations of actions (don't run).
+
+```{r negationProportion}
+negative_proportions <-
+  english_tokens %>%
+  filter(polarity=="negative", speaker=="child") %>%
+  group_by(category, age) %>%
+  summarize(count = n()) %>%
+  group_by(age) %>%
+  mutate(total = sum(count), proportion = count / total, percent = proportion * 100)
+
+saveRDS(negative_proportions, file="../processed_data/negation_proportions")
+```
+
+```{r negationPlot}
+negative_proportions %>%
+  ggplot(aes(age,percent)) +
+  geom_point(aes(color=category, shape=category)) +
+  geom_line(aes(color=category)) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r utterance_type}
+negation_children <-
+  english_tokens %>%
+  group_by(speaker, category, polarity, age) %>%
+  summarize(count = n()) %>%
+  group_by(speaker, age) %>%
+  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+
+negation_children$speaker <- relevel(as.factor(negation_children$speaker), "parent")
+
+negation_children %>%
+  filter(category!="other", category!="quantifier", category!="adverb", category!="derivational", polarity=="negative") %>%
+ggplot(aes(age,ppt, fill=category, shape = category, color=category)) +
+  geom_point(stat="identity", aes(fill=category, shape = category, color=category)) +
+  geom_line(aes(fill = category, linetype=speaker)) +
+  facet_grid(.~speaker) +
+#  geom_smooth(aes(fill = category), span=0.5) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+
+negation_children %>%
+  filter(category!="other", category!="no", category!="not", category!="auxiliary", polarity=="negative", speaker=="child") %>%
+ggplot(aes(age,ppt, fill=category, color=category, shape=category)) +
+  geom_point(stat="identity", aes(fill=category, color=category, shape=category)) +
+  geom_line(aes(fill = category)) +
+#  geom_smooth(aes(fill = category), span=0.5) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+# Percentage of Children Producing Negative Morphemes
+
+Here I tried to test if we can find out about the proportion of children producing negative forms in CHILDES. However, it seems like this is not good practice. The database seems to be too sparse per child so we end up severly underestimating if a child is actually producing it or not. In order to infer what proportion of children produce a given form from naturalistic productions, we need a database that has at least comparable contribution from each child. This is not at all the case for CHILDES. 
+
+```{r proportion_children}
+proportion_children <-
+  english_tokens %>%
+  filter(speaker=="child") %>% #remove data from parents
+  group_by(age) %>% #group by age and compute the total number of children in each age bin
+  mutate(total_children=length(unique(target_child_id))) %>%
+  group_by(negation_type, age, target_child_id, total_children) %>% #for each child, count their negation in each bin
+  summarize(count = n()) %>%
+  filter(count>2) %>% #remove children that had fewer than 5 tokens in the age bin
+  group_by(negation_type,age) %>%
+  mutate(producing_children=length(unique(target_child_id)), pc = producing_children/total_children)
+
+proportion_children %>%
+  filter(negation_type!="pos")%>%
+  ggplot(aes(age, pc)) +
+  geom_bar(stat="identity") +
+  facet_wrap(.~negation_type)
+```
