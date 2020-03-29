@@ -37,15 +37,18 @@ eng_utterances <- get_utterances(collection = c("Eng-NA","Eng-UK"),
                                  role = c("target_child","Mother", "Father"))
 ```
 
+<<<<<<< HEAD
 ```{r ChildesStorage}
 #Store CHILDES-DB imports in the locel folder 1_raw_data
+=======
+#Store CHILDES-DB imports in the local folder 1_raw_data
+>>>>>>> 99769eb65bf34d60b722ca4bd4c79c34ae6d9481
 write_csv(english_tokens, "../raw_data/english_tokens.csv")
 write_feather(english_tokens, "../raw_data/english_tokens.feather")
 
 write_csv(speaker_stats, "../raw_data/speaker_stats.csv")
 write_csv(d_transcripts, "../raw_data/corpora_info.csv")
 
-#write_csv(all_utterances, "../raw_data/emg_utterances.csv")
 write_feather(eng_utterances, "../raw_data/eng_utterances.feather")
 ```
 
@@ -90,6 +93,65 @@ exclusions <-
 
 # save the exclusion data in a file
 write.csv(exclusions, "../processed_data/exclusions.csv", row.names=FALSE)
+
+# Exclusions for Utterances
+eng_utterances <- saved_eng_utterances
+# count tokens before exclusion
+u_initial <- nrow(eng_utterances)
+
+# remove the unintelligible tokens
+eng_utterances %<>% filter(!grepl("xxx", gloss)) %>% filter(!grepl("^$", part_of_speech))
+
+# count the tokens after excluding unintelligible ones
+u_unintels <- nrow(eng_utterances)
+
+# remove NAs target_child_age
+eng_utterances %<>% drop_na(target_child_age) %>%
+  drop_na(part_of_speech)
+
+# count the tokens after removing NA tokens
+u_nas <- nrow(eng_utterances)
+
+#Take out data for the age range below 1 and above 6 years, this is because there is not much data in that range
+eng_utterances %<>% filter(target_child_age < 24)
+
+# count the tokens after excluding the below 1 and older than 6 age range
+u_age_ex <- nrow(eng_utterances)
+
+# number of children left after exclusions
+u_n_children <-
+  eng_utterances$target_child_id %>% unique() %>% length()
+
+# record the dataframe of exclusions
+u_exclusions <-
+  data.frame (Unintelligible = u_initial - u_unintels,
+              missing = u_unintels - u_nas,
+              age_ex = u_nas - u_age_ex,
+              n_children = u_n_children)
+
+# save the exclusion data in a file
+write.csv(u_exclusions, "../processed_data/u_exclusions.csv", row.names=FALSE)
+```
+
+# Grouping utterances by construction
+
+```{r}
+eng_utterances$age <- eng_utterances$target_child_age %>% floor()
+
+construction_byAge <-
+  eng_utterances %>%
+  group_by(part_of_speech, age) %>%
+  summarize(count = n()) %>% 
+  group_by(age) %>%
+  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+
+#weird error???
+selection <- c("co n", "qn qn n", "qn n", "n")
+construction_byAge %>%
+  filter(part_of_speech %in% selection) %>%
+  ggplot(mapping = aes(age, ppt)) +
+  geom_point(stat="identity") +
+  facet_wrap(part_of_speech~., scales="free_y")
 ```
 
 # Coding Speaker Roles
