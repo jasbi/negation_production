@@ -14,7 +14,7 @@ library(childesr)
 library(lubridate)
 ```
 
-#Import Raw Data from CHILDES-db
+#CHILDES-DB Import
 
 This next chunk imports data from Childes-db using the childesr package and saves them as csv or feather files in the local drive
 
@@ -35,7 +35,9 @@ speaker_stats <- get_speaker_statistics(collection = c("Eng-NA","Eng-UK"),
 #Import all English utterances from CHILDES 
 eng_utterances <- get_utterances(collection = c("Eng-NA","Eng-UK"), 
                                  role = c("target_child","Mother", "Father"))
+```
 
+```{r ChildesStorage}
 #Store CHILDES-DB imports in the locel folder 1_raw_data
 write_csv(english_tokens, "../raw_data/english_tokens.csv")
 write_feather(english_tokens, "../raw_data/english_tokens.feather")
@@ -47,37 +49,18 @@ write_csv(d_transcripts, "../raw_data/corpora_info.csv")
 write_feather(eng_utterances, "../raw_data/eng_utterances.feather")
 ```
 
-# General Properties of the Corpus Collection
-
-```{r corpus_properties}
-# read the english tokens
-english_tokens <- read_feather("../raw_data/english_tokens.feather")
-hist(english_tokens$target_child_age)
-
-# corpus desnity
-corpus_density <- 
-  english_tokens %>%
-  group_by(target_child_age_months, speaker_role, collection_name) %>%
-  summarize(word_count=n()) 
-
-# number of children in each monthly bin
-child_density <-
-  english_tokens %>%
-  group_by(target_child_age_months, collection_name) %>%
-  summarize(child_count = length(unique(target_child_id))) 
-  
-write.csv(corpus_density, "../processed_data/corpusDensity.csv", row.names=FALSE)
-write.csv(child_density, "../processed_data/childDensity.csv", row.names=FALSE)
-```
-
 # Exclusions
 
+The following script cleans up the data to exclude: unintelligible tokens and tokens above 72 months of the child's age.
+
 ```{r exclusions}
+english_tokens <- read_feather("../raw_data/english_tokens.feather")
+
 # count the tokens before exclusions
 initial <- nrow(english_tokens)
 
 # remove the unintelligible tokens
-english_tokens %<>% filter(gloss!="xxx")
+english_tokens %<>% filter(gloss!="xxx", gloss!="yyy")
 
 # count the tokens after excluding unintelligible ones
 unintels <- nrow(english_tokens)
@@ -89,7 +72,7 @@ english_tokens %<>% drop_na(target_child_age)
 nas <- nrow(english_tokens)
 
 #Take out data for the age range below 1 and above 6 years, this is because there is not much data in that range
-english_tokens %<>% filter(target_child_age < 72)
+english_tokens %<>% filter(target_child_age < 72, target_child_age >= 12)
 
 # count the tokens after excluding the below 1 and older than 6 age range
 age_ex <- nrow(english_tokens)
@@ -109,131 +92,9 @@ exclusions <-
 write.csv(exclusions, "../processed_data/exclusions.csv", row.names=FALSE)
 ```
 
-# Grouping Utterance Types
+# Coding Speaker Roles
 
-```{r utterance_types}
-# Prepare the utterance_type categories for this study based on the utterance_types in childes-db
-## Categories: declarative, impertaive, question, and other
-english_tokens$utterance_type <-
-  recode(english_tokens$utterance_type, 
-         `broken for coding`="other",
-          `imperative_emphatic` = "imperative",
-         interruption = "other",
-         `interruption question` = "question",
-         `missing CA terminator` = "other",
-         `no break TCU continuation` = "other",
-         `question exclamation` = "question",
-         `quotation next line` = "other",
-         `quotation precedes` = "other",
-         `self interruption` = "other",
-         `self interruption question` = "question",
-         `trail off` = "other",
-         `trail off question` = "question"
-         )
-```
-
-# Coding Different Forms of Negation
-
-```{r negative_words}
-# Sentential Negatives
-english_tokens$word <- "other"
-
-english_tokens$word[english_tokens$gloss=="no" | english_tokens$gloss=="No"] <- "no"
-
-english_tokens$word[english_tokens$gloss=="not" | english_tokens$gloss=="Not"] <- "not"
-english_tokens$word[english_tokens$gloss=="cannot"] <- "cannot"
-
-english_tokens$word[english_tokens$gloss=="ain't" | english_tokens$gloss=="Ain't"] <- "aint"
-english_tokens$word[english_tokens$gloss=="isn't" | english_tokens$gloss=="Isn't"] <- "isnt"
-english_tokens$word[english_tokens$gloss=="amn't" | english_tokens$gloss=="Amn't"] <- "amnt"
-english_tokens$word[english_tokens$gloss=="aren't" | english_tokens$gloss=="Aren't"] <- "arent"
-english_tokens$word[english_tokens$gloss=="wasn't" | english_tokens$gloss=="Wasn't"] <- "wasnt"
-english_tokens$word[english_tokens$gloss=="weren't" | english_tokens$gloss=="Weren't"] <- "werent"
-english_tokens$word[english_tokens$gloss=="don't" | english_tokens$gloss=="Don't"] <- "dont"
-english_tokens$word[english_tokens$gloss=="doesn't" | english_tokens$gloss=="Doesn't"] <- "doesnt"
-english_tokens$word[english_tokens$gloss=="didn't" | english_tokens$gloss=="Didn't"] <- "didnt"
-english_tokens$word[english_tokens$gloss=="won't" | english_tokens$gloss=="Won't"] <- "wont"
-english_tokens$word[english_tokens$gloss=="shan't" | english_tokens$gloss=="Shan't"] <- "shant"
-english_tokens$word[english_tokens$gloss=="hasn't" | english_tokens$gloss=="Hasn't"] <- "hasnt"
-english_tokens$word[english_tokens$gloss=="haven't" | english_tokens$gloss=="Haven't"] <- "havent"
-english_tokens$word[english_tokens$gloss=="hadn't" | english_tokens$gloss=="Hadn't"] <- "hadnt"
-english_tokens$word[english_tokens$gloss=="shouldn't" | english_tokens$gloss=="Shouldn't"] <- "shouldnt"
-english_tokens$word[english_tokens$gloss=="can't" | english_tokens$gloss=="Can't"] <- "cant"
-english_tokens$word[english_tokens$gloss=="couldn't" | english_tokens$gloss=="Couldn't"] <- "couldnt"
-english_tokens$word[english_tokens$gloss=="mayn't" | english_tokens$gloss=="Mayn't"] <- "maynt"
-english_tokens$word[english_tokens$gloss=="mightn't" | english_tokens$gloss=="Mightn't"] <- "mightnt"
-english_tokens$word[english_tokens$gloss=="wouldn't" | english_tokens$gloss=="Wouldn't"] <- "wouldnt"
-english_tokens$word[english_tokens$gloss=="mustn't" | english_tokens$gloss=="Mustn't"] <- "mustnt"
-
-english_tokens$word[english_tokens$gloss=="never" | english_tokens$gloss=="Never"] <- "never"
-english_tokens$word[english_tokens$gloss=="nothing" | english_tokens$gloss=="Nothing"] <- "nothing"
-english_tokens$word[english_tokens$gloss=="nobody" | english_tokens$gloss=="Nobody"] <- "nobody"
-english_tokens$word[english_tokens$gloss=="nowhere" | english_tokens$gloss=="Nowhere"] <- "nowhere"
-english_tokens$word[english_tokens$gloss=="noone" | english_tokens$gloss=="Noone"] <- "noone"
-english_tokens$word[english_tokens$gloss=="none" | english_tokens$gloss=="None"] <- "none"
-```
-
-```{r negative_forms}
-# create column that says what type of negative form it is
-english_tokens$negative_form <- "pos"
-english_tokens$negative_form[english_tokens$word=="no"] <- "no"
-english_tokens$negative_form[english_tokens$word=="not" | english_tokens$word=="cannot"] <- "not"
-english_tokens$negative_form[english_tokens$word=="never" | english_tokens$word=="nothing" | english_tokens$word=="nobody" | english_tokens$word=="nowhere" | english_tokens$word=="noone" | english_tokens$word=="none"] <- "quantifier"
-
-english_tokens[grep("n't", english_tokens$gloss),]$negative_form <- "nt"
-
-#english_tokens$negative_form[english_tokens$word=="aint"| english_tokens$word=="amnt"| english_tokens$word=="isnt" | english_tokens$word=="arent" | english_tokens$word=="wasnt" | english_tokens$word=="werent" | english_tokens$word=="dont" | english_tokens$word=="doesnt" | english_tokens$word=="didnt" | english_tokens$word=="wont" | english_tokens$word=="hasnt" | english_tokens$word=="havent" | english_tokens$word=="hadnt" | english_tokens$word=="cant" | english_tokens$word=="couldnt" | english_tokens$word=="shouldnt" | english_tokens$word=="wouldnt" | english_tokens$word=="mustnt" | english_tokens$word=="maynt" | english_tokens$word=="mightnt" | english_tokens$word=="shant"] <- "nt"
-
-# Lexical negatives: 
-english_tokens[grepl("^(?i)un[a-zA-Z]{4,}", english_tokens$gloss) & 
-                 !grepl("^(?i)un[a-zA-Z]+", english_tokens$stem) &
-                 !grepl("^(?i)under[a-zA-Z]+", english_tokens$gloss) &
-                 english_tokens$gloss != "untill" &
-                 english_tokens$gloss != "unhunh" &
-                 english_tokens$gloss != "unless"
-               ,]$negative_form <- "un"
-
-english_tokens[grepl("^(?i)[a-zA-Z]+less$", english_tokens$gloss) & 
-                 !grepl("^(?i)[a-zA-Z]+less$", english_tokens$stem) & 
-                 english_tokens$gloss != "unless" & 
-                 english_tokens$gloss != "bless"
-               ,]$negative_form <- "less"
-
-english_tokens[grepl("^(?i)in[a-zA-Z]+", english_tokens$gloss) & 
-                 !grepl("^(?i)in[a-zA-Z]+", english_tokens$stem) & 
-               english_tokens$stem!=""
-               ,]$negative_form <- "in"
-
-english_tokens[grepl("^(?i)dis[a-zA-Z]+", english_tokens$gloss) & 
-                 !grepl("^(?i)dis[a-zA-Z]+", english_tokens$stem) &
-               english_tokens$stem!=""
-               ,]$negative_form <- "dis"
-
-english_tokens[grepl("^(?i)de[a-zA-Z]+", english_tokens$gloss) & 
-                 !grepl("^(?i)de[a-zA-Z]+", english_tokens$stem) &
-               english_tokens$stem!=""
-               ,]$negative_form <- "de"
-
-english_tokens[grepl("^(?i)non[a-zA-Z]+", english_tokens$gloss) & 
-                 !grepl("^(?i)non[a-zA-Z]+", english_tokens$stem) &
-               english_tokens$stem!=""
-               ,]$negative_form <- "non"
-
-# types of nageation
-
-english_tokens$negation_type <- "pos"
-english_tokens$negation_type[english_tokens$negative_form=="no"] <- "no"
-english_tokens$negation_type[english_tokens$negative_form=="not" |
-                               english_tokens$negative_form=="nt"] <- "sentential"
-english_tokens$negation_type[english_tokens$negative_form=="un" |
-                               english_tokens$negative_form=="less" |
-                               english_tokens$negative_form=="in" |
-                               english_tokens$negative_form=="dis" |
-                               english_tokens$negative_form=="de" |
-                               english_tokens$negative_form=="non" | 
-                               english_tokens$negative_form=="quantifier"
-                               ] <- "lexical"
-```
+Here we group mothers and fathers together as "parents".
 
 ```{r}
 # Collapse mothers and fathers into parents
@@ -243,309 +104,271 @@ english_tokens$speaker[english_tokens$speaker_role=="Target_Child"] <- "child"
 
 # Coding Age
 
-It is already in months so I'm just gonna create a column that rounds it up
+Here we bin the age data per month.
 
 ```{r age}
 english_tokens$age <- english_tokens$target_child_age %>% floor()
 ```
 
-# Frequncy Tables
+# Grouping Utterance Types
+
+Grouping utterances as declarative, imperative, interrogative, and other.
+
+```{r utterance_types}
+# Prepare the utterance_type categories for this study based on the utterance_types in childes-db
+## Categories: declarative, impertaive, interrogative, and other
+english_tokens$utterance_type <-
+  recode(english_tokens$utterance_type, 
+         question = "interrogative",
+         `broken for coding`="other",
+          `imperative_emphatic` = "imperative",
+         interruption = "other",
+         `interruption question` = "interrogative",
+         `missing CA terminator` = "other",
+         `no break TCU continuation` = "other",
+         `question exclamation` = "interrogative",
+         `quotation next line` = "other",
+         `quotation precedes` = "other",
+         `self interruption` = "other",
+         `self interruption question` = "interrogative",
+         `trail off` = "other",
+         `trail off question` = "interrogative"
+         )
+```
+
+# Coding Different Forms of Negation
+
+Layers: word, category (no, not, modal_nt, quantifier, derivational), polarity (positive, negative)
+
+```{r lowerCase}
+english_tokens$gloss <- english_tokens$gloss %>% tolower()
+```
+
+```{r NegationWords}
+english_tokens$word <- "other"
+
+# simple "no"
+english_tokens$word[english_tokens$gloss=="no"] <- "no"
+
+# coding for uncontracted NOT
+english_tokens$word[english_tokens$gloss=="not"] <- "not"
+english_tokens$word[english_tokens$gloss=="cannot"] <- "cannot"
+
+# Negative auxilliary verbs
+english_tokens$word[english_tokens$gloss=="ain't"] <- "aint"
+english_tokens$word[english_tokens$gloss=="isn't"] <- "isnt"
+english_tokens$word[english_tokens$gloss=="amn't"] <- "amnt"
+english_tokens$word[english_tokens$gloss=="aren't"] <- "arent"
+english_tokens$word[english_tokens$gloss=="wasn't"] <- "wasnt"
+english_tokens$word[english_tokens$gloss=="weren't"] <- "werent"
+english_tokens$word[english_tokens$gloss=="don't"] <- "dont"
+english_tokens$word[english_tokens$gloss=="doesn't"] <- "doesnt"
+english_tokens$word[english_tokens$gloss=="didn't"] <- "didnt"
+english_tokens$word[english_tokens$gloss=="won't"] <- "wont"
+english_tokens$word[english_tokens$gloss=="shan't"] <- "shant"
+english_tokens$word[english_tokens$gloss=="hasn't"] <- "hasnt"
+english_tokens$word[english_tokens$gloss=="haven't"] <- "havent"
+english_tokens$word[english_tokens$gloss=="hadn't"] <- "hadnt"
+english_tokens$word[english_tokens$gloss=="shouldn't"] <- "shouldnt"
+english_tokens$word[english_tokens$gloss=="can't"] <- "cant"
+english_tokens$word[english_tokens$gloss=="couldn't"] <- "couldnt"
+english_tokens$word[english_tokens$gloss=="mayn't"] <- "maynt"
+english_tokens$word[english_tokens$gloss=="mightn't"] <- "mightnt"
+english_tokens$word[english_tokens$gloss=="wouldn't"] <- "wouldnt"
+english_tokens$word[english_tokens$gloss=="mustn't"] <- "mustnt"
+
+# Positive auxilliary verbs
+english_tokens$word[english_tokens$gloss=="is"] <- "is"
+english_tokens$word[english_tokens$gloss=="am"] <- "am"
+english_tokens$word[english_tokens$gloss=="are"] <- "are"
+english_tokens$word[english_tokens$gloss=="was"] <- "was"
+english_tokens$word[english_tokens$gloss=="were"] <- "were"
+english_tokens$word[english_tokens$gloss=="do"] <- "do"
+english_tokens$word[english_tokens$gloss=="does"] <- "does"
+english_tokens$word[english_tokens$gloss=="did"] <- "did"
+english_tokens$word[english_tokens$gloss=="will"] <- "will"
+english_tokens$word[english_tokens$gloss=="shall"] <- "shall"
+english_tokens$word[english_tokens$gloss=="has"] <- "has"
+english_tokens$word[english_tokens$gloss=="have"] <- "have"
+english_tokens$word[english_tokens$gloss=="had"] <- "had"
+english_tokens$word[english_tokens$gloss=="should"] <- "should"
+english_tokens$word[english_tokens$gloss=="can"] <- "can"
+english_tokens$word[english_tokens$gloss=="could"] <- "could"
+english_tokens$word[english_tokens$gloss=="may"] <- "may"
+english_tokens$word[english_tokens$gloss=="might"] <- "might"
+english_tokens$word[english_tokens$gloss=="would"] <- "would"
+english_tokens$word[english_tokens$gloss=="must"] <- "must"
+
+#Quantifiers
+## X+thing
+english_tokens$word[english_tokens$gloss=="everything"] <- "everything"
+english_tokens$word[english_tokens$gloss=="something"] <- "something"
+english_tokens$word[english_tokens$gloss=="nothing"] <- "nothing"
+## X+body
+english_tokens$word[english_tokens$gloss=="everybody"] <- "everybody"
+english_tokens$word[english_tokens$gloss=="somebody"] <- "somebody"
+english_tokens$word[english_tokens$gloss=="nobody"] <- "nobody"
+## X+where
+english_tokens$word[english_tokens$gloss=="everywhere" ] <- "everywhere"
+english_tokens$word[english_tokens$gloss=="somewhere"] <- "somewhere"
+english_tokens$word[english_tokens$gloss=="nowhere"] <- "nowhere"
+## X+one
+english_tokens$word[english_tokens$gloss=="noone"] <- "everyone"
+english_tokens$word[english_tokens$gloss=="noone"] <- "someone"
+english_tokens$word[english_tokens$gloss=="noone"] <- "noone"
+## some vs none
+english_tokens$word[english_tokens$gloss=="some"] <- "all"
+english_tokens$word[english_tokens$gloss=="some"] <- "some"
+english_tokens$word[english_tokens$gloss=="none"] <- "none"
+## adverbs of frequency
+english_tokens$word[english_tokens$gloss=="never"] <- "never"
+english_tokens$word[english_tokens$gloss=="usually"] <- "usually"
+english_tokens$word[english_tokens$gloss=="always"] <- "always"
+english_tokens$word[english_tokens$gloss=="sometimes"] <- "sometimes"
+english_tokens$word[english_tokens$gloss=="often"] <- "often"
+
+# Derivational negatives: 
+english_tokens[grepl("^(?i)un[a-zA-Z]{4,}", english_tokens$gloss) & 
+                 !grepl("^(?i)un[a-zA-Z]+", english_tokens$stem) &
+                 !grepl("^(?i)under[a-zA-Z]+", english_tokens$gloss) &
+                 english_tokens$gloss != "untill" &
+                 english_tokens$gloss != "unhunh" &
+                 english_tokens$gloss != "unless"
+               ,]$word <- "un"
+
+english_tokens[grepl("^(?i)[a-zA-Z]+less$", english_tokens$gloss) & 
+                 !grepl("^(?i)[a-zA-Z]+less$", english_tokens$stem) & 
+                 english_tokens$gloss != "unless" & 
+                 english_tokens$gloss != "bless"
+               ,]$word <- "less"
+
+english_tokens[grepl("^(?i)in[a-zA-Z]+", english_tokens$gloss) & 
+                 !grepl("^(?i)in[a-zA-Z]+", english_tokens$stem) & 
+               english_tokens$stem!=""
+               ,]$word <- "in"
+
+english_tokens[grepl("^(?i)dis[a-zA-Z]+", english_tokens$gloss) & 
+                 !grepl("^(?i)dis[a-zA-Z]+", english_tokens$stem) &
+               english_tokens$stem!=""
+               ,]$word <- "dis"
+
+english_tokens[grepl("^(?i)de[a-zA-Z]+", english_tokens$gloss) & 
+                 !grepl("^(?i)de[a-zA-Z]+", english_tokens$stem) &
+               english_tokens$stem!=""
+               ,]$word <- "de"
+
+english_tokens[grepl("^(?i)non[a-zA-Z]+", english_tokens$gloss) & 
+                 !grepl("^(?i)non[a-zA-Z]+", english_tokens$stem) &
+               english_tokens$stem!=""
+               ,]$word <- "non"
+```
+
+```{r Category}
+# nonnegatives
+english_tokens$category <- "other"
+# coding "no"
+english_tokens$category[english_tokens$word=="no"] <- "no"
+# 
+english_tokens$category[english_tokens$word=="not" | english_tokens$word=="cannot"] <- "not"
+# coding for contracted negation N'T
+english_tokens[grep("n't", english_tokens$gloss),]$category <- "auxiliary"
+# coding for Aux positive
+english_tokens$category[english_tokens$word=="is" | 
+                          english_tokens$word=="am" | 
+                          english_tokens$word=="are" |
+                          english_tokens$word=="was" |
+                          english_tokens$word=="were" |
+                          english_tokens$word=="do" |
+                          english_tokens$word=="does" |
+                          english_tokens$word=="did" |
+                          english_tokens$word=="will" |
+                          english_tokens$word=="shall" |
+                          english_tokens$word=="have" |
+                          english_tokens$word=="has" |
+                          english_tokens$word=="had" |
+                          english_tokens$word=="do" |
+                          english_tokens$word=="should" |
+                          english_tokens$word=="can" |
+                          english_tokens$word=="could" |
+                          english_tokens$word=="do" |
+                          english_tokens$word=="may" |
+                          english_tokens$word=="might" |
+                          english_tokens$word=="would" |
+                          english_tokens$word=="must"
+                          ] <- "auxiliary"
+
+# quantifier
+english_tokens$category[english_tokens$word=="everything" | 
+                          english_tokens$word=="something" | 
+                          english_tokens$word=="nothing" | 
+                          english_tokens$word=="everybody" | 
+                          english_tokens$word=="somebody" | 
+                          english_tokens$word=="nobody" |
+                          english_tokens$word=="everyone" |
+                          english_tokens$word=="someone" |
+                          english_tokens$word=="noone" |
+                          english_tokens$word=="everywhere" |
+                          english_tokens$word=="somewhere" |
+                          english_tokens$word=="nowhere" |
+                          english_tokens$word=="all" |
+                          english_tokens$word=="some" |
+                          english_tokens$word=="none"
+                          ] <- "quantifier"
+
+# frequency adverbs
+english_tokens$category[english_tokens$word=="never" | 
+                          english_tokens$word=="usually" | 
+                          english_tokens$word=="always" | 
+                          english_tokens$word=="sometimes" | 
+                          english_tokens$word=="often"] <- "adverb"
+
+# derivational
+english_tokens$category[english_tokens$word=="un" |
+                               english_tokens$word=="less" |
+                               english_tokens$word=="in" |
+                               english_tokens$word=="dis" |
+                               english_tokens$word=="de" |
+                               english_tokens$word=="non" 
+                               ] <- "derivational"
+```
+
+Using a column to encode the polarity of the word: positive vs. negative.
+
+```{r polarity}
+# nonnegatives
+english_tokens$polarity <- "positive"
+# coding "no"
+english_tokens$polarity[english_tokens$word=="no"] <- "negative"
+# 
+english_tokens$polarity[english_tokens$word=="not" | english_tokens$word=="cannot"] <- "negative"
+# coding for contracted negation N'T
+english_tokens[grep("n't", english_tokens$gloss),]$polarity <- "negative"
+
+english_tokens$polarity[english_tokens$word=="nothing" | 
+                          english_tokens$word=="nobody" |
+                          english_tokens$word=="noone" |
+                          english_tokens$word=="nowhere" |
+                          english_tokens$word=="none" |
+                          english_tokens$word=="never"
+                          ] <- "negative"
+
+english_tokens$polarity[english_tokens$word=="un" |
+                               english_tokens$word=="less" |
+                               english_tokens$word=="in" |
+                               english_tokens$word=="dis" |
+                               english_tokens$word=="de" |
+                               english_tokens$word=="non" 
+                               ] <- "negative"
+```
+
+```{r negation_type}
+english_tokens <-
+  english_tokens %>%
+  unite(category_polarity, category, polarity, sep="_", remove=FALSE)
+```
+
+# Saving Summary Tables
 
 ```{r save_dataframe}
 write_feather(english_tokens, "../processed_data/english_tokens_processed.feather")
 ```
-
-```{r corpus_wordcounts}
-# the next few chunks create the frequency tables needed for the analyses
-wordCounts <- 
-  english_tokens %>%
-  group_by(speaker_role,word) %>%
-  summarize(counts=n())
-
-wordCounts_byAge <- 
-  english_tokens %>%
-  group_by(speaker_role, age) %>%
-  summarize(count=n())
-
-wordCounts_byCollection <-
-  english_tokens %>%
-  group_by(speaker_role, collection_name) %>%
-  summarize(count=n())
-
-write.csv(wordCounts, "../processed_data/wordCounts.csv", row.names=FALSE)
-
-write.csv(wordCounts_byAge, "../processed_data/wordCounts_byAge.csv", row.names=FALSE)
-
-write.csv(wordCounts_byCollection, "../processed_data/wordCounts_byCollection.csv", row.names=FALSE)
-```
-
-```{r RelFreqBySpeaker}
-# frequency of "and" and "or" relativized to the speech of fathers, mothers, and children
-freqTable_bySpeaker <-
-  english_tokens %>%
-  group_by(speaker, negative_form) %>%
-  summarize(count = n()) %>%
-  group_by(speaker) %>%
-  mutate(total = sum(count))
-
-# calculating the confidence intervals
-conf_ints <- 
-  binom.confint(freqTable_bySpeaker$count, freqTable_bySpeaker$total, conf.level = 0.95, methods = "agresti-coull") %>%
-  rename(total = "n", count="x", rel_freq = "mean") %>%
-  select(-method)
-
-#joining the confidence interval table and the proportion table
-freqTable_bySpeaker %<>%
-  full_join(conf_ints, by=c("count","total")) %>%
-  mutate(ppt = rel_freq*1000, ppt_upper=upper*1000, ppt_lower=lower*1000)
-
-write.csv(freqTable_bySpeaker, "../processed_data/RelFreq_bySpeaker.csv", row.names=FALSE)
-
-freqTable_bySpeaker %>%
-  filter(negative_form!="pos") %>%
-ggplot(aes(speaker,ppt)) +
-  geom_bar(stat="identity", aes(fill=negative_form)) +
-  theme_classic()
-```
-
-```{r relFreqbySpeakerAge}
-freqTable_byAge <-
-  english_tokens %>%
-  group_by(speaker, negation_type, age) %>%
-  summarize(count = n()) %>%
-  group_by(speaker, age) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
-
-freqTable_byAge %>%
-  filter(negation_type!="pos") %>%
-ggplot(aes(age,ppt, fill=speaker, color=speaker)) +
-  geom_point(stat="identity", aes(color=speaker)) +
-  facet_grid(negation_type~., scales="free_y") +
-  geom_smooth(aes(fill = speaker), span=0.7) +
-  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
-  theme_classic()
-```
-
-```{r}
-negativeform_byAge <-
-  english_tokens %>%
-  group_by(speaker, negative_form, age) %>%
-  summarize(count = n()) %>%
-  group_by(speaker, age) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
-
-negativeform_byAge %>%
-  filter(negative_form!="pos", negative_form!="no") %>%
-ggplot(aes(age,ppt, fill=speaker, color=speaker)) +
-  geom_point(stat="identity", aes(color=speaker)) +
-  facet_wrap(negative_form~., scales="free_y") +
-  geom_smooth(aes(fill = speaker), span=1) +
-  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
-  theme_classic()
-```
-
-```{r}
-word_byAge <-
-  english_tokens %>%
-  group_by(speaker, word, age) %>%
-  summarize(count = n()) %>%
-  group_by(speaker, age) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
-
-word_byAge %>%
-  filter(word!="other", word!="no", word!="not", word!="amnt", word!="maynt", word!="shant", word!="aint", word!="mightnt", word!="noone") %>%
-ggplot(aes(age,ppt, fill=speaker)) +
-  geom_point(stat="identity", aes(color=speaker)) +
-  facet_wrap(word~., scales="free_y") +
-  geom_smooth(aes(fill = speaker), span=1) +
-  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
-  theme_classic()
-```
-
-```{r utterance_type}
-negation_byUtterance <-
-  english_tokens %>%
-  group_by(speaker, negation_type, age, utterance_type) %>%
-  summarize(count = n()) %>%
-  group_by(speaker, age, utterance_type) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
-
-negation_byUtterance %>%
-  filter(negation_type!="pos", utterance_type!="other") %>%
-ggplot(aes(age,ppt, fill=speaker)) +
-  geom_point(stat="identity", aes(color=speaker)) +
-  facet_grid(negation_type~utterance_type, scales="free_y") +
-  geom_smooth(aes(fill = speaker), span=1) +
-  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
-  theme_classic()
-
-write.csv(freqTable_byAge, "2_processed_data/RelFreq_byAge.csv", row.names=FALSE)
-write.csv(freqTable_byAgeSpeechAct, "2_processed_data/RelFreq_byAgeSpeechAct.csv", row.names=FALSE)
-```
-
-```{r}
-negativeForm_byUtterance <-
-  english_tokens %>%
-  group_by(speaker, negative_form, age, utterance_type) %>%
-  summarize(count = n()) %>%
-  group_by(speaker, age, utterance_type) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
-
-negativeForm_byUtterance %>%
-  filter(negative_form=="not" | 
-         negative_form=="nt" |
-         negative_form=="quantifier", 
-         utterance_type!="other"
-         ) %>%
-ggplot(aes(age,ppt, fill=speaker)) +
-  geom_point(stat="identity", aes(color=speaker)) +
-  facet_grid(negative_form~utterance_type, scales="free_y") +
-  geom_smooth(aes(fill = speaker), span=1) +
-  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
-  theme_classic()
-```
-
-# Percentage of Children Producing Negative Morphemes
-
-Here I tried to test if we can findo ut about the proportion of children producing negative forms in CHILDES. However, it seems like this is not good practice. The database seems to be too sparse per child so we end up severly underestimating if a child is actually producing it or not. In order to infer what proportion of children produce a given form from naturalistic productions, we need a database that has at least comparable contribution from each child. This is not at all the case for CHILDES. 
-
-```{r proportion_children}
-proportion_children <-
-  english_tokens %>%
-  filter(speaker=="child") %>% #remove data from parents
-  group_by(age) %>% #group by age and compute the total number of children in each age bin
-  mutate(total_children=length(unique(target_child_id))) %>%
-  group_by(negation_type, age, target_child_id, total_children) %>% #for each child, count their negation in each bin
-  summarize(count = n()) %>%
-  filter(count>2) %>% #remove children that had fewer than 5 tokens in the age bin
-  group_by(negation_type,age) %>%
-  mutate(producing_children=length(unique(target_child_id)), pc = producing_children/total_children)
-
-proportion_children %>%
-  filter(negation_type!="pos")%>%
-  ggplot(aes(age, pc)) +
-  geom_bar(stat="identity") +
-  facet_wrap(.~negation_type)
-```
-
-```{r connectiveProportions, eval=FALSE}
-# proportions of "and" and "or" in different speech acts
-cnctv_prop_bySpeechAct <- 
-  english_tokens %>%
-  group_by(word, utterance_type, speaker) %>%
-  summarize(count = n()) %>%
-  group_by(word, speaker) %>%
-  mutate(total = sum(count))
-
-# calculating the confidence intervals
-conf_ints <- 
-  binom.confint(cnctv_prop_bySpeechAct$count, cnctv_prop_bySpeechAct$total, conf.level = 0.95, methods = "exact") %>%
-  rename(total = "n", count="x", rel_freq = "mean") %>%
-  select(-method)
-
-#joining the confidence interval table and the proportion table
-cnctv_prop_bySpeechAct %<>%
-  full_join(conf_ints, by=c("count","total")) %>%
-  mutate(connective_pct = rel_freq*100, upper_pct=upper*100, lower_pct=lower*100)
-
-write.csv(cnctv_prop_bySpeechAct, "2_processed_data/connective_prop_bySpeechAct.csv", row.names=FALSE)
-```
-
-```{r RelFreqBySpeakerSpeechAct, eval=FALSE}
-#frequency of "and" and "or" relative to speakers and speech acts
-freqTable_bySpeakerSpeechAct <-
-  english_tokens %>%
-  group_by(speaker, word, utterance_type) %>%
-  summarize(count = n()) %>%
-  group_by(speaker, utterance_type) %>%
-  mutate(total = sum(count))
-
-# calculating the confidence intervals
-conf_ints <- 
-  binom.confint(freqTable_bySpeakerSpeechAct$count, freqTable_bySpeakerSpeechAct$total, conf.level = 0.95, methods = "exact") %>%
-  rename(total = "n", count="x", rel_freq = "mean") %>%
-  select(-method)
-
-#joining the confidence interval table and the proportion table
-freqTable_bySpeakerSpeechAct %<>%
-  full_join(conf_ints, by=c("count","total")) %>%
-  mutate(ppt = rel_freq*1000, upper_ppt=upper*1000, lower_ppt=lower*1000)
-
-write.csv(freqTable_bySpeakerSpeechAct, "2_processed_data/RelFreq_bySpeakerSpeechAct.csv", row.names=FALSE)
-```
-
-
-```{r UtteranceFreq, eval=FALSE}
-#read all the utterances
-all_utterances <- read_csv("1_raw_data/All_Eng_Utterances.csv")
-
-#convert the age from days to years
-all_utterances$target_child_age_years <-
-  all_utterances$target_child_age %>% 
-  duration ("days") %>%
-  as.numeric("years")
-
-# pick the age range 1 to 6
-all_utterances %<>% filter(target_child_age_years < 6, target_child_age_years > 1)
-
-#store a month version of the age
-all_utterances$target_child_age_months <- 
-  floor(all_utterances$target_child_age_years * 12)
-
-# Prepare the utterance_type categories for this study based on the utterance_types in childes-db
-# Categories: declarative, impertaive, question, and other
-all_utterances$utterance_type <-
-  recode(all_utterances$type, 
-         `broken for coding`="other", # small (16 observations only)
-          `imperative_emphatic` = "imperative",
-         interruption = "other", # a mix of questions, declaratives, and imperatives
-         `interruption question` = "question",
-         `missing CA terminator` = "other", # seems like a good mix of declaratives, questoins, imperatives 
-         `no break TCU continuation` = "other", # very few data points
-         `question exclamation` = "question",
-         `quotation next line` = "other", # seems mostly declaratives
-         `quotation precedes` = "other", # seems mostly declaratives
-         `self interruption` = "other", # seems mostly declaratives
-         `self interruption question` = "question", 
-         `trail off` = "other", # seems like mostly declaratives
-         `trail off question` = "question"
-         )
-
-# Collapse mothers and fathers into parents
-all_utterances$speaker <- "parent"
-all_utterances$speaker[all_utterances$speaker_role=="Target_Child"] <- "child"
-
-# count the number of utterances per speaker
-totalUtterance_bySpeaker <-
-  all_utterances %>%
-  group_by(speaker) %>%
-  summarize(total_utterance_count = n())
-
-# count the number of utterances per speaker at each age
-totalUtterance_bySpeakerAge <- 
-  all_utterances %>%
-  group_by(speaker, target_child_age_months) %>%
-  summarize(total_utterance_count = n())
-
-# Normalize a speaker's utterance type by the total number of utterances made
-utteranceType_bySpeaker <-
-  all_utterances %>%
-  group_by(utterance_type,speaker) %>%
-  summarize (utterance_count = n()) %>%
-  full_join(totalUtterance_bySpeaker, by="speaker") %>%
-  mutate(utteranceType_relFreq = utterance_count / total_utterance_count, utteranceType_ppc = utteranceType_relFreq * 100)
-
-# normalize the speaker utterance type at a particular age by the total number of utterances by that speaker at that age
-utteranceType_byAge <- 
-  all_utterances %>%
-  group_by(utterance_type,speaker, target_child_age_months) %>%
-  summarize (utterance_count = n()) %>%
-  full_join(totalUtterance_bySpeakerAge, by=c("speaker", "target_child_age_months")) %>%
-  mutate(utteranceType_relFreq = utterance_count / total_utterance_count, utteranceType_ppc = utteranceType_relFreq * 100)
-
-write.csv(utteranceType_bySpeaker,"2_processed_data/utteranceType_bySpeaker.csv", row.names=FALSE)
-write.csv(utteranceType_byAge,"2_processed_data/utteranceType_byAge.csv", row.names=FALSE)
-```
-
-
-
