@@ -51,6 +51,7 @@ library(devtools)
 library(childesr)
 library(tidyverse)
 library(tm)
+library(forcats)
 ```
 
 # Introduction
@@ -81,31 +82,33 @@ Formal and functional development of negation
 # Methods
 
 ```{r}
-english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
+
+#english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
 
 
-count_types <- function(string){
-  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
-  return(n)
-}
+#count_types <- function(string){
+#  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+#  return(n)
+#}
 
-count_tokens <- function(string){
-  n <- unlist(strsplit(string, " "))
-  return(length(n))
-}
+#count_tokens <- function(string){
+#  n <- unlist(strsplit(string, " "))
+#  return(length(n))
+#}
 
-english_negation <-
-  english_negation %>%
-  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
-  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
-  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
-  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
-  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
-  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+#english_negation <-
+#  english_negation %>%
+#  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
+#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 
-write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+#write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+
 ```
 
 ```{r}
@@ -146,6 +149,12 @@ filtered_constructions %>%
 
 undertwo_neg %>%
   filter(condensed_p_o_s %in% filtered_constructions$x) %>%
+  # Order by mean or median? or frequency?
+  group_by(condensed_p_o_s) %>%
+  mutate(mean_by_construction = median(target_child_age)) %>%
+  arrange(mean_by_construction) %>%
+  ungroup(condensed_p_o_s) %>%
+  mutate(condensed_p_o_s = fct_reorder(condensed_p_o_s, mean_by_construction)) %>%
   ggplot(mapping = aes(x =condensed_p_o_s, y =target_child_age)) +
   #geom_boxplot(color = 'red')+
   geom_jitter(size = .5, width = .2) +
@@ -164,14 +173,55 @@ undertwo_neg %>%
 #sum(constructions$freq)
 ```
 
-$$
-\begin{table}[]
-\begin{tabular}{ll}
-mod v & can't catch, don't talk  \\
-\end{tabular}
-\end{table}
-$$
+|Abbreviation     | Meaning       |
+|-----------------|---------------|
+| n               | noun (includes pronouns and proper nouns) |
+| v               | verb          |
+| adj             | adjective     |
+| adv             | adverb        |
+| prep            | preposition   |
+| det             | determiner    |
+| part            | participle    |
+| mod             | modal         | 
 
+
+| Construction    | Examples                           | Negation Categories  |
+|-----------------|------------------------------------|----------------------|
+| no n            | no baby, no horsie, no juice       | Existence, Desire, Metalinguistic? |
+| no no n  OOPS   | PROBLEM HERE no more stuff, *no car, no no pram, #no like doggy  |    |
+| no det n        | no my turn, no a cow, no the hammer|                      |
+| no adj          | no happy, no pretend, no brown     |                      |
+| no adv          | no there, no up, no behind         |                      |
+| no n adv        | no jacket on, no monkey there, *no lie down  |            |
+| no n n          | no baby bubble, no this one, *no brush hair|              |
+| no n n n        | no night night moon, no mummy this side, *no hold daddy hand |                |
+| no n v          | no mail came, no mummy go, no I wanted |                  |
+| no n v n        | no car go car, no comb want brush, no mummy do it |    |
+| no part         | no bouncing, no eating, no hurting |                      |
+| no prep n       | no in tree, no with this, *no like bubbles|               |
+| no v            | no read, no pooped,  *no zipper    |                      |
+| no v n          | no sit chair, no have cracker, no eat milk |              |
+| not n           | not noodle, not home, not right    |                      |
+| not det n       | not my car, not a cat, not a white |                      |
+| not adj         | not good, not dirty, not real      |                      |
+| not adv         | not today, not there, *not asleep  |                      |
+| not v           | not shush, not work, not blanket   |                      |
+| not v n         | not eat rocks, not have coffee, not green one|            |
+| n no            | mammy no, apple no, train no       |                      |
+| n not n         | pizza not pizza, pizza not apples, that not knees|        |
+| n v no          | doll sit no, I take no, Joana say no|                     |
+| mod             | don't, can't                       |                      |
+| mod n           | can't tea, don't Mommy, didn't I   |                      |
+| mod v           | don't go, doesn't work, can't catch|                      |
+| mod v adv       | can't come in, don't fall down, doesn't fit here|         |
+| mod v n         | don't touch that, don't fit car, can't open it|           |
+| mod v n n       | don't eat skin part, (?) don't touch that book, *can't find bunny rabit  | |
+| n mod           | I can't, Jane doesn't, mine didn't |                      |
+| n mod v         | I don't know, they don't fit, I can't open|               |
+| n mod v n       | I don't want juice, I can't find duck, cow won't go Mama| |
+| n mod v prep    | I don't want to, Laura don't want to|                     |
+| v no n n        | man no taste it (???)              |                      |
+    
 ```{r}
 filter(undertwo_neg, part_of_speech == "qn n")$clean_utterances %>%
   unique
