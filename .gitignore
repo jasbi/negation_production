@@ -45,3 +45,4 @@ raw_data/eng_utterances.feather
 processed_data/english_tokens_processed.feather
 
 papers/
+SALT/
