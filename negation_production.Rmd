@@ -125,31 +125,31 @@ negative_proportions %>%
 
 ```{r}
 
-#english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
+english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
 
 
-#count_types <- function(string){
-#  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
-#  return(n)
-#}
+count_types <- function(string){
+  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+  return(n)
+}
 
-#count_tokens <- function(string){
-#  n <- unlist(strsplit(string, " "))
-#  return(length(n))
-#}
+count_tokens <- function(string){
+  n <- unlist(strsplit(string, " "))
+  return(length(n))
+}
 
-#english_negation <-
-#  english_negation %>%
-#  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
-#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
-#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-#  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
-#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
-#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
-#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+english_negation <-
+  english_negation %>%
+  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
+  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
+  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
+  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 
-#write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 
 ```
 
