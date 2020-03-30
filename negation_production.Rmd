@@ -1,6 +1,6 @@
 ---
-title             : "How do children produce negation?"
-shorttitle        : "Negation Production"
+title             : "The production of negation in parents' and children's speech"
+shorttitle        : "Child and Parent Production of Negation"
 
 author: 
   - name          : "First Author"
@@ -57,29 +57,71 @@ library(forcats)
 # Introduction
 
 Claim: Children start producing all types of English negation by age 18 months and by 36 months, they produce them at the rate parents do.
-  types of negation in English: no, sentential (not, nt), lexical (nothing, nobody, nowhere, none, un-in-de-dis-).
-  For no: higher frequency in imperatives
-  For sentential negation: ...
-  For lexical negatoin: ...
-
-* How frequent are different negative forms in children's input?
+  types of negation in English: no, verbal (not, nt), lexical (nothing, nobody, nowhere, none, un-in-de-dis-).
   
-* What is the developmental trajectory of different negative forms?
-* How prevelant are different negative forms in different sentence types (imperative, declerative, interrogative)?
+Study 1 Questions
+* What is the overall trajectory of negative forms in child production?
+    * Does the development of negation follow a no > not > nt cline? (Cameron-faulkner et al)
+    * How many children are found to produce no/not/nt at each age?
+* Do positive variants of the negative constructions exist too?
+    * Are early “can’t" and “don’t" examples unanalyzed wholes? (Klima & Bellugi 1966; Bloom 1970) Do children produce “can’t” and “don’t” before using “do” and “can”?
+* Proportion of no vs. not vs. nt broken down by mean length of utterance
+    * instead of age, put mean length of utterance on the x axis?
 
-* Do lexical negatives develop first or sentential negatives? Could one help the other?
+Study 2 Questions
+* What are early constructions?
+    * the response may differ based on annotation level
+* Do children’s early negative utterances differ so much from those used by adults? (Thornton & Tesan 2013)
+    * How common are ungrammatical non-adult like combinations?
+        * How many pre-sentential negation? (NEG + Subject + Predicate)
+            * How many sentence internal? (Subj + NEG + Predicate)
+        * Is negation external at the beginning? (appear before subjects) Does a NEG + S schema mark the beginning of negation? (McNeill & McNeill)
+        * How many are optional infinitive: it not fit in here, it don’t fit in here?
+    * control MLU: which forms are common among 1/2/3/… word utterances?
+    * exclude single “no” (as well as anaphoric no) utterances from “no + more words” 
+* What is anaphoric negation negating?
+* How productive are early forms of negation?
+    * average neg + #WORD per child as measure of productivity
 
-* What percentage of children at each age produce negation? different forms?
-
-Study 2:
-* What syntactic constructions host negative forms?
-* How productive are negative morphemes?
-
-# Literature Review
+## Previous Studies
 
 Formal and functional development of negation
 
-# Methods
+## Current Study
+
+Acquisition of negation should concern itself with two notions: 1. negative morpheme 2. compositional complexity. By negative morpheme, we mean the kinds of morphemes that at each stage of acquisition are mapped to negative meanings. English has adverbal and adnominal mophemes that encode the concept of negation. We can look at how each form-meaning mapping emerges in children's development. Second by compositional complexity, we mean the types of elements that each morphemes succesfully negates at each stage of development. Under stuch analysis negation may have been successfully acquired to operate on locative elements but not identity relations. Compositional complexity of negation at each stage also helps us understand how quickly children generalize the function of negation beyond specific arguments it takes in the child's input.
+
+# Study 1: Large-scale metrics
+
+## Methods
+
+For samples of parents' and children's speech, we used the online database [childes-db](childes-db.stanford.edu) and its associated R programming package `childesr` [@sanchez2018childes]. Childes-db is an online interface to the child language components of [TalkBank](https://talkbank.org/), namely [CHILDES](https://childes.talkbank.org/) [@macwhinney2000childes] and [PhonBank](https://phonbank.talkbank.org/). Two collections of corpora were selected: English-North America and English-UK. 
+
+### Procedure
+
+All word tokens were tagged for the following information: 1. The speaker role (parent vs. child), 2. the age of the child when the word was produced, 3. the type of the utterance the word appeared in (declarative, question, imperative, other)[^1], 4. whether the word was positive or negative, and 5. the type of negative word produced. For this study we considerd the following classes of negative words in English: the words *no* and *not*, the negative clitic auxiliary forms with *nt* (*ain't*, *isn't*, *amn't*, *aren't*, *wasn't*, *weren't*, *don't*, *doesn't*, *didn't*, *won't*, *shan't*, *hasn't*, *havn't*, *hadn't*, *shouldn't*, *can't*, *couldn't*, *may'nt*, *might'nt*, *would'nt*, and *mustn't*), negative quantifiers or adverbs of frequency (*nothing*, *nobody*, *nowhere*, *no-one*, *none*, *never*), as well as derivational negative forms with morphemes *un-* (e.g. unhappy), *in-* (e.g. invisible), *dis-*(e.g. disappear), *de-* (e.g. defrost), *non-* (e.g. nonsense), and *-less* (e.g. careless).
+
+[^1]: This study grouped utterance types into four main categories: "declarative", "question", "imperative", and "other". Utterance type categorization followed the convention used in the [TalkBank manual](https://talkbank.org/manuals/CHAT.html#_Toc486414422). The utterance types are similar to sentence types (declarative, interrogative, imperative) with one exception: the category "question" consists of interrogatives as well as rising declaratives (i.e. declaratives with rising question intonation). In the transcripts, declaratives are marked with a period, questions with a question mark, and imperatives with an exclamation mark. It is important to note that the manual also provides [terminators for special-type utterances](https://talkbank.org/manuals/CHAT.html#_Toc486414431). Among the special type utterances, this study included the following in the category "questions": trailing off of a question, question with exclamation, interruption of a question, and self-interrupted question. The category imperatives also included "emphatic imperatives". The rest of the special type utterances such as "interruptions" and "trailing off" were included in the category "other".
+
+### Exclusion Criteria
+
+First, unintelligible tokens were excluded (N = `r format(exclusions$Unintelligible, big.mark=",")`). Second, tokens that had missing information on children's age were excluded (N = `r format(exclusions$missing, big.mark=",")`). Third, tokens outside the age range of 1 to 6 years were excluded (N = `r format(exclusions$age_ex, big.mark=",")`). The collection contained the speech of `r exclusions$n_children` children and their parents after the exclusions.
+
+## Results
+
+```{r negationProportionPlot}
+negative_proportions %>%
+  ggplot(aes(age,percent)) +
+  geom_point(aes(color=category, shape=category)) +
+  geom_line(aes(color=category)) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+
+## Conclusions
+
+# Study 2: Early Productions
 
 ```{r}
 
@@ -113,12 +155,16 @@ Formal and functional development of negation
 
 ```{r}
 undertwo_neg <- read.csv("raw_data/eng_negation_undertwo.csv")
+
+undertwo_neg[order(undertwo_neg$target_child_age),]
 ```
+
 
 ```{r population}
 undertwo_neg$speaker_id %>%
   unique() %>% length()
 ```
+
 
 Participant information:
 1. what is the distribution of words per participant?
@@ -270,6 +316,7 @@ filter(undertwo_neg, part_of_speech == "co v n")$clean_utterances %>%
 
 ```
 
+
 ```{r}
 # Arbitrary, judgement-based distinction; how to actually split them up?
 non_sentential <- c("qn n", "qn qn n", "co n", "co n:prop", "co v", "co n:prop n n", "n co", "neg n", "neg v", "co pro:pos")
@@ -288,6 +335,7 @@ undertwo_neg %>%
   summarise(utterances = paste(clean_utterances, collapse =","))
 ```
 
+
 ```{r}
 top30 <- filter(constructions, freq>10, x!="co", x!="co co", x!="co co co", x!="co co co co", x!="")$freq %>%
   sum()
@@ -297,6 +345,7 @@ all <- filter(constructions, x!="co", x!="co co", x!="co co co", x!="co co co co
 
 top30/all
 ```
+
 
 Susan's Questions:
 Are you sure it is a quantifier or a marker of non-existence?
