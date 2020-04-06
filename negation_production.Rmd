@@ -125,31 +125,32 @@ negative_proportions %>%
 
 ```{r}
 
-english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
+#english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
 
 
-count_types <- function(string){
-  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
-  return(n)
-}
+#count_types <- function(string){
+#  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+#  return(n)
+#}
 
-count_tokens <- function(string){
-  n <- unlist(strsplit(string, " "))
-  return(length(n))
-}
+#count_tokens <- function(string){
+#  n <- unlist(strsplit(string, " "))
+#  return(length(n))
+#}
 
-english_negation <-
-  english_negation %>%
-  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
-  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
-  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
-  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
-  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
-  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+#english_negation <-
+#  english_negation %>%
+#  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
+#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 
-write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+#write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 
 ```
 
@@ -169,6 +170,40 @@ undertwo_neg$speaker_id %>%
 Participant information:
 1. what is the distribution of words per participant?
 2. what proportion of children in each monthly age bin produce negative morphemes?
+
+Filtering Process: (In parentheses I haven't done yet)
+1. New column (condensed_p_o_s) transformations: 
+  nouns, proper nouns, pronouns -> n
+  (no -> no (replacing co/qn); haven't done this yet)
+  all types of adverbs and determiners condensed to adv and det respectively
+  (no n n -> no v n: 
+    no cockle me
+    no hug baby
+    no it’s yours
+    no brush hair
+    no ride horsie
+    no stop it
+    no help me
+    no spin it
+    no touch Lastname
+    no pop weasel
+    no play toys
+    no pinch that
+    no hold it)
+  (no n n -> no n v:
+    no Mommy Humm
+    no mummy sneeze
+    no phone talk
+    no everybody fall
+    no hair wash)
+  (no n n -> no adj n: 
+    no tomato soup
+    no clam chowder
+    no Pat’s hat
+    no ice pop)
+2. filtered to constructions that occur at least 10 times
+3. filtered out "no", "no no", "no no no", "no no no no", and ""
+
 
 ```{r construction}
 undertwo_neg <- undertwo_neg %>%
@@ -219,6 +254,35 @@ undertwo_neg %>%
 #sum(constructions$freq)
 ```
 
+
+```{r}
+
+length(filter(undertwo_neg, can)$clean_utterances)
+length(filter(undertwo_neg, do)$clean_utterances)
+length(filter(undertwo_neg, want)$clean_utterances)
+
+filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>%
+  length()
+
+filter(undertwo_neg, condensed_p_o_s == "no n")$clean_utterances %>%
+  length()
+
+no_simple <- c("no adv", "no adj", "no v")
+
+filter(undertwo_neg, condensed_p_o_s %in% no_simple)$clean_utterances %>%
+  length()
+
+filter(undertwo_neg, condensed_p_o_s == "not n")$clean_utterances %>%
+  length()
+
+not_simple <-  c("not adv", "not adj", "not v")
+
+filter(undertwo_neg, condensed_p_o_s %in% not_simple)$clean_utterances %>%
+  length()
+
+```
+
+
 |Abbreviation     | Meaning       |
 |-----------------|---------------|
 | n               | noun (includes pronouns and proper nouns) |
@@ -231,42 +295,63 @@ undertwo_neg %>%
 | mod             | modal         | 
 
 
-| Construction    | Examples                           | Negation Categories  |
-|-----------------|------------------------------------|----------------------|
-| no n            | no baby, no horsie, no juice       | Existence, Desire, Metalinguistic? |
-| no no n  OOPS   | PROBLEM HERE no more stuff, *no car, no no pram, #no like doggy  |    |
-| no det n        | no my turn, no a cow, no the hammer|                      |
-| no adj          | no happy, no pretend, no brown     |                      |
-| no adv          | no there, no up, no behind         |                      |
-| no n adv        | no jacket on, no monkey there, *no lie down  |            |
-| no n n          | no baby bubble, no this one, *no brush hair|              |
-| no n n n        | no night night moon, no mummy this side, *no hold daddy hand |                |
-| no n v          | no mail came, no mummy go, no I wanted |                  |
-| no n v n        | no car go car, no comb want brush, no mummy do it |    |
-| no part         | no bouncing, no eating, no hurting |                      |
-| no prep n       | no in tree, no with this, *no like bubbles|               |
-| no v            | no read, no pooped,  *no zipper    |                      |
-| no v n          | no sit chair, no have cracker, no eat milk |              |
-| not n           | not noodle, not home, not right    |                      |
-| not det n       | not my car, not a cat, not a white |                      |
-| not adj         | not good, not dirty, not real      |                      |
-| not adv         | not today, not there, *not asleep  |                      |
-| not v           | not shush, not work, not blanket   |                      |
-| not v n         | not eat rocks, not have coffee, not green one|            |
-| n no            | mammy no, apple no, train no       |                      |
-| n not n         | pizza not pizza, pizza not apples, that not knees|        |
-| n v no          | doll sit no, I take no, Joana say no|                     |
-| mod             | don't, can't                       |                      |
-| mod n           | can't tea, don't Mommy, didn't I   |                      |
-| mod v           | don't go, doesn't work, can't catch|                      |
-| mod v adv       | can't come in, don't fall down, doesn't fit here|         |
-| mod v n         | don't touch that, don't fit car, can't open it|           |
-| mod v n n       | don't eat skin part, (?) don't touch that book, *can't find bunny rabit  | |
-| n mod           | I can't, Jane doesn't, mine didn't |                      |
-| n mod v         | I don't know, they don't fit, I can't open|               |
-| n mod v n       | I don't want juice, I can't find duck, cow won't go Mama| |
-| n mod v prep    | I don't want to, Laura don't want to|                     |
-| v no n n        | man no taste it (???)              |                      |
+| Construction    | Frequency | Examples                           | Negation Categories  |
+|-----------------|-----------|------------------------------------|----------------------|
+| no n            | 455       | no baby, no horsie, no juice       | Existence, Desire, Metalinguistic? |
+| mod v n         | 142       | don't touch that, don't fit car, can't open it|           |
+| n mod v n       | 90        | I don't want juice, I can't find duck, cow won't go Mama| |
+| no no n  OOPS   | 83        | PROBLEM HERE no more stuff, *no car, no no pram, #no like doggy  |    |
+| mod             | 74        | don't, can't                       |                      |
+| n mod v         | 73        | I don't know, they don't fit, I can't open|               |
+| mod v           | 67        | don't go, doesn't work, can't catch|                      |
+| no n n          | 63        | no baby bubble, no this one, *no brush hair|              |
+| n mod           | 55        | I can't, Jane doesn't, mine didn't |                      |
+| not n           | 39        | not noodle, not home, not right    |                      |
+| no v            | 38        | no read, no pooped,  *no zipper    |                      |
+| no v n          | 33        | no sit chair, no have cracker, no eat milk |              |
+| not adv         | 30        | not today, not there, *not asleep  |                      |
+| n no            | 25        | mammy no, apple no, train no       |                      |
+| no adv          | 24        | no there, no up, no behind         |                      |
+| no n n n        | 24        | no night night moon, no mummy this side, *no hold daddy hand |                |
+| mod v n n       | 22        | don't eat skin part, (?) don't touch that book, *can't find bunny rabit  | |
+| no prep n       | 19        | no in tree, no with this, *no like bubbles|               |
+| n mod v prep    | 17        | I don't want to, Laura don't want to|                     |
+| mod n           | 15        | can't tea, don't Mommy, didn't I   |                      |
+| n v no          | 15        | doll sit no, I take no, Joana say no|                     |
+| no n v n        | 15        | no car go car, no comb want brush, no mummy do it |       |
+| not adj         | 15        | not good, not dirty, not real      |                      |
+| not det n       | 15        | not my car, not a cat, not a white |                      |
+| not v n         | 15        | not eat rocks, not have coffee, not green one|            |
+| no det n        | 13        | no my turn, no a cow, no the hammer|                      |
+| not v           | 13        | not shush, not work, not blanket   |                      |
+| mod v adv       | 12        | can't come in, don't fall down, doesn't fit here|         |
+| no n adv        | 12        | no jacket on, no monkey there, *no lie down  |            |
+| no n v          | 12        | no mail came, no mummy go, no I wanted |                  |
+| no part         | 12        | no bouncing, no eating, no hurting |                      |
+| v no n n        | 12        | man no taste it (???)              |                      |
+| n not n         | 11        | pizza not pizza, pizza not apples, that not knees|        |
+| no adj          | 11        | no happy, no pretend, no brown     |                      |
+
+
+
+| Semantic Category  | Frequency  | Examples  |
+|--------------------|------------|-----------|
+| Do                 |  666       | don't like it, I don't feel good, no do it Mummy|
+| No noun            |  455       | no baby, no horsie, no juice  |
+| Ability (can)      |  212       | I can't find a blankie, can't eat, no no I can not do |
+| Desire (want)      |  148       | Don't want to, no comb want brush, no want the baby|
+| Don't want         |  106       | I don't want juice, don't want it, Laura don't want to|
+| No [simple thing]  |  73        | no go, no stupid, no now|
+| Not [simple thing] |  58        | not bad, not write, not quite|
+| Not noun           |  39        | not noodle, not Danny, not right|
+| Presentential (Optimistic) |    | |
+| Presentential (Pessimistic)| 12 | no Mommy read, no I wanted, no I sweep, no water go|
+
+Notes on Semantic Categories:
+- [simple thing] : adj, adv, v
+- Presentential (Optimistic) = no n v, no n adv, 
+- Presentential (Pessimistic) = no n v
+  - all of these could be read as pronominal
     
 ```{r}
 filter(undertwo_neg, part_of_speech == "qn n")$clean_utterances %>%
