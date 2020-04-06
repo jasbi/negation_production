@@ -83,6 +83,11 @@ Study 2 Questions
 * How productive are early forms of negation?
     * average neg + #WORD per child as measure of productivity
 
+<!-- Origins 
+
+Possible origins: 1. metalinguistic and conceptual categorization 2. perceptual (existence) 3. affective (rejections, wants, likes). Two hypothesis: 1. unified concept of negation that is incorporated to operate on different representations and 2. heterogeneous concepts of negation that develop independently but can be generalized into a single concept.
+-->
+
 ## Previous Studies
 
 Formal and functional development of negation

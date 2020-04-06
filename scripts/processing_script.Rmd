@@ -16,7 +16,7 @@ library(lubridate)
 
 #CHILDES-DB Import
 
-This next chunk imports data from Childes-db using the childesr package and saves them as csv or feather files in the local drive
+This next chunk imports data from Childes-db using the childesr package and saves them as a csv file or a feather file in the local drive 1_raw_data:
 
 ```{r ChildesDBimports}
 #Getting data from 673 children in 62 corpora...
@@ -37,12 +37,9 @@ eng_utterances <- get_utterances(collection = c("Eng-NA","Eng-UK"),
                                  role = c("target_child","Mother", "Father"))
 ```
 
-<<<<<<< HEAD
 ```{r ChildesStorage}
 #Store CHILDES-DB imports in the locel folder 1_raw_data
-=======
-#Store CHILDES-DB imports in the local folder 1_raw_data
->>>>>>> 99769eb65bf34d60b722ca4bd4c79c34ae6d9481
+
 write_csv(english_tokens, "../raw_data/english_tokens.csv")
 write_feather(english_tokens, "../raw_data/english_tokens.feather")
 
@@ -83,6 +80,8 @@ age_ex <- nrow(english_tokens)
 # number of children left after exclusions
 n_children <-
   english_tokens$target_child_id %>% unique() %>% length()
+
+# early erroneous tagging
 
 # record the dataframe of exclusions
 exclusions <-
@@ -295,6 +294,7 @@ english_tokens[grepl("^(?i)un[a-zA-Z]{4,}", english_tokens$gloss) &
                  !grepl("^(?i)under[a-zA-Z]+", english_tokens$gloss) &
                  english_tokens$gloss != "untill" &
                  english_tokens$gloss != "unhunh" &
+                 english_tokens$gloss != "unahyah" &
                  english_tokens$gloss != "unless"
                ,]$word <- "un"
 

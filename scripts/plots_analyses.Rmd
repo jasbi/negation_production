@@ -114,6 +114,10 @@ negative_proportions <-
   mutate(total = sum(count), proportion = count / total, percent = proportion * 100)
 
 saveRDS(negative_proportions, file="../processed_data/negation_proportions")
+
+  english_tokens %>%
+  filter(polarity=="negative", speaker=="child", target_child_age < 18) %>%
+  arrange(target_child_age)
 ```
 
 ```{r negationPlot}
