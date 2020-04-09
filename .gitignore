@@ -39,6 +39,7 @@ rsconnect/
 */.DS_Store
 
 negation_production.log
+negation_production.fff
 
 raw_data/english_tokens.feather
 raw_data/eng_utterances.feather
