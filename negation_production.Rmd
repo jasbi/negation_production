@@ -105,7 +105,6 @@ All word tokens were tagged for the following information: 1. The speaker role (
 
 ### Exclusion Criteria
 
-First, unintelligible tokens were excluded (N = `r format(exclusions$Unintelligible, big.mark=",")`). Second, tokens that had missing information on children's age were excluded (N = `r format(exclusions$missing, big.mark=",")`). Third, tokens outside the age range of 1 to 6 years were excluded (N = `r format(exclusions$age_ex, big.mark=",")`). The collection contained the speech of `r exclusions$n_children` children and their parents after the exclusions.
 
 ## Results
 
@@ -190,8 +189,8 @@ undertwo_neg %>%
 ## Participants
 
 ```{r population}
-undertwo_neg$speaker_id %>%
-  unique() %>% length()
+#undertwo_neg$speaker_id %>%
+#  unique() %>% length()
 ```
 
 ## Material
