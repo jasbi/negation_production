@@ -23,7 +23,7 @@
 }{}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
-            pdftitle={How do children produce negation?},
+            pdftitle={The production of negation in parents' and children's speech},
             pdfauthor={First Author~\& Ernst-August Doelle},
             pdfkeywords={keywords},
             pdfborder={0 0 0},
@@ -64,12 +64,12 @@
 \def\footnote{\protect\rmarkdownfootnote}
 
 
-  \title{How do children produce negation?}
+  \title{The production of negation in parents' and children's speech}
     \author{First Author\textsuperscript{1}~\& Ernst-August
 Doelle\textsuperscript{1,2}}
     \date{}
   
-\shorttitle{Negation Production}
+\shorttitle{Child and Parent Production of Negation}
 \affiliation{
 \vspace{0.5cm}
 \textsuperscript{1} Wilhelm-Wundt-University\\\textsuperscript{2} Konstanz Business School}
@@ -126,46 +126,144 @@ this is the abstract
 
 Claim: Children start producing all types of English negation by age 18
 months and by 36 months, they produce them at the rate parents do. types
-of negation in English: no, sentential (not, nt), lexical (nothing,
-nobody, nowhere, none, un-in-de-dis-). For no: higher frequency in
-imperatives For sentential negation: \ldots{} For lexical negatoin:
-\ldots{}
+of negation in English: no, verbal (not, nt), lexical (nothing, nobody,
+nowhere, none, un-in-de-dis-).
 
-\begin{itemize}
-\item
-  How frequent are different negative forms in children's input?
-\item
-  What is the developmental trajectory of different negative forms?
-\item
-  How prevelant are different negative forms in different sentence types
-  (imperative, declerative, interrogative)?
-\item
-  Do lexical negatives develop first or sentential negatives? Could one
-  help the other?
-\item
-  What percentage of children at each age produce negation? different
-  forms?
-\end{itemize}
+Study 1 Questions * What is the overall trajectory of negative forms in
+child production? * Does the development of negation follow a no
+\textgreater{} not \textgreater{} nt cline? (Cameron-faulkner et al) *
+How many children are found to produce no/not/nt at each age? * Do
+positive variants of the negative constructions exist too? * Are early
+\enquote{can't} and \enquote{don't} examples unanalyzed wholes? (Klima
+\& Bellugi 1966; Bloom 1970) Do children produce \enquote{can't} and
+\enquote{don't} before using \enquote{do} and \enquote{can}? *
+Proportion of no vs.~not vs.~nt broken down by mean length of utterance
+* instead of age, put mean length of utterance on the x axis?
 
-Study 2: * What syntactic constructions host negative forms? * How
-productive are negative morphemes?
+Study 2 Questions * What are early constructions? * the response may
+differ based on annotation level * Do children's early negative
+utterances differ so much from those used by adults? (Thornton \& Tesan
+2013) * How common are ungrammatical non-adult like combinations? * How
+many pre-sentential negation? (NEG + Subject + Predicate) * How many
+sentence internal? (Subj + NEG + Predicate) * Is negation external at
+the beginning? (appear before subjects) Does a NEG + S schema mark the
+beginning of negation? (McNeill \& McNeill) * How many are optional
+infinitive: it not fit in here, it don't fit in here? * control MLU:
+which forms are common among 1/2/3/\ldots{} word utterances? * exclude
+single \enquote{no} (as well as anaphoric no) utterances from
+\enquote{no + more words} * What is anaphoric negation negating? * How
+productive are early forms of negation? * average neg + \#WORD per child
+as measure of productivity
 
-\section{Literature Review}\label{literature-review}
+\subsection{Previous Studies}\label{previous-studies}
 
 Formal and functional development of negation
 
-\section{Methods}\label{methods}
+\subsection{Current Study}\label{current-study}
 
-\begin{verbatim}
-## [1] 173
-\end{verbatim}
+Acquisition of negation should concern itself with two notions: 1.
+negative morpheme 2. compositional complexity. By negative morpheme, we
+mean the kinds of morphemes that at each stage of acquisition are mapped
+to negative meanings. English has adverbal and adnominal mophemes that
+encode the concept of negation. We can look at how each form-meaning
+mapping emerges in children's development. Second by compositional
+complexity, we mean the types of elements that each morphemes
+succesfully negates at each stage of development. Under stuch analysis
+negation may have been successfully acquired to operate on locative
+elements but not identity relations. Compositional complexity of
+negation at each stage also helps us understand how quickly children
+generalize the function of negation beyond specific arguments it takes
+in the child's input.
+
+\section{Study 1: Large-scale
+metrics}\label{study-1-large-scale-metrics}
+
+\subsection{Methods}\label{methods}
+
+For samples of parents' and children's speech, we used the online
+database \href{childes-db.stanford.edu}{childes-db} and its associated R
+programming package \texttt{childesr} ({\textbf{???}}). Childes-db is an
+online interface to the child language components of
+\href{https://talkbank.org/}{TalkBank}, namely
+\href{https://childes.talkbank.org/}{CHILDES} ({\textbf{???}}) and
+\href{https://phonbank.talkbank.org/}{PhonBank}. Two collections of
+corpora were selected: English-North America and English-UK.
+
+\subsubsection{Procedure}\label{procedure}
+
+All word tokens were tagged for the following information: 1. The
+speaker role (parent vs.~child), 2. the age of the child when the word
+was produced, 3. the type of the utterance the word appeared in
+(declarative, question, imperative, other)\footnote{This study grouped
+  utterance types into four main categories: \enquote{declarative},
+  \enquote{question}, \enquote{imperative}, and \enquote{other}.
+  Utterance type categorization followed the convention used in the
+  \href{https://talkbank.org/manuals/CHAT.html\#_Toc486414422}{TalkBank
+  manual}. The utterance types are similar to sentence types
+  (declarative, interrogative, imperative) with one exception: the
+  category \enquote{question} consists of interrogatives as well as
+  rising declaratives (i.e.~declaratives with rising question
+  intonation). In the transcripts, declaratives are marked with a
+  period, questions with a question mark, and imperatives with an
+  exclamation mark. It is important to note that the manual also
+  provides
+  \href{https://talkbank.org/manuals/CHAT.html\#_Toc486414431}{terminators
+  for special-type utterances}. Among the special type utterances, this
+  study included the following in the category \enquote{questions}:
+  trailing off of a question, question with exclamation, interruption of
+  a question, and self-interrupted question. The category imperatives
+  also included \enquote{emphatic imperatives}. The rest of the special
+  type utterances such as \enquote{interruptions} and \enquote{trailing
+  off} were included in the category \enquote{other}.}, 4. whether the
+word was positive or negative, and 5. the type of negative word
+produced. For this study we considerd the following classes of negative
+words in English: the words \emph{no} and \emph{not}, the negative
+clitic auxiliary forms with \emph{nt} (\emph{ain't}, \emph{isn't},
+\emph{amn't}, \emph{aren't}, \emph{wasn't}, \emph{weren't},
+\emph{don't}, \emph{doesn't}, \emph{didn't}, \emph{won't},
+\emph{shan't}, \emph{hasn't}, \emph{havn't}, \emph{hadn't},
+\emph{shouldn't}, \emph{can't}, \emph{couldn't}, \emph{may'nt},
+\emph{might'nt}, \emph{would'nt}, and \emph{mustn't}), negative
+quantifiers or adverbs of frequency (\emph{nothing}, \emph{nobody},
+\emph{nowhere}, \emph{no-one}, \emph{none}, \emph{never}), as well as
+derivational negative forms with morphemes \emph{un-} (e.g.~unhappy),
+\emph{in-} (e.g.~invisible), \emph{dis-}(e.g.~disappear), \emph{de-}
+(e.g.~defrost), \emph{non-} (e.g.~nonsense), and \emph{-less}
+(e.g.~careless).
+
+\subsubsection{Exclusion Criteria}\label{exclusion-criteria}
+
+\subsection{Results}\label{results}
+
+\subsection{Conclusions}\label{conclusions}
+
+\section{Study 2: Early Productions}\label{study-2-early-productions}
 
 Participant information: 1. what is the distribution of words per
 participant? 2. what proportion of children in each monthly age bin
 produce negative morphemes?
 
-\includegraphics{negation_production_files/figure-latex/construction-1.pdf}
-\includegraphics{negation_production_files/figure-latex/construction-2.pdf}
+Filtering Process: (In parentheses I haven't done yet) 1. New column
+(condensed\_p\_o\_s) transformations: nouns, proper nouns, pronouns
+-\textgreater{} n (no -\textgreater{} no (replacing co/qn); haven't done
+this yet) all types of adverbs and determiners condensed to adv and det
+respectively (no n n -\textgreater{} no v n: no cockle me no hug baby no
+it's yours no brush hair no ride horsie no stop it no help me no spin it
+no touch Lastname no pop weasel no play toys no pinch that no hold it)
+(no n n -\textgreater{} no n v: no Mommy Humm no mummy sneeze no phone
+talk no everybody fall no hair wash) (no n n -\textgreater{} no adj n:
+no tomato soup no clam chowder no Pat's hat no ice pop) 2. filtered to
+constructions that occur at least 10 times 3. filtered out \enquote{no},
+\enquote{no no}, \enquote{no no no}, \enquote{no no no no}, and
+\enquote{}
+
+\subsection{Participants}\label{participants}
+
+\subsection{Material}\label{material}
+
+\subsection{Procedure}\label{procedure-1}
+
+\subsection{Data analysis}\label{data-analysis}
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -185,469 +283,335 @@ mod & modal\tabularnewline
 
 \begin{longtable}[]{@{}lll@{}}
 \toprule
-\begin{minipage}[b]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[b]{0.23\columnwidth}\raggedright\strut
 Construction\strut
-\end{minipage} & \begin{minipage}[b]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright\strut
+Frequency\strut
+\end{minipage} & \begin{minipage}[b]{0.47\columnwidth}\raggedright\strut
 Examples\strut
-\end{minipage} & \begin{minipage}[b]{0.27\columnwidth}\raggedright\strut
-Negation Categories\strut
 \end{minipage}\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 no n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+455\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 no baby, no horsie, no juice\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-Existence, Desire, Metalinguistic?\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no no n OOPS\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-PROBLEM HERE no more stuff, *no car, no no pram, \#no like doggy\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no det n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no my turn, no a cow, no the hammer\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no adj\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no happy, no pretend, no brown\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no there, no up, no behind\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no jacket on, no monkey there, *no lie down\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no baby bubble, no this one, *no brush hair\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no night night moon, no mummy this side, *no hold daddy hand\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no mail came, no mummy go, no I wanted\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no car go car, no comb want brush, no mummy do it\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no part\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no bouncing, no eating, no hurting\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no prep n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no in tree, no with this, *no like bubbles\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no read, no pooped, *no zipper\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no sit chair, no have cracker, no eat milk\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not noodle, not home, not right\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not det n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not my car, not a cat, not a white\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not adj\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not good, not dirty, not real\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not today, not there, *not asleep\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not shush, not work, not blanket\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not eat rocks, not have coffee, not green one\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n no\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-mammy no, apple no, train no\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n not n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-pizza not pizza, pizza not apples, that not knees\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n v no\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-doll sit no, I take no, Joana say no\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-don't, can't\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-can't tea, don't Mommy, didn't I\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-don't go, doesn't work, can't catch\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod v adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-can't come in, don't fall down, doesn't fit here\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 mod v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+142\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 don't touch that, don't fit car, can't open it\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n mod v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+90\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+I don't want juice, I can't find duck, cow won't go Mama\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no qn n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+83\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no more stuff, *no car, no no pram, no like doggy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+74\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+don't, can't\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n mod v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+73\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+I don't know, they don't fit, I can't open\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+67\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+don't go, doesn't work, can't catch\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+63\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no baby bubble, no this one, *no brush hair\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n mod\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+55\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+I can't, Jane doesn't, mine didn't\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+39\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not noodle, not home, not right\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+38\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no read, no pooped, *no zipper\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+33\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no sit chair, no have cracker, no eat milk\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+30\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not today, not there, *not asleep\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n no\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+25\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+mammy no, apple no, train no\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+24\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no there, no up, no behind\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n n n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+24\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no night night moon, no mummy this side, *no hold daddy hand\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 mod v n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+22\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 don't eat skin part, (?) don't touch that book, *can't find bunny
 rabit\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n mod\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-I can't, Jane doesn't, mine didn't\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no prep n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+19\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no in tree, no with this, *no like bubbles\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n mod v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-I don't know, they don't fit, I can't open\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n mod v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-I don't want juice, I can't find duck, cow won't go Mama\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 n mod v prep\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+17\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 I don't want to, Laura don't want to\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+can't tea, don't Mommy, didn't I\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n v no\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+doll sit no, I take no, Joana say no\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no car go car, no comb want brush, no mummy do it\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not adj\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not good, not dirty, not real\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not det n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not my car, not a cat, not a white\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not eat rocks, not have coffee, not green one\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no det n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+13\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no my turn, no a cow, no the hammer\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+13\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not shush, not work, not blanket\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod v adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+can't come in, don't fall down, doesn't fit here\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no jacket on, no monkey there, *no lie down\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no mail came, no mummy go, no I wanted\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no part\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no bouncing, no eating, no hurting\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 v no n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 man no taste it (???)\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n not n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+11\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+pizza not pizza, pizza not apples, that not knees\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no adj\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+11\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no happy, no pretend, no brown\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
-\begin{verbatim}
-##   [1] no baby          no mama          no door          no car          
-##   [5] no pillow        no straws        no game          no pages        
-##   [9] no bath          no celery        no house         no milk         
-##  [13] no box           no boot          no baseball      no caca swing   
-##  [17] no supper        no cuppie        no thank_you     no car carpark  
-##  [21] no color         no cat           no back          no water        
-##  [25] no bubble        no juice         no milk          no nose         
-##  [29] no way           no goggie        no letter        no pen          
-##  [33] no puppy         no orange        no cookie        no glove        
-##  [37] no horsie        no play          no pentagon      no moon         
-##  [41] no boats         no book          no cars          no bricks       
-##  [45] no park          no tickle        no toys          no touch        
-##  [49] no man           no tape          no bite          no nana         
-##  [53] no baby's        no bits          no egg           no machine      
-##  [57] no mail          no tractor       no Ma            no tanker tanker
-##  [61] no right         no lady          no bug           no wood         
-##  [65] no babies        no pocket        no move          no push         
-##  [69] no teddy         no walk          no bed           no dolls        
-##  [73] no no monkeys    no couch         no mom           no shoe shoe    
-##  [77] no mummy         no hold          no kisses        no blue         
-##  [81] no no no powder  no powder        no clock         no valentines   
-##  [85] no cream         no bottle        no train         no bus          
-##  [89] no doll          no soup          no tigers        no pigs         
-##  [93] no cheese        no girl          no window        no paper        
-##  [97] no face          no mummy's       no boy           no mommy        
-## [101] no pictures      no picture       no hands         no fall         
-## [105] no soda          no lady          no food          no rice         
-## [109] no truck         no bucket        no noise         no eggs         
-## [113] no knee          no shoes         no socks         no baba         
-## [117] no tea           no bee           no sir           no balloons     
-## [121] no balloon       no motorcycle    no fork          no dance        
-## [125] no work          no nappie        no glue          no cookies      
-## [129] no works         no daddy's       no squirrel      no pink         
-## [133] no cakes         no wheels        no yellow       
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.27\columnwidth}\raggedright\strut
+Semantic Category\strut
+\end{minipage} & \begin{minipage}[b]{0.16\columnwidth}\raggedright\strut
+Frequency\strut
+\end{minipage} & \begin{minipage}[b]{0.39\columnwidth}\raggedright\strut
+Examples\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Do\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+666\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+don't like it, I don't feel good, no do it Mummy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Ability (can)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+212\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+I can't find a blankie, can't eat, no no I can not do\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Desire (want)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+148\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+Don't want to, no comb want brush, no want the baby\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Don't want\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+106\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+I don't want juice, don't want it, Laura don't want to\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+No {[}simple thing{]}\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+528\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+no go, no stupid, no now, no baby\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Not {[}simple thing{]}\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+97\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+not bad, not write, not quite\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Not noun\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+39\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+not noodle, not Danny, not right\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Presentential (Optimistic)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+76\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+no daddy eat, no eat lunch, no in tree, no Toto here\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Presentential (Pessimistic)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+no Mommy read, no I wanted, no I sweep, no water go\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
-\begin{verbatim}
-##  [1] no more stuff     no more people    no more people   
-##  [4] no more ball      no no car         no no paint      
-##  [7] no more bath      no more toy       no more juice    
-## [10] no more machine   no more noise     no more light    
-## [13] no more fire      no no mouse       no no pram       
-## [16] no more pegs      no more car       no more apple    
-## [19] no more blocks    no more monkey    no more squirrels
-## [22] no more whale     no more wheels    no other pennys  
-## [25] no more horse     no more meat     
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] no push     no hat      no dada     no mommy    no fish    
-##  [6] no pig      no bottle   no juice    no mommy    no picture 
-## [11] no sweeties no uncle    no hug      no boat     no match   
-## [16] no neck un  no pink     no monkey   no boy     
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] no Mummy                  no Mommy                 
-##  [3] no Mum                    no Baura                 
-##  [5] no Joshua                 no Papa                  
-##  [7] no Jen                    no Mom                   
-##  [9] no Brittany               no Naima                 
-## [11] no Nana                   no Fraser                
-## [13] no Davy                   no Fraser no Fraser      
-## [15] no Ma                     no No                    
-## [17] no Mumm                   no Zita                  
-## [19] no Daddy                  no Percy                 
-## [21] no Toby                   no Nana's                
-## [23] no Mummy's                no Abi                   
-## [25] no Pooh                   no Mommy                 
-## [27] no Papa                   no Eve                   
-## [29] no Ernie                  no Pat                   
-## [31] no Emily                  no Mama                  
-## [33] no Laura_Lastname         no Mummy                 
-## [35] no Carl                   no Thomas                
-## [37] no Thomas_the_Tank_engine
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] can't catch it      don't want it       can't do it        
-##  [4] can't get it        don't touch it      don't do it        
-##  [7] can't have it       tan't blow it       don't throw it     
-## [10] don't like it       can't reach it      don't touch you    
-## [13] didn't eat it       can't open it       don't hear you     
-## [16] don't pour it       don't eat it        don't don't pour it
-## [19] can't fix it        don't lose it       can't find it      
-## [22] don't push it      
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-## [1] no more      no noone     no one       no more      no everybody
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-## [1] don't          can't can't    can't          can't         
-## [5] don't          don't don't    doo+doos can't
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-## [1] I don't    I didn't   I can't    I couldn't I can't    I won't   
-## [7] she don't  I won't   
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] don't go           don't talk         can't catch       
-##  [4] don't know         can't come         don't touch       
-##  [7] don't kick         can't put          doesn't work      
-## [10] don't fit          don't want         don't cry         
-## [13] don't worry        leebs don't know   can't push        
-## [16] don't jump         don't wiggle       can't reach       
-## [19] don't push         can't move         don't nurse       
-## [22] can't open         willn't fit        won't open        
-## [25] willn't willn't go can't eat          don't put         
-## [28] willn't work       don't throw        don't stop        
-## [31] won't go           can't talk        
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] don't touch that  don't do that     don't want that  
-##  [4] don't want these  don't say that    didn't put this  
-##  [7] didn't took this  don't put that    don't do this    
-## [10] don't want this   don't spoil that  don't like that  
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] I don't know           I don't play           I can't open          
-##  [4] I don't remember       they don't fit         I can't tie           
-##  [7] I don't come           I can't sing           hh I can't sing with  
-## [10] my can't eat           I don't want           I didn't cry          
-## [13] I couldn't predict     I can't go living+room I don't blanket       
-## [16] I can't see           
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] no read          no write         no pooped        no go           
-##  [5] no want          no zipper        no want din+dins no draw         
-##  [9] no bumble        no draw          no sit           no go bathroom  
-## [13] no eat           no fit           no finish        no f finish     
-## [17] no think         no left         
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] I don't want it     I don't see it      I can't do it      
-##  [4] I can't find it     I don't need it     I can't see you    
-##  [7] I don't like it     I can't hear you    I didn't like it   
-## [10] I can't see it      I can't can't do it
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] not there     not again     not yet       not quite     not here     
-##  [6] not off       not not there not on        not now       not asleep   
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-##  [1] no have black   no sit chair    no eat lunch    no have cracker
-##  [5] no want truck   no want paint   no want food    no spill milk  
-##  [9] no eat milk     no want bottle 
-## 1807 Levels: a don't turn a ice no ice+cream a no ... Zoe not Zoe
-\end{verbatim}
-
-\begin{verbatim}
-## # A tibble: 924 x 2
-##    part_of_speech                        utterances                        
-##    <fct>                                 <chr>                             
-##  1 adj co                                hot no,wet no                     
-##  2 adj cop pro:per                       naughty isn't it,cold isn't it    
-##  3 adj mod v                             mum don't know                    
-##  4 adj n co conj mod v                   little bun birthday ho but can't ~
-##  5 adj n co n:prop coord n:prop coord n~ big kids like Emmy and Carl and L~
-##  6 adj n neg pro:dem                     just crayon not these             
-##  7 adj prep n:prop n cop pro:per         close to Rachel's feet wasn't it  
-##  8 adv aux                               there aren't                      
-##  9 adv cop                               there isn't ,there isn't          
-## 10 adv cop qn n                          there is no moon                  
-## # ... with 914 more rows
-\end{verbatim}
-
-\begin{verbatim}
-## [1] 0.6919721
-\end{verbatim}
-
-Susan's Questions: Are you sure it is a quantifier or a marker of
-non-existence? Check the difference between no+N and no-more+N how about
-single \enquote{no}s?
-
-To do: 1. cluster the most frequent categories 2. look at the age
-distribution for the cluster (what about the distribution of age in
-communicative function: nonexistence, nondesire, imperative)
-
-\subsection{Participants}\label{participants}
-
-\subsection{Material}\label{material}
-
-\subsection{Procedure}\label{procedure}
-
-\subsection{Data analysis}\label{data-analysis}
-
-\section{Results}\label{results}
+\section{Results}\label{results-1}
 
 \section{Discussion}\label{discussion}
 

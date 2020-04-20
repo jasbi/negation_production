@@ -17,253 +17,331 @@ mod & modal\tabularnewline
  
 \begin{longtable}[]{@{}lll@{}}
 \toprule
-\begin{minipage}[b]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[b]{0.23\columnwidth}\raggedright\strut
 Construction\strut
-\end{minipage} & \begin{minipage}[b]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[b]{0.15\columnwidth}\raggedright\strut
+Frequency\strut
+\end{minipage} & \begin{minipage}[b]{0.47\columnwidth}\raggedright\strut
 Examples\strut
-\end{minipage} & \begin{minipage}[b]{0.27\columnwidth}\raggedright\strut
-Negation Categories\strut
 \end{minipage}\tabularnewline
 \midrule
 \endhead
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 no n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+455\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 no baby, no horsie, no juice\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-Existence, Desire, Metalinguistic?\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no no n OOPS\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-PROBLEM HERE no more stuff, *no car, no no pram, \#no like doggy\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no det n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no my turn, no a cow, no the hammer\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no adj\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no happy, no pretend, no brown\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no there, no up, no behind\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no jacket on, no monkey there, *no lie down\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no baby bubble, no this one, *no brush hair\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no night night moon, no mummy this side, *no hold daddy hand\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no mail came, no mummy go, no I wanted\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no n v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no car go car, no comb want brush, no mummy do it\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no part\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no bouncing, no eating, no hurting\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no prep n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no in tree, no with this, *no like bubbles\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no read, no pooped, *no zipper\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-no v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-no sit chair, no have cracker, no eat milk\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not noodle, not home, not right\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not det n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not my car, not a cat, not a white\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not adj\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not good, not dirty, not real\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not today, not there, *not asleep\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not shush, not work, not blanket\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-not v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-not eat rocks, not have coffee, not green one\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n no\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-mammy no, apple no, train no\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n not n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-pizza not pizza, pizza not apples, that not knees\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n v no\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-doll sit no, I take no, Joana say no\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-don't, can't\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-can't tea, don't Mommy, didn't I\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-don't go, doesn't work, can't catch\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-mod v adv\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-can't come in, don't fall down, doesn't fit here\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 mod v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+142\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 don't touch that, don't fit car, can't open it\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n mod v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+90\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+I don't want juice, I can't find duck, cow won't go Mama\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no qn n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+83\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no more stuff, *no car, no no pram, no like doggy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+74\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+don't, can't\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n mod v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+73\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+I don't know, they don't fit, I can't open\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+67\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+don't go, doesn't work, can't catch\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+63\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no baby bubble, no this one, *no brush hair\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n mod\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+55\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+I can't, Jane doesn't, mine didn't\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+39\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not noodle, not home, not right\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+38\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no read, no pooped, *no zipper\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+33\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no sit chair, no have cracker, no eat milk\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+30\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not today, not there, *not asleep\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n no\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+25\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+mammy no, apple no, train no\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+24\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no there, no up, no behind\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n n n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+24\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no night night moon, no mummy this side, *no hold daddy hand\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 mod v n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+22\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 don't eat skin part, (?) don't touch that book, *can't find bunny
 rabit\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n mod\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-I can't, Jane doesn't, mine didn't\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no prep n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+19\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no in tree, no with this, *no like bubbles\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n mod v\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-I don't know, they don't fit, I can't open\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
-n mod v n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
-I don't want juice, I can't find duck, cow won't go Mama\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 n mod v prep\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+17\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 I don't want to, Laura don't want to\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
 \end{minipage}\tabularnewline
-\begin{minipage}[t]{0.21\columnwidth}\raggedright\strut
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+can't tea, don't Mommy, didn't I\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n v no\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+doll sit no, I take no, Joana say no\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no car go car, no comb want brush, no mummy do it\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not adj\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not good, not dirty, not real\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not det n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not my car, not a cat, not a white\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not v n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+15\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not eat rocks, not have coffee, not green one\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no det n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+13\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no my turn, no a cow, no the hammer\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+not v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+13\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+not shush, not work, not blanket\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+mod v adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+can't come in, don't fall down, doesn't fit here\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n adv\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no jacket on, no monkey there, *no lie down\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no n v\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no mail came, no mummy go, no I wanted\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no part\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no bouncing, no eating, no hurting\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
 v no n n\strut
-\end{minipage} & \begin{minipage}[t]{0.43\columnwidth}\raggedright\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
 man no taste it (???)\strut
-\end{minipage} & \begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
-\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+n not n\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+11\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+pizza not pizza, pizza not apples, that not knees\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright\strut
+no adj\strut
+\end{minipage} & \begin{minipage}[t]{0.15\columnwidth}\raggedright\strut
+11\strut
+\end{minipage} & \begin{minipage}[t]{0.47\columnwidth}\raggedright\strut
+no happy, no pretend, no brown\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+\efloatseparator
+ 
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.27\columnwidth}\raggedright\strut
+Semantic Category\strut
+\end{minipage} & \begin{minipage}[b]{0.16\columnwidth}\raggedright\strut
+Frequency\strut
+\end{minipage} & \begin{minipage}[b]{0.39\columnwidth}\raggedright\strut
+Examples\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Do\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+666\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+don't like it, I don't feel good, no do it Mummy\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Ability (can)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+212\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+I can't find a blankie, can't eat, no no I can not do\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Desire (want)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+148\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+Don't want to, no comb want brush, no want the baby\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Don't want\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+106\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+I don't want juice, don't want it, Laura don't want to\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+No {[}simple thing{]}\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+528\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+no go, no stupid, no now, no baby\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Not {[}simple thing{]}\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+97\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+not bad, not write, not quite\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Not noun\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+39\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+not noodle, not Danny, not right\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Presentential (Optimistic)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+76\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+no daddy eat, no eat lunch, no in tree, no Toto here\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.27\columnwidth}\raggedright\strut
+Presentential (Pessimistic)\strut
+\end{minipage} & \begin{minipage}[t]{0.16\columnwidth}\raggedright\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.39\columnwidth}\raggedright\strut
+no Mommy read, no I wanted, no I sweep, no water go\strut
 \end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
