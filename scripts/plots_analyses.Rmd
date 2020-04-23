@@ -183,6 +183,116 @@ word_table <-
 saveRDS(word_table, file="../processed_data/word_table")
 ```
 
+### Auxiliaries
+
+```{r AuxWordPlotDo}
+aux_plot <-
+  word_table %>%
+  filter(category=="auxiliary", polarity=="negative", word!="aint", word!="other", word!="amnt", word!="maynt", word!="mightnt", word!="shant")
+  
+  
+aux_plot$word <- fct_relevel(aux_plot$word, "dont", "cant", "didnt", "isnt", "doesnt", "wont", "arent", "wasnt", "havent", "hasnt", "couldnt", "wouldnt", "werent", "shouldnt", "hadnt", "mustnt")
+
+  ggplot(aux_plot, aes(age, ppt, fill=speaker, color=speaker, shape=speaker)) +
+  geom_point(stat="identity", aes(fill=speaker, color=speaker, shape=speaker)) +
+  geom_line() +
+  facet_wrap(.~word, scales = "free_y") +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  geom_vline(xintercept = 24, linetype = "dashed") +
+  theme_classic()
+```
+
+Auxiliary words that are almost never said: maynt, mightnt, mustnt, 
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="hadnt" | word=="hasnt" | word=="havent") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="didnt" | word=="doesnt" | word=="dont") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="didnt" | word=="doesnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="cant" | word=="couldnt" | word=="shouldnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="isnt" | word=="arent") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="werent" | word=="wasnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="wont" | word=="wouldnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter() %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
 ### Adverbials
 
 Plot for adverbials below. It seems like "often" and "ususally" are not produced that often!
@@ -202,10 +312,10 @@ Plot for "always" and "never" as positive and negative pairs:
 
 ```{r AuxWordPlotDo}
 word_table %>%
-  filter(word=="never" | word=="always") %>%
+  filter(word=="never" | word=="sometimes" | word=="always") %>%
   ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
   geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
-  geom_line(aes(fill = word)) +
+  geom_line() +
   facet_grid(.~speaker) +
   scale_x_continuous(breaks=seq(0, 72, by = 6)) +
   theme_classic()
