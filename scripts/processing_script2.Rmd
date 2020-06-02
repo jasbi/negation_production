@@ -20,39 +20,40 @@ library(tm)
 
 ```{r, include= FALSE}
 
-english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
-
-
-count_types <- function(string){
- n <- nlevels(as.factor(unlist(strsplit(string, " "))))
- return(n)
-}
-
-count_tokens <- function(string){
- n <- unlist(strsplit(string, " "))
- return(length(n))
-}
-
-english_negation <-
- english_negation %>%
- filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
- filter(!grepl('not yet transcribed need to fix', gloss)) %>%
- mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?", "n ?"))) %>%
- mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
- mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
- mutate(want = grepl('^want | want | want$', clean_utterances))%>%
- mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
- mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
- mutate(type_token_ratio = n_types_clean/n_tokens_clean)
-
-
-write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+# english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
+# 
+# 
+# count_types <- function(string){
+#  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+#  return(n)
+# }
+# 
+# count_tokens <- function(string){
+#  n <- unlist(strsplit(string, " "))
+#  return(length(n))
+# }
+# 
+# english_negation <-
+#  english_negation %>%
+#  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
+#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?", "n ?"))) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+# 
+# 
+# write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 
 ```
 
 ```{r cleanup, include=FALSE}
 undertwo_neg <- read.csv("raw_data/eng_negation_undertwo.csv")
 
+# uh no idea what this does??
 #undertwo_neg[order(undertwo_neg$target_child_age),]
 
 # Takes in a gloss string and a part of speech string and returns a part of speech string with "no" in places
@@ -96,7 +97,7 @@ constructions <- plyr::count(undertwo_neg$condensed_p_o_s) %>%
   arrange(desc(freq))
 
 filtered_constructions <- constructions %>%
-  filter(freq>10, x!="no", x!="no no", x!="no no no", x!="no no no no", x!="")
+  filter(freq>10, x!="no", x!="no no", x!="no no no", x!="no no no no", x != "no no no no no", x!="")
 
 ```
 
@@ -158,14 +159,16 @@ Total # of utterances: 3495
 | Construction    | Frequency | Examples                           | 
 |-----------------|-----------|------------------------------------|
 | no n            | `r filter(undertwo_neg, condensed_p_o_s == "no n")$clean_utterances %>% length()` | no baby, no horsie, no juice  | 
+| co no           | `r filter(undertwo_neg, condensed_p_o_s == "co no")$clean_utterances %>% length()`| oh no, okay no, yeah no |
 | mod v n         | `r filter(undertwo_neg, condensed_p_o_s == "mod v n")$clean_utterances %>% length()` | don't touch that, don't fit car, can't open it|           
 | n mod v n       | `r filter(undertwo_neg, condensed_p_o_s == "n mod v n")$clean_utterances %>% length()` | I don't want juice, I can't find duck, cow won't go Mama| 
-| no qn n         | `r filter(undertwo_neg, condensed_p_o_s == "no qn n")$clean_utterances %>% length()` | no more stuff, *no car, no no pram, no like doggy  |    
 | mod             | `r filter(undertwo_neg, condensed_p_o_s == "mod")$clean_utterances %>% length()` | don't, can't                       |                      
 | n mod v         | `r filter(undertwo_neg, condensed_p_o_s == "n mod v")$clean_utterances %>% length()` | I don't know, they don't fit, I can't open|               
 | mod v           | `r filter(undertwo_neg, condensed_p_o_s == "mod v")$clean_utterances %>% length()` | don't go, doesn't work, can't catch|                      
 | no n n          | `r filter(undertwo_neg, condensed_p_o_s == "no n n")$clean_utterances %>% length()` | no baby bubble, no this one, *no brush hair|              
 | n mod           | `r filter(undertwo_neg, condensed_p_o_s == "n mod")$clean_utterances %>% length()` | I can't, Jane doesn't, mine didn't |                      
+| no qn n         | `r filter(undertwo_neg, condensed_p_o_s == "no qn n")$clean_utterances %>% length()` | no more stuff, *no car, no no pram, no like doggy  |    
+| no co           | `r filter(undertwo_neg, condensed_p_o_s == "no co")$clean_utterances %>% length()` | no no, no yes, no look (??), no thanks |
 | not n           | `r filter(undertwo_neg, condensed_p_o_s == "not n")$clean_utterances %>% length()` | not noodle, not home, not right    |                      
 | no v            | `r filter(undertwo_neg, condensed_p_o_s == "no v")$clean_utterances %>% length()` | no read, no pooped,  *no zipper    |                      
 | no v n          | `r filter(undertwo_neg, condensed_p_o_s == "no v n")$clean_utterances %>% length()` | no sit chair, no have cracker, no eat milk |              
@@ -174,10 +177,11 @@ Total # of utterances: 3495
 | no n n n        | `r filter(undertwo_neg, condensed_p_o_s == "no n n n")$clean_utterances %>% length()` | no night night moon, no mummy this side, *no hold daddy hand  |
 | mod v n n       | `r filter(undertwo_neg, condensed_p_o_s == "mod v n n")$clean_utterances %>% length()` | don't eat skin part, (?) don't touch that book, *can't find bunny rabit  | 
 | n no            | `r filter(undertwo_neg, condensed_p_o_s == "n no")$clean_utterances %>% length()` | mammy no, apple no, train no       |                      
+| no no n         | `r filter(undertwo_neg, condensed_p_o_s == "no no n")$clean_utterances %>% length()` | no no mine, no no more, no no mouse |
 | no prep n       | `r filter(undertwo_neg, condensed_p_o_s == "no prep n")$clean_utterances %>% length()` | no in tree, no with this, *no like bubbles|               
 | n mod v prep    | `r filter(undertwo_neg, condensed_p_o_s == "n mod v prep")$clean_utterances %>% length()` | I don't want to, Laura don't want to|                     
-| mod n           | `r filter(undertwo_neg, condensed_p_o_s == "mod n")$clean_utterances %>% length()` | can't tea, don't Mommy, didn't I   |                      
 | n v no          | `r filter(undertwo_neg, condensed_p_o_s == "n v no")$clean_utterances %>% length()` | doll sit no, I take no, Joana say no|                     
+| mod n           | `r filter(undertwo_neg, condensed_p_o_s == "mod n")$clean_utterances %>% length()` | can't tea, don't Mommy, didn't I   |                      
 | no n v n        | `r filter(undertwo_neg, condensed_p_o_s == "no n v n")$clean_utterances %>% length()` | no car go car, no comb want brush, no mummy do it |       
 | not adj         | `r filter(undertwo_neg, condensed_p_o_s == "not adj")$clean_utterances %>% length()` | not good, not dirty, not real      |                      
 | not det n       | `r filter(undertwo_neg, condensed_p_o_s == "not det n")$clean_utterances %>% length()` | not my car, not a cat, not a white |                      
@@ -187,10 +191,10 @@ Total # of utterances: 3495
 | mod v adv       | `r filter(undertwo_neg, condensed_p_o_s == "mod v adv")$clean_utterances %>% length()` | can't come in, don't fall down, doesn't fit here|         
 | no n adv        | `r filter(undertwo_neg, condensed_p_o_s == "no n adv")$clean_utterances %>% length()` | no jacket on, no monkey there, *no lie down  |            
 | no n v          | `r filter(undertwo_neg, condensed_p_o_s == "no n v")$clean_utterances %>% length()` | no mail came, no mummy go, no I wanted|    
-| no part         | `r filter(undertwo_neg, condensed_p_o_s == "no part")$clean_utterances %>% length()` | no bouncing, no eating, no hurting |  
 | v no n n        | `r filter(undertwo_neg, condensed_p_o_s == "v no n n")$clean_utterances %>% length()` | man no taste it (???)              |  
 | n not n         | `r filter(undertwo_neg, condensed_p_o_s == "n not n")$clean_utterances %>% length()` | pizza not pizza, pizza not apples, that not knees|        
 | no adj          | `r filter(undertwo_neg, condensed_p_o_s == "no adj")$clean_utterances %>% length()` | no happy, no pretend, no brown     |                      
+| no part         | `r filter(undertwo_neg, condensed_p_o_s == "no part")$clean_utterances %>% length()` | no bouncing, no eating, no hurting |  
 
 
 
