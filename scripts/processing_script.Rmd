@@ -14,15 +14,19 @@ library(childesr)
 library(lubridate)
 ```
 
-#CHILDES-DB Import
+#CHILDES-DB Imports
 
-This next chunk imports data from Childes-db using the childesr package and saves them as csv or feather files in the local drive
+This next chunk imports data from Childes-db using the childesr package and saves them as a csv file or a feather file in the local drive 1_raw_data:
 
 ```{r ChildesDBimports}
 #Getting data from 673 children in 62 corpora...
 english_tokens <- get_tokens(collection = c("Eng-NA","Eng-UK"), 
                           role = c("target_child","Mother", "Father"),
                           token = "*")
+
+#Import all English utterances from CHILDES 
+eng_utterances <- get_utterances(collection = c("Eng-NA","Eng-UK"), 
+                                 role = c("target_child","Mother", "Father"))
 
 # take out all the English transcripts 
 d_transcripts <- get_transcripts(collection = c("Eng-NA","Eng-UK"), 
@@ -31,18 +35,11 @@ d_transcripts <- get_transcripts(collection = c("Eng-NA","Eng-UK"),
 # Import statistics on the speakers in CHILDES
 speaker_stats <- get_speaker_statistics(collection = c("Eng-NA","Eng-UK"), 
                                         role = c("target_child","Mother", "Father"))
-
-#Import all English utterances from CHILDES 
-eng_utterances <- get_utterances(collection = c("Eng-NA","Eng-UK"), 
-                                 role = c("target_child","Mother", "Father"))
 ```
 
-<<<<<<< HEAD
 ```{r ChildesStorage}
 #Store CHILDES-DB imports in the locel folder 1_raw_data
-=======
-#Store CHILDES-DB imports in the local folder 1_raw_data
->>>>>>> 99769eb65bf34d60b722ca4bd4c79c34ae6d9481
+
 write_csv(english_tokens, "../raw_data/english_tokens.csv")
 write_feather(english_tokens, "../raw_data/english_tokens.feather")
 
@@ -52,9 +49,11 @@ write_csv(d_transcripts, "../raw_data/corpora_info.csv")
 write_feather(eng_utterances, "../raw_data/eng_utterances.feather")
 ```
 
-# Exclusions
+# Token Processing (Study 1)
 
-The following script cleans up the data to exclude: unintelligible tokens and tokens above 72 months of the child's age.
+## Exclusions
+
+The following script cleans up the data to exclude: unintelligible tokens and tokens above 72 months of the child's age. All exclusions are stored in a file called exclusions.csv
 
 ```{r exclusions}
 english_tokens <- read_feather("../raw_data/english_tokens.feather")
@@ -83,6 +82,8 @@ age_ex <- nrow(english_tokens)
 # number of children left after exclusions
 n_children <-
   english_tokens$target_child_id %>% unique() %>% length()
+
+# early erroneous tagging
 
 # record the dataframe of exclusions
 exclusions <-
@@ -133,28 +134,7 @@ u_exclusions <-
 write.csv(u_exclusions, "../processed_data/u_exclusions.csv", row.names=FALSE)
 ```
 
-# Grouping utterances by construction
-
-```{r}
-eng_utterances$age <- eng_utterances$target_child_age %>% floor()
-
-construction_byAge <-
-  eng_utterances %>%
-  group_by(part_of_speech, age) %>%
-  summarize(count = n()) %>% 
-  group_by(age) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
-
-#weird error???
-selection <- c("co n", "qn qn n", "qn n", "n")
-construction_byAge %>%
-  filter(part_of_speech %in% selection) %>%
-  ggplot(mapping = aes(age, ppt)) +
-  geom_point(stat="identity") +
-  facet_wrap(part_of_speech~., scales="free_y")
-```
-
-# Coding Speaker Roles
+## Coding Speaker Roles
 
 Here we group mothers and fathers together as "parents".
 
@@ -164,7 +144,7 @@ english_tokens$speaker <- "parent"
 english_tokens$speaker[english_tokens$speaker_role=="Target_Child"] <- "child"
 ```
 
-# Coding Age
+## Coding Age
 
 Here we bin the age data per month.
 
@@ -172,7 +152,7 @@ Here we bin the age data per month.
 english_tokens$age <- english_tokens$target_child_age %>% floor()
 ```
 
-# Grouping Utterance Types
+## Grouping Utterance Types
 
 Grouping utterances as declarative, imperative, interrogative, and other.
 
@@ -198,9 +178,9 @@ english_tokens$utterance_type <-
          )
 ```
 
-# Coding Different Forms of Negation
+## Coding Different Forms of Negation
 
-Layers: word, category (no, not, modal_nt, quantifier, derivational), polarity (positive, negative)
+Layers: word, category (no, not, auxiliary, quantifier, adverb, derivational), polarity (positive, negative)
 
 ```{r lowerCase}
 english_tokens$gloss <- english_tokens$gloss %>% tolower()
@@ -279,7 +259,7 @@ english_tokens$word[english_tokens$gloss=="noone"] <- "everyone"
 english_tokens$word[english_tokens$gloss=="noone"] <- "someone"
 english_tokens$word[english_tokens$gloss=="noone"] <- "noone"
 ## some vs none
-english_tokens$word[english_tokens$gloss=="some"] <- "all"
+english_tokens$word[english_tokens$gloss=="all"] <- "all"
 english_tokens$word[english_tokens$gloss=="some"] <- "some"
 english_tokens$word[english_tokens$gloss=="none"] <- "none"
 ## adverbs of frequency
@@ -295,6 +275,7 @@ english_tokens[grepl("^(?i)un[a-zA-Z]{4,}", english_tokens$gloss) &
                  !grepl("^(?i)under[a-zA-Z]+", english_tokens$gloss) &
                  english_tokens$gloss != "untill" &
                  english_tokens$gloss != "unhunh" &
+                 english_tokens$gloss != "unahyah" &
                  english_tokens$gloss != "unless"
                ,]$word <- "un"
 
@@ -429,8 +410,32 @@ english_tokens <-
   unite(category_polarity, category, polarity, sep="_", remove=FALSE)
 ```
 
-# Saving Summary Tables
+## Saving Summary Tables
 
 ```{r save_dataframe}
 write_feather(english_tokens, "../processed_data/english_tokens_processed.feather")
+```
+
+
+# Utterance Processing (Study 2)
+
+## Grouping utterances by construction
+
+```{r}
+eng_utterances$age <- eng_utterances$target_child_age %>% floor()
+
+construction_byAge <-
+  eng_utterances %>%
+  group_by(part_of_speech, age) %>%
+  summarize(count = n()) %>% 
+  group_by(age) %>%
+  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+
+#weird error???
+selection <- c("co n", "qn qn n", "qn n", "n")
+construction_byAge %>%
+  filter(part_of_speech %in% selection) %>%
+  ggplot(mapping = aes(age, ppt)) +
+  geom_point(stat="identity") +
+  facet_wrap(part_of_speech~., scales="free_y")
 ```

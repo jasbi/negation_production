@@ -116,6 +116,11 @@ not_simple <-  c("not adv", "not adj", "not v", "not n")
 filter(undertwo_neg, condensed_p_o_s %in% not_simple)$clean_utterances %>%
   length()
 
+pessimistic <- c("no n v", "no n v n")
+
+filter(undertwo_neg, condensed_p_o_s %in% pessimistic)$clean_utterances %>%
+  length()
+
 optimistic <- c("no n v", "no n adv", "no prep n", "no v n")
 
 filter(undertwo_neg, condensed_p_o_s %in% optimistic)$clean_utterances %>%
@@ -193,7 +198,7 @@ Total # of utterances: 3495
 Notes on Semantic Categories:
 - [simple thing] : adj, adv, v, n
 - Presentential (Optimistic) = no n v, no n adv, no prep n, no v n
-- Presentential (Pessimistic) = no n v
+- Presentential (Pessimistic) = no n v, no n v n
   - all of these could be read as pronominal
 
 
