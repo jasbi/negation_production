@@ -14,6 +14,7 @@ library(feather)
 library(binom)
 library(childesr)
 library(lubridate)
+library(tm)
 ```
 
 
@@ -36,7 +37,7 @@ english_negation <-
  english_negation %>%
  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
- mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "oh ?", "ah ?", "n ?"))) %>%
+ mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?", "n ?"))) %>%
  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
@@ -45,7 +46,6 @@ english_negation <-
  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 
 
-setwd("~/Documents/LDS/Production_Study/negation_production")
 write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 
 ```
