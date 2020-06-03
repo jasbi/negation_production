@@ -1,6 +1,7 @@
 ---
 title: 'Negation Production Processing Script: Study 2'
 output:
+  word_document: default
   pdf_document: default
   html_document: default
 ---
@@ -37,9 +38,9 @@ library(tm)
 #  english_negation %>%
 #  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?", "n ?"))) %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
 #  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-#  mutate(do = grepl('^do | do | do$|don\'t', clean_utterances)) %>%
+#  mutate(do = grepl('^do | do | do$|don\'t|does|doesn\'t', clean_utterances)) %>%
 #  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
 #  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
 #  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
@@ -101,59 +102,20 @@ filtered_constructions <- constructions %>%
 
 ```
 
-```{r tables, include= FALSE}
-
-#length(filter(undertwo_neg, can)$clean_utterances)
-#length(filter(undertwo_neg, do)$clean_utterances)
-#length(filter(undertwo_neg, want)$clean_utterances)
-
-
-# filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>%
-#   length()
-
-# filter(undertwo_neg, condensed_p_o_s == "no co")$clean_utterances %>%
-#   length()
-# 
-# no_simple <- c("no adv", "no adj", "no v", "no n")
-# 
-# filter(undertwo_neg, condensed_p_o_s %in% no_simple)$clean_utterances %>%
-#   length()
-# 
-# filter(undertwo_neg, condensed_p_o_s == "not n")$clean_utterances %>%
-#   length()
-# 
-# not_simple <-  c("not adv", "not adj", "not v", "not n")
-# 
-# filter(undertwo_neg, condensed_p_o_s %in% not_simple)$clean_utterances %>%
-#   length()
-# 
-# pessimistic <- c("no n v", "no n v n")
-# 
-# filter(undertwo_neg, condensed_p_o_s %in% pessimistic)$clean_utterances %>%
-#   length()
-# 
-# optimistic <- c("no n v", "no n adv", "no prep n", "no v n")
-# 
-# filter(undertwo_neg, condensed_p_o_s %in% optimistic)$clean_utterances %>%
-#   length()
-```
-
-
-
-
-Total # of utterances: 3495
+Total # of utterances: `r nrow(undertwo_neg)`
 
 |Abbreviation     | Meaning       |
 |-----------------|---------------|
-| n               | noun (includes pronouns and proper nouns) |
-| v               | verb          |
 | adj             | adjective     |
 | adv             | adverb        |
+| co              | ???           |
+| det             | determiner    |
+| mod             | modal         | 
+| n               | noun (includes pronouns and proper nouns) |
+| part            | participle    |
 | prep            | preposition   |
 | qn              | quantifier    |
-| det             | determiner    |
-| part            | participle    |
-| mod             | modal         | 
+| v               | verb          |
 
 
 | Construction    | Frequency | Examples                           | 
@@ -198,22 +160,17 @@ Total # of utterances: 3495
 
 
 
-| Semantic Category  | Frequency  | Examples  |
-|--------------------|------------|-----------|
-| Do                 |  666       | don't like it, I don't feel good, no do it Mummy|
-| Ability (can)      |  212       | I can't find a blankie, can't eat, no no I can not do |
-| Desire (want)      |  148       | Don't want to, no comb want brush, no want the baby|
-| Don't want         |  106       | I don't want juice, don't want it, Laura don't want to|
-| No [simple thing]  |  528       | no go, no stupid, no now, no baby|
-| Not [simple thing] |  97        | not bad, not write, not quite|
-| Not noun           |  39        | not noodle, not Danny, not right|
-| Presentential (Optimistic) | 76 | no daddy eat, no eat lunch, no in tree, no Toto here|
-| Presentential (Pessimistic)| 12 | no Mommy read, no I wanted, no I sweep, no water go|
+| Semantic Category           | Frequency  | Examples                                              |
+|-----------------------------|:----------:|-------------------------------------------------------|
+| Do                 |  `r length(filter(undertwo_neg, do)$clean_utterances)`   | don't like it, I don't feel good, no do it Mummy|
+| Ability (can)      |  `r length(filter(undertwo_neg, can)$clean_utterances)`  | I can't find a blankie, can't eat, no no I can not do |
+| Desire (want)      |  `r length(filter(undertwo_neg, want)$clean_utterances)` | Don't want to, no comb want brush, no want the baby|
+| Don't want         |  `r filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>% length()`| I don't want juice, don't want it, Laura don't want to|
+| No [simple thing]  |  `r filter(undertwo_neg, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length()`| no go, no stupid, no now, no baby|
+| Not [simple thing] |  `r filter(undertwo_neg, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length()`| not bad, not write, not quite|
+| Presentential (Optimistic) | `r filter(undertwo_neg, condensed_p_o_s %in% c("no n v", "no n v n", "no n adv", "no prep n", "no v n"))$clean_utterances %>% length()` | no daddy eat, no eat lunch, no in tree, no Toto here|
+| Presentential (Pessimistic)| `r filter(undertwo_neg, condensed_p_o_s %in% c("no n v", "no n v n"))$clean_utterances %>% length()` | no Mommy read, no I wanted, no baby bite me, no water go|
 
-Notes on Semantic Categories:
-- [simple thing] : adj, adv, v, n
-- Presentential (Optimistic) = no n v, no n adv, no prep n, no v n
-- Presentential (Pessimistic) = no n v, no n v n
-  - all of these could be read as pronominal
+
 
 
