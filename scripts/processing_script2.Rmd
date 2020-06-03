@@ -119,7 +119,7 @@ Total # of utterances: `r nrow(undertwo_neg)`
 
 
 | Construction    | Frequency | Examples                           | 
-|-----------------|-----------|------------------------------------|
+|-----------------|:-----------:|------------------------------------|
 | no n            | `r filter(undertwo_neg, condensed_p_o_s == "no n")$clean_utterances %>% length()` | no baby, no horsie, no juice  | 
 | co no           | `r filter(undertwo_neg, condensed_p_o_s == "co no")$clean_utterances %>% length()`| oh no, okay no, yeah no |
 | mod v n         | `r filter(undertwo_neg, condensed_p_o_s == "mod v n")$clean_utterances %>% length()` | don't touch that, don't fit car, can't open it|           
@@ -167,9 +167,20 @@ Total # of utterances: `r nrow(undertwo_neg)`
 | Desire (want)      |  `r length(filter(undertwo_neg, want)$clean_utterances)` | Don't want to, no comb want brush, no want the baby|
 | Don't want         |  `r filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>% length()`| I don't want juice, don't want it, Laura don't want to|
 | No [simple thing]  |  `r filter(undertwo_neg, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length()`| no go, no stupid, no now, no baby|
+| No more            |  `r filter(undertwo_neg, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length()` | no more, no more corn, there's no more time |
 | Not [simple thing] |  `r filter(undertwo_neg, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length()`| not bad, not write, not quite|
-| Presentential (Optimistic) | `r filter(undertwo_neg, condensed_p_o_s %in% c("no n v", "no n v n", "no n adv", "no prep n", "no v n"))$clean_utterances %>% length()` | no daddy eat, no eat lunch, no in tree, no Toto here|
+| Presentential (Optimistic) | `r filter(undertwo_neg, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length()` | no daddy eat, no eat lunch, no in tree, no Toto here|
 | Presentential (Pessimistic)| `r filter(undertwo_neg, condensed_p_o_s %in% c("no n v", "no n v n"))$clean_utterances %>% length()` | no Mommy read, no I wanted, no baby bite me, no water go|
+
+
+``` {r}
+#filters for 'no [anything], excluding repeated 'no'; 1183 utterances (33.8%)
+filter(undertwo_neg, grepl('^no .*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+
+#filters for 'no n [anything]', excluding repeated 'no'; 236 utterances (6.75%)
+filter(undertwo_neg, grepl('^no n.*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+
+```
 
 
 
