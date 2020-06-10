@@ -249,38 +249,24 @@ Participant information:
 1. what is the distribution of words per participant?
 2. what proportion of children in each monthly age bin produce negative morphemes?
 
-Filtering Process: (In parentheses I haven't done yet)
-1. New column (condensed_p_o_s) transformations: 
-  nouns, proper nouns, pronouns -> n
-  (no -> no (replacing co/qn); haven't done this yet)
-  all types of adverbs and determiners condensed to adv and det respectively
-  (no n n -> no v n: 
-    no cockle me
-    no hug baby
-    no it’s yours
-    no brush hair
-    no ride horsie
-    no stop it
-    no help me
-    no spin it
-    no touch Lastname
-    no pop weasel
-    no play toys
-    no pinch that
-    no hold it)
-  (no n n -> no n v:
-    no Mommy Humm
-    no mummy sneeze
-    no phone talk
-    no everybody fall
-    no hair wash)
-  (no n n -> no adj n: 
-    no tomato soup
-    no clam chowder
-    no Pat’s hat
-    no ice pop)
-2. filtered to constructions that occur at least 10 times
-3. filtered out "no", "no no", "no no no", "no no no no", and ""
+Filtering Process:
+- all utterances by target child between 0 and 24 months
+- filter to only utterances containing ‘no’, ‘not’, and ‘n’t’
+- to create clean_utterances column
+  - remove entries with ‘not yet transcribed need to fix’ 
+  - remove ‘xxx’, ‘yyy’, ‘um’, ‘uh’, ‘ah’ from gloss
+- to create condensed_p_o_s column
+  - all pronouns, nouns, proper nouns become ‘n’
+  - all ‘neg’ become ‘not’
+  - condense all advs to ‘adv’
+  - condense all dets to ‘det’
+  - replace ‘co’ and ‘qn’ with ‘no’ where they correspond to a ‘no’
+- to create constructions from condensed p_o_s
+  - filter any constructions used <10 times
+  - filter ‘no’, ‘no no’, ‘no no no’, ‘no no no no’, ‘no no no no no’, and ‘’
+
+- filtered to constructions that occur at least 10 times
+- filtered out "no", "no no", "no no no", "no no no no", and ""
 -->
 
 
