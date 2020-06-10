@@ -1,9 +1,9 @@
 ---
 title: 'Negation Production Processing Script: Study 2'
 output:
-  word_document: default
   pdf_document: default
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -54,12 +54,12 @@ library(tm)
 ```{r cleanup, include=FALSE}
 undertwo_neg <- read.csv("raw_data/eng_negation_undertwo.csv")
 
-# uh no idea what this does??
-#undertwo_neg[order(undertwo_neg$target_child_age),]
-
-# Takes in a gloss string and a part of speech string and returns a part of speech string with "no" in places
-# corresponding to "no" in the gloss
-set_nos <- function(gloss, pos) {
+# Modifications to part_of_speech column
+condense_pos <- function (gloss, pos) 
+{
+  # Replace POS with 'no' where relevant
+  gloss <- 'but that that that that that that no'
+  pos <- 'conj co'
   if (pos == "") {return(pos)}
   no_list = list()
   gloss_list = strsplit(gloss," ")
@@ -70,19 +70,23 @@ set_nos <- function(gloss, pos) {
   }
   pos_list <- unlist(strsplit(pos, " "))
   pos_list[unlist(no_list)] <- "no"
-  return(paste(pos_list, collapse = " "))
-}
-
-# Modifications to part_of_speech column
-replace_f <- function (gloss, pos) 
-{
-  result <- pos %>%
+  result <- paste(pos_list, collapse = " ")
+  
+  # Condense POS to major categories
+  result <- result %>%
     str_replace_all('pro:\\w*|n:prop', 'n') %>% 
     str_replace_all('neg', 'not') %>% 
     str_replace_all('adv:\\w*', 'adv') %>% 
     str_replace_all('det:\\w*', 'det')
   
-  return (set_nos(gloss, result))
+  
+  # Condense repeated 'no'
+  result <- gsub(' (no )+', ' no ', result) 
+  result <- gsub(' (no ?)+$', ' no', result)
+  result <- gsub('^(no )+', 'no ', result)
+  result <- gsub('^(no ?)+$', 'no', result)
+  
+  return (result)
 }
 
 
@@ -92,13 +96,13 @@ undertwo_neg$part_of_speech <- as.character(undertwo_neg$part_of_speech)
 # Add condensed part of speech column to reflect simplifications
 undertwo_neg <- undertwo_neg %>%
   mutate(condensed_p_o_s = 
-           mapply(replace_f, clean_utterances, part_of_speech))
+           mapply(condense_pos, clean_utterances, part_of_speech))
 
 constructions <- plyr::count(undertwo_neg$condensed_p_o_s) %>%
   arrange(desc(freq))
 
 filtered_constructions <- constructions %>%
-  filter(freq>10, x!="no", x!="no no", x!="no no no", x!="no no no no", x != "no no no no no", x!="")
+  filter(freq>10, x!="no", x!="")
 
 ```
 
@@ -135,37 +139,39 @@ Total # of utterances: `r nrow(undertwo_neg)`
 | no v            | `r filter(undertwo_neg, condensed_p_o_s == "no v")$clean_utterances %>% length()` | no read, no pooped,  *no zipper    |                      
 | no v n          | `r filter(undertwo_neg, condensed_p_o_s == "no v n")$clean_utterances %>% length()` | no sit chair, no have cracker, no eat milk |              
 | not adv         | `r filter(undertwo_neg, condensed_p_o_s == "not adv")$clean_utterances %>% length()` | not today, not there, *not asleep  |                      
-| no adv          | `r filter(undertwo_neg, condensed_p_o_s == "no adv")$clean_utterances %>% length()` | no there, no up, no behind         |                      
 | no n n n        | `r filter(undertwo_neg, condensed_p_o_s == "no n n n")$clean_utterances %>% length()` | no night night moon, no mummy this side, *no hold daddy hand  |
-| mod v n n       | `r filter(undertwo_neg, condensed_p_o_s == "mod v n n")$clean_utterances %>% length()` | don't eat skin part, (?) don't touch that book, *can't find bunny rabit  | 
+| no adv          | `r filter(undertwo_neg, condensed_p_o_s == "no adv")$clean_utterances %>% length()` | no there, no up, no behind         |                      
 | n no            | `r filter(undertwo_neg, condensed_p_o_s == "n no")$clean_utterances %>% length()` | mammy no, apple no, train no       |                      
-| no no n         | `r filter(undertwo_neg, condensed_p_o_s == "no no n")$clean_utterances %>% length()` | no no mine, no no more, no no mouse |
+| mod v n n       | `r filter(undertwo_neg, condensed_p_o_s == "mod v n n")$clean_utterances %>% length()` | don't eat skin part, (?) don't touch that book, *can't find bunny rabit  | 
 | no prep n       | `r filter(undertwo_neg, condensed_p_o_s == "no prep n")$clean_utterances %>% length()` | no in tree, no with this, *no like bubbles|               
 | n mod v prep    | `r filter(undertwo_neg, condensed_p_o_s == "n mod v prep")$clean_utterances %>% length()` | I don't want to, Laura don't want to|                     
 | n v no          | `r filter(undertwo_neg, condensed_p_o_s == "n v no")$clean_utterances %>% length()` | doll sit no, I take no, Joana say no|                     
-| mod n           | `r filter(undertwo_neg, condensed_p_o_s == "mod n")$clean_utterances %>% length()` | can't tea, don't Mommy, didn't I   |                      
 | no n v n        | `r filter(undertwo_neg, condensed_p_o_s == "no n v n")$clean_utterances %>% length()` | no car go car, no comb want brush, no mummy do it |       
+| mod n           | `r filter(undertwo_neg, condensed_p_o_s == "mod n")$clean_utterances %>% length()` | can't tea, don't Mommy, didn't I   |                      
 | not adj         | `r filter(undertwo_neg, condensed_p_o_s == "not adj")$clean_utterances %>% length()` | not good, not dirty, not real      |                      
 | not det n       | `r filter(undertwo_neg, condensed_p_o_s == "not det n")$clean_utterances %>% length()` | not my car, not a cat, not a white |                      
 | not v n         | `r filter(undertwo_neg, condensed_p_o_s == "not v n")$clean_utterances %>% length()` | not eat rocks, not have coffee, not green one|            
 | no det n        | `r filter(undertwo_neg, condensed_p_o_s == "no det n")$clean_utterances %>% length()` | no my turn, no a cow, no the hammer|                    
+| no n v          | `r filter(undertwo_neg, condensed_p_o_s == "no n v")$clean_utterances %>% length()` | no mail came, no mummy go, no I wanted|    
 | not v           | `r filter(undertwo_neg, condensed_p_o_s == "not v")$clean_utterances %>% length()` | not shush, not work, not blanket   |                      
 | mod v adv       | `r filter(undertwo_neg, condensed_p_o_s == "mod v adv")$clean_utterances %>% length()` | can't come in, don't fall down, doesn't fit here|         
 | no n adv        | `r filter(undertwo_neg, condensed_p_o_s == "no n adv")$clean_utterances %>% length()` | no jacket on, no monkey there, *no lie down  |            
-| no n v          | `r filter(undertwo_neg, condensed_p_o_s == "no n v")$clean_utterances %>% length()` | no mail came, no mummy go, no I wanted|    
 | v no n n        | `r filter(undertwo_neg, condensed_p_o_s == "v no n n")$clean_utterances %>% length()` | man no taste it (???)              |  
+| n no n          | `r filter(undertwo_neg, condensed_p_o_s == "n no n")$clean_utterances %>% length()` | straws no straws, Mommie no mail, there's no towel  |  
 | n not n         | `r filter(undertwo_neg, condensed_p_o_s == "n not n")$clean_utterances %>% length()` | pizza not pizza, pizza not apples, that not knees|        
 | no adj          | `r filter(undertwo_neg, condensed_p_o_s == "no adj")$clean_utterances %>% length()` | no happy, no pretend, no brown     |                      
 | no part         | `r filter(undertwo_neg, condensed_p_o_s == "no part")$clean_utterances %>% length()` | no bouncing, no eating, no hurting |  
 
 
 
-| Semantic Category           | Frequency  | Examples                                              |
+| Category           | Frequency  | Examples                                              |
 |-----------------------------|:----------:|-------------------------------------------------------|
 | Do                 |  `r length(filter(undertwo_neg, do)$clean_utterances)`   | don't like it, I don't feel good, no do it Mummy|
 | Ability (can)      |  `r length(filter(undertwo_neg, can)$clean_utterances)`  | I can't find a blankie, can't eat, no no I can not do |
 | Desire (want)      |  `r length(filter(undertwo_neg, want)$clean_utterances)` | Don't want to, no comb want brush, no want the baby|
 | Don't want         |  `r filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>% length()`| I don't want juice, don't want it, Laura don't want to|
+| Don't know         |   `r filter(undertwo_neg, grepl('don\'t know', clean_utterances))$clean_utterances %>% length()` | I don't know, I don't know name of them, you don't know how zip zip up |
+| Don't like         |   `r filter(undertwo_neg, grepl('don\'t like', clean_utterances))$clean_utterances %>% length()` | I don't like it, don't like toast, I don't like|
 | No [simple thing]  |  `r filter(undertwo_neg, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length()`| no go, no stupid, no now, no baby|
 | No more            |  `r filter(undertwo_neg, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length()` | no more, no more corn, there's no more time |
 | Not [simple thing] |  `r filter(undertwo_neg, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length()`| not bad, not write, not quite|
