@@ -58,8 +58,6 @@ undertwo_neg <- read.csv("raw_data/eng_negation_undertwo.csv")
 condense_pos <- function (gloss, pos) 
 {
   # Replace POS with 'no' where relevant
-  gloss <- 'but that that that that that that no'
-  pos <- 'conj co'
   if (pos == "") {return(pos)}
   no_list = list()
   gloss_list = strsplit(gloss," ")
@@ -70,7 +68,7 @@ condense_pos <- function (gloss, pos)
   }
   pos_list <- unlist(strsplit(pos, " "))
   pos_list[unlist(no_list)] <- "no"
-  result <- paste(pos_list, collapse = " ")
+  result <- removeWords(paste(pos_list, collapse = " "), "NA")
   
   # Condense POS to major categories
   result <- result %>%
@@ -104,6 +102,47 @@ constructions <- plyr::count(undertwo_neg$condensed_p_o_s) %>%
 filtered_constructions <- constructions %>%
   filter(freq>10, x!="no", x!="")
 
+```
+
+``` {r fix miscodes, include=FALSE}
+replacements <- 
+  list(
+    list("no v", "no tickle", "no bite", "no push", "no works", "no hold", "no play", "no touch", "no look", "no help", "no see"),
+    list("no v n", "no no like Winnie+Pooh", "no like sweet+corn", "no want din+dins", "no go bathroom", "no touch Lastname",
+         "no pop weasel", "no hold it", "no hug baby", "no brush hair", "no pinch that","no ride horsie", "no stop it",
+         "no help me", "no spin it", "no play toys"), 
+    list("co no co", "quack_quack no peep_peep_peep"),
+    list("n no", "horsie no"), 
+    list("n mod v prep", "hh I can’t sing with"), 
+    list("n mod v n", "I can’t go living+room"), 
+    list("no n v", "no Mommy Humm", "no mummy sneeze", "no everybody fall", "no hair wash"), 
+    list("no", "no"), 
+    list("not adj", "not right", "not asleep"), 
+    list("no n n v", "no Mommy baby seep"),
+    list("no n v n", "no Abi play toys", "no everybody play toys", "no mummy check nappie", "no Papa tie it"),
+    list("no v n n", "no hold daddy hand", "no dump Baura puzzle", "no spin it mom", "no pinch that monkey"), 
+    list("mod v n adv", "can’t put him back"), 
+    list("no n prep n", "no no piece a paper"), 
+    list("not det n n", "not a cat station+cat"),
+    list("not adj n", "not green one"), 
+    list("not n", "not baby", "not lunch", "not diaper", "not blanket"), 
+    list("n no v n", "man no taste it")
+)
+  
+
+fix <- function(df, replacements) 
+{
+  for (i in 1:length(replacements))
+  {
+    for (j in 2:length(replacements[[i]]))
+    {
+      df$condensed_p_o_s[df$clean_utterances == replacements[[i]][[j]]] <- replacements[[i]][[1]]
+    }
+  }
+  return(df)
+}
+
+undertwo_neg <- fix(undertwo_neg, replacements)
 ```
 
 Total # of utterances: `r nrow(undertwo_neg)`
@@ -185,6 +224,11 @@ filter(undertwo_neg, grepl('^no .*', condensed_p_o_s) & !grepl('^(no ?)+$', cond
 
 #filters for 'no n [anything]', excluding repeated 'no'; 236 utterances (6.75%)
 filter(undertwo_neg, grepl('^no n.*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+
+# filters for 'do not'; 22 utterances (!!!!) vs. 602 'don't' utterances
+filter(undertwo_neg, grepl('( |^)do not( |$)', clean_utterances))$clean_utterances
+# Same with 'can not'; 2 utterances vs 208 'can't' utterances
+
 
 ```
 
