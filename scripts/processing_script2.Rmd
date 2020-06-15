@@ -16,6 +16,8 @@ library(binom)
 library(childesr)
 library(lubridate)
 library(tm)
+library(knitr)
+library(kableExtra)
 ```
 
 
@@ -214,8 +216,45 @@ Total # of utterances: `r nrow(undertwo_neg)`
 | Presentential (Optimistic) | `r filter(undertwo_neg, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length()` | no daddy eat, no eat lunch, no in tree, no Toto here|
 | Presentential (Pessimistic)| `r filter(undertwo_neg, condensed_p_o_s %in% c("no n v", "no n v n"))$clean_utterances %>% length()` | no Mommy read, no I wanted, no baby bite me, no water go|
 
+``` {r, echo=FALSE}
 
-``` {r}
+table1 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "Don't know", "Don't like", "No _", "No more", "Not _", "Presentential (Pessimistic)", "Presentential (Optimistic)"), 
+                     "Frequency" = c(length(filter(undertwo_neg, can)$clean_utterances), 
+                                     length(filter(undertwo_neg, want)$clean_utterances),
+                                     length(filter(undertwo_neg, do)$clean_utterances), 
+                                     filter(undertwo_neg, grepl('don\'t', clean_utterances))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('don\'t know', clean_utterances))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('don\'t like', clean_utterances))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('^no v ?.*', condensed_p_o_s))$clean_utterances %>% length()), 
+                     "Examples" = c("I can't find a blankie, can't eat, no no I can not do", 
+                                    "Don't want to, no comb want brush, no want the baby",
+                                    "don't like it, I don't feel good, no do it Mummy", 
+                                    "don't like it, no don't, I don't know",
+                                    "I don't want juice, don't want it, Laura don't want to",
+                                    "I don't know, I don't know name of them, you don't know how zip zip up",
+                                    "I don't like it, don't like toast, I don't like",
+                                    "no go, no stupid, no now, no baby",
+                                    "no more, no more corn, there's no more time",
+                                    "not bad, not write, not quite",
+                                    "no Mommy read, no baby bite me, no you wait there for me", 
+                                    "no have black, no give me that, no bite"))
+
+kable(table1, "latex") %>%
+  kable_styling(font_size = 12) %>%
+  #pack_rows("Don't", 4, 6); makes a header for rows 4-6
+  add_indent(c(4, 5, 6, 7)) %>%
+  row_spec(3, bold = T) %>%
+  column_spec(3, width = "20em")
+
+```
+
+
+``` {r, include=FALSE}
 #filters for 'no [anything], excluding repeated 'no'; 1183 utterances (33.8%)
 filter(undertwo_neg, grepl('^no .*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
 
@@ -254,7 +293,7 @@ undertwo_neg$speaker_id %>% unique() %>% length()
 speaker_counts <- undertwo_neg %>% count(speaker_id)
 
 # Proportion of total (0, 24) utterances that include negation by age bin (maybe split bar graph?)
-all_utterances
+#all_utterances
 # Proportion of children in each age bin producing negation
 # Proportion of utterances that include negation by child (?)
 ```
