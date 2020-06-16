@@ -102,27 +102,28 @@ undertwo_neg <- undertwo_neg %>%
 # Fix miscodes
 replacements <- 
   list(
+    # Nouns coded incorrectly
+    list("n no", "horsie no"), 
+    list("not n", "not baby", "not lunch", "not diaper", "not blanket"),
+    list("n mod v n", "I can’t go living+room"), 
+    # Verbs coded incorrectly
     list("no v", "no tickle", "no bite", "no push", "no works", "no hold", "no play", "no touch", "no look", "no help", "no see"),
-    list("no v n", "no no like Winnie+Pooh", "no like sweet+corn", "no want din+dins", "no go bathroom", "no touch Lastname",
+    list("no v n", "no like sweet+corn", "no touch Lastname",
          "no pop weasel", "no hold it", "no hug baby", "no brush hair", "no pinch that","no ride horsie", "no stop it",
          "no help me", "no spin it", "no play toys"), 
-    list("co no co", "quack_quack no peep_peep_peep"),
-    list("n no", "horsie no"), 
-    list("n mod v prep", "hh I can’t sing with"), 
-    list("n mod v n", "I can’t go living+room"), 
     list("no n v", "no Mommy Humm", "no mummy sneeze", "no everybody fall", "no hair wash"), 
-    list("no", "no"), 
-    list("not adj", "not asleep"), 
     list("no n n v", "no Mommy baby seep"),
     list("no n v n", "no Abi play toys", "no everybody play toys", "no mummy check nappie", "no Papa tie it"),
     list("no v n n", "no hold daddy hand", "no dump Baura puzzle", "no spin it mom", "no pinch that monkey"), 
-    list("mod v n adv", "can’t put him back"), 
-    list("no n prep n", "no no piece a paper"), 
-    list("not det n n", "not a cat station+cat"),
-    list("not adj n", "not green one"), 
-    list("not n", "not baby", "not lunch", "not diaper", "not blanket"), 
-    list("n no v n", "man no taste it")
-)
+    list("n no v n", "man no taste it"),
+    # Miscodes due to stem skipping repeated words
+    list("no v n", "no no like Winnie+Pooh"),
+    list("no", "no"), 
+    list("no v n", "no want din+dins", "no go bathroom"),
+    list("no n prep n", "no no piece a paper")
+  )
+
+
   
 fix <- function(df, replacements) 
 {
@@ -186,7 +187,7 @@ Total # of utterances: `r nrow(undertwo_neg)`
 | no n v          | `r filter(undertwo_neg, condensed_p_o_s == "no n v")$clean_utterances %>% length()` | no mail came, no mummy go, no I wanted|    
 | no prep n       | `r filter(undertwo_neg, condensed_p_o_s == "no prep n")$clean_utterances %>% length()` | no in tree, no with this, no like bubbles|               
 | not adj         | `r filter(undertwo_neg, condensed_p_o_s == "not adj")$clean_utterances %>% length()` | not good, not dirty, not real      |                      
-| n mod v prep    | `r filter(undertwo_neg, condensed_p_o_s == "n mod v prep")$clean_utterances %>% length()` | I don't want to, Laura don't want to|                     
+| n mod v prep    | `r filter(undertwo_neg, condensed_p_o_s == "n mod v prep")$clean_utterances %>% length()` | I don't want to, Laura don't want to|                   
 | n v no          | `r filter(undertwo_neg, condensed_p_o_s == "n v no")$clean_utterances %>% length()` | doll sit no, I take no, Joana say no|                     
 | mod n           | `r filter(undertwo_neg, condensed_p_o_s == "mod n")$clean_utterances %>% length()` | can't tea, don't Mommy, didn't I   |                      
 | n no v n        | `r filter(undertwo_neg, condensed_p_o_s == "n no v n")$clean_utterances %>% length()` | man no taste it, I no do it   |                      
@@ -217,8 +218,62 @@ Total # of utterances: `r nrow(undertwo_neg)`
 | Presentential (Pessimistic)| `r filter(undertwo_neg, condensed_p_o_s %in% c("no n v", "no n v n"))$clean_utterances %>% length()` | no Mommy read, no I wanted, no baby bite me, no water go|
 
 ``` {r, echo=FALSE}
+table1 <- data.frame(
+  "Construction" = c( "no n" ,  "co no" , "mod v n" , "n mod v n" ,  "mod", "n mod v" , "mod v", "n mod", "no qn n" , "no v" , "no n n", "no v n" , "not n",
+                      "no n v n" , "not adv" ,"no adv" , "n no" , "no co" , "mod v n n",  "no n v", "no prep n" , "not adj", "n mod v prep" , "n v no" ,  "mod n" ,
+                      "n no v n" ,  "not det n" , "not v n" ,  "no det n" ,  "mod v adv" ,  "no n adv" , "n no n" , "n not n"  , "no adj" ,  "no part" ), 
+  "Examples" = c("no baby, no horsie, no juice", 
+                 "oh no, okay no, yeah no", 
+                 "don't touch that, don't fit car, can't open it", 
+                 "I don't want juice, I can't find duck, cow won't go Mama", 
+                 "don't, can't" , 
+                 "I don't know, they don't fit, I can't open", 
+                 "don't go, doesn't work, can't catch", 
+                 "I can't, Jane doesn't, mine didn't", 
+                 "no more stuff, no other pennies, no like doggy", 
+                 "no read, no pooped, no want", 
+                 "no baby bubble, no this one, no you pencil", 
+                 "no sit chair, no have cracker, no eat milk", 
+                 "not noodle, not home, not Toffer's", 
+                 "no car go car, no comb want brush, no mummy do it", 
+                 "not today, not there, not yet", 
+                 "no there, no up, no behind", 
+                 "mammy no, apple no, train no", 
+                 "no no, no yes, no thanks", 
+                 "don't eat skin part, don't touch that book, can't find bunny rabit", 
+                 "no mail came, no mummy go, no I wanted", 
+                 "no in tree, no with this, no like bubbles", 
+                 "not good, not dirty, not real", 
+                 "I don't want to, Laura don't want to", 
+                  "doll sit no, I take no, Joana say no", 
+                 "can't tea, don't Mommy, didn't I", 
+                  "man no taste it, I no do it", 
+                 "not my car, not a cat, not a white", 
+                 "not eat rocks, not have coffee, not green one", 
+                 "no my turn, no a cow, no the hammer", 
+                 "can't come in, don't fall down, doesn't fit here", 
+                 "no jacket on, no monkey there, no lie down", 
+                 "straws no straws, Mommie no mail, there's no towel", 
+                 "pizza not pizza, pizza not apples, that not knees", 
+                 "no happy, no pretend, no brown", 
+                 "no bouncing, no eating, no hurting")
+)
 
-table1 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "Don't know", "Don't like", "No _", "No more", "Not _", "Presentential (Pessimistic)", "Presentential (Optimistic)"), 
+freq <- function(pos) 
+{
+  filter(undertwo_neg, condensed_p_o_s == pos)$clean_utterances %>% length()
+}
+
+table1 <- table1 %>%
+  mutate(Frequency = sapply(Construction, freq))
+
+table1 <- table1[order(-table1$Frequency),]
+
+kable(table1[,c(1, 3, 2)]) %>%
+  kable_styling(font_size = 12) %>%
+  column_spec(4, width = "20em")
+
+table2 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "Don't know", "Don't like", "No _", "No more", "Not _", "Presentential (No)", "Pre-VP (No)", "Presentential (Not)", "Pre-VP (Not)"), 
                      "Frequency" = c(length(filter(undertwo_neg, can)$clean_utterances), 
                                      length(filter(undertwo_neg, want)$clean_utterances),
                                      length(filter(undertwo_neg, do)$clean_utterances), 
@@ -230,7 +285,9 @@ table1 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "
                                      filter(undertwo_neg, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length(),
                                      filter(undertwo_neg, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length(),
                                      filter(undertwo_neg, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^no v ?.*', condensed_p_o_s))$clean_utterances %>% length()), 
+                                     filter(undertwo_neg, grepl('^no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('^not n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(undertwo_neg, grepl('^not v ?.*', condensed_p_o_s))$clean_utterances %>% length()), 
                      "Examples" = c("I can't find a blankie, can't eat, no no I can not do", 
                                     "Don't want to, no comb want brush, no want the baby",
                                     "don't like it, I don't feel good, no do it Mummy", 
@@ -242,9 +299,11 @@ table1 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "
                                     "no more, no more corn, there's no more time",
                                     "not bad, not write, not quite",
                                     "no Mommy read, no baby bite me, no you wait there for me", 
-                                    "no have black, no give me that, no bite"))
+                                    "no have black, no give me that, no bite",
+                                    "not Fraser read it, not that keys",
+                                    "Not shush, not write this book, not eat rocks"))
 
-kable(table1, "latex") %>%
+kable(table2, "latex") %>%
   kable_styling(font_size = 12) %>%
   #pack_rows("Don't", 4, 6); makes a header for rows 4-6
   add_indent(c(4, 5, 6, 7)) %>%
@@ -273,17 +332,44 @@ filter(undertwo_neg, grepl('( |^)do not( |$)', clean_utterances))$clean_utteranc
 
 # Utterance count, binned by month
 
-breaks <- 0:24
 tags <- c("0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", "9-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-24")
 
-binned <- cut(undertwo_neg$target_child_age, 
-              breaks = breaks,
-              include.lowest = TRUE,
-              labels = tags)
+undertwo_neg <- undertwo_neg %>% 
+  mutate(bin = case_when(
+    target_child_age < 1 ~ tags[1],
+    target_child_age >= 1 & target_child_age < 2 ~ tags[2],
+    target_child_age >= 2 & target_child_age < 3 ~ tags[3],
+    target_child_age >= 3 & target_child_age < 4 ~ tags[4],
+    target_child_age >= 4 & target_child_age < 5 ~ tags[5],
+    target_child_age >= 5 & target_child_age < 6 ~ tags[6],
+    target_child_age >= 6 & target_child_age < 7 ~ tags[7],
+    target_child_age >= 7 & target_child_age < 8 ~ tags[8],
+    target_child_age >= 8 & target_child_age < 9 ~ tags[9],
+    target_child_age >= 9 & target_child_age < 10 ~ tags[10],
+    target_child_age >= 10 & target_child_age < 11 ~ tags[11],
+    target_child_age >= 11 & target_child_age < 12 ~ tags[12],
+    target_child_age >= 12 & target_child_age < 13 ~ tags[13],
+    target_child_age >= 13 & target_child_age < 14 ~ tags[14],
+    target_child_age >= 14 & target_child_age < 15 ~ tags[15],
+    target_child_age >= 15 & target_child_age < 16 ~ tags[16],
+    target_child_age >= 16 & target_child_age < 17 ~ tags[17],
+    target_child_age >= 17 & target_child_age < 18 ~ tags[18],
+    target_child_age >= 18 & target_child_age < 19 ~ tags[19],
+    target_child_age >= 19 & target_child_age < 20 ~ tags[20],
+    target_child_age >= 20 & target_child_age < 21 ~ tags[21],
+    target_child_age >= 21 & target_child_age < 22 ~ tags[22],
+    target_child_age >= 22 & target_child_age < 23 ~ tags[23],
+    target_child_age >= 23 & target_child_age < 24 ~ tags[24]
+    ))
 
-ggplot(as_tibble(binned), aes(x = value)) +
-  geom_bar() +
-  labs(x = "Age Bin", y = "Utterance Count")
+ggplot(undertwo_neg, aes(x = bin)) +
+  geom_bar(fill="thistle4") +
+  labs(x = "Age Bin", y = "Utterance Count") 
+
+
+# 'No' composition, binned by month
+
+
 
 # Participant information
 
