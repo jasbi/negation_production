@@ -369,6 +369,39 @@ ggplot(undertwo_neg, aes(x = bin)) +
 
 # 'No' composition, binned by month
 
+nos <- undertwo_neg %>%
+  filter(grepl('(^| )no($| )', condensed_p_o_s)) %>%
+  filter(!grepl('(^| )no$', condensed_p_o_s)) %>%
+  mutate(noN = str_count(condensed_p_o_s, '( |^)no n')) %>%
+  mutate(noNP = str_count(condensed_p_o_s, '( |^)no (det (adj )?)?n')) %>%
+  mutate(noV = str_count(condensed_p_o_s, '( |^)no v')) %>%
+  mutate(noADV = str_count(condensed_p_o_s, '( |^)no adv')) %>%
+  mutate(noADJ = str_count(condensed_p_o_s, '( |^)no adj'))%>%
+  mutate(noCO = str_count(condensed_p_o_s, '( |^)no co'))%>%
+  mutate(noUNI = str_count(condensed_p_o_s, '( |^)no uni'))%>%
+  mutate(noPART = str_count(condensed_p_o_s, '( |^)no part'))%>%
+  mutate(noQN = str_count(condensed_p_o_s, '( |^)no qn'))%>%
+  mutate(noMOD = str_count(condensed_p_o_s, '( |^)no mod'))%>%
+  mutate(noPREP = str_count(condensed_p_o_s, '( |^)no prep'))%>%
+  mutate(noON = str_count(condensed_p_o_s, '( |^)no on'))%>%
+  mutate(noDET = str_count(condensed_p_o_s, '( |^)no det'))
+
+# Checks if I missed any parts of speech; right know contains unk, chi, and bab
+leftovers <- nos %>%
+  filter(noNP + noV + noADV + noADJ +noCO + noUNI + noPART + noQN + noMOD + noPREP + noON + noDET == 0)
+
+# Utterance count and composition of no
+no_sums <- data.frame(table(nos$bin)) %>%
+  rename("Utterance_Count" = "Freq") %>%
+  rename("Bin" = "Var1") %>%
+  mutate(noN = tally(group_by(nos, bin), noN)$n) %>%
+  mutate(noV = tally(group_by(nos, bin), noV)$n)
+
+# START HERE
+# This is not right; they are covering eachother, not stacked
+ggplot(no_sums) +
+  geom_bar(stat = "identity", aes(x = Bin, y = noN/Utterance_Count, fill = "noun")) +
+  geom_bar(stat = "identity", aes(x = Bin, y = noV/Utterance_Count, fill = "verb"))
 
 
 # Participant information
