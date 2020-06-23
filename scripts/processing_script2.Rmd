@@ -42,11 +42,11 @@ library(RColorBrewer)
 # }
 # 
 # english_negation <-
-#  english_negation %>%
-#  filter(grepl('^no | no | no$|^not | not | not$|n\'t', gloss)) %>%
+#  all_utterances %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
 #  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
 #  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
 #  mutate(do = grepl('^do | do | do$|don\'t|does|doesn\'t', clean_utterances)) %>%
 #  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
@@ -56,7 +56,6 @@ library(RColorBrewer)
 # 
 # 
 # write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
-
 ```
 
 ```{r cleanup, include=FALSE}
@@ -101,8 +100,9 @@ undertwo_neg$part_of_speech <- as.character(undertwo_neg$part_of_speech)
 
 # Add condensed part of speech column to reflect simplifications
 undertwo_neg <- undertwo_neg %>%
-  mutate(condensed_p_o_s = 
-           mapply(condense_pos, clean_utterances, part_of_speech))
+  mutate(condensed_p_o_s = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
+  # remove single-word negations
+  filter(!grepl('^no$|^not$|^[a-z]*n\'t$', condensed_p_o_s))
 
 # Fix miscodes
 replacements <- 
@@ -148,7 +148,7 @@ constructions <- plyr::count(undertwo_neg$condensed_p_o_s) %>%
   arrange(desc(freq))
 
 filtered_constructions <- constructions %>%
-  filter(freq>10, x!="no", x!="")
+  filter(freq>10, x!="")
 
 ```
 
@@ -170,14 +170,13 @@ Total # of utterances: `r nrow(undertwo_neg)`
 
 ``` {r, echo=FALSE}
 table1 <- data.frame(
-  "Construction" = c( "no n" ,  "co no" , "mod v n" , "n mod v n" ,  "mod", "n mod v" , "mod v", "n mod", "no qn n" , "no v" , "no n n", "no v n" , "not n",
+  "Construction" = c( "no n" ,  "co no" , "mod v n" , "n mod v n" , "n mod v" , "mod v", "n mod", "no qn n" , "no v" , "no n n", "no v n" , "not n",
                       "no n v n" , "not adv" ,"no adv" , "n no" , "no co" , "mod v n n",  "no n v", "no prep n" , "not adj", "n mod v prep" , "n v no" ,  "mod n" ,
                       "n no v n" ,  "not det n" , "not v n" ,  "no det n" ,  "mod v adv" ,  "no n adv" , "n no n" , "n not n"  , "no adj" ,  "no part" ), 
   "Examples" = c("no baby, no horsie, no juice", 
                  "oh no, okay no, yeah no", 
                  "don't touch that, don't fit car, can't open it", 
                  "I don't want juice, I can't find duck, cow won't go Mama", 
-                 "don't, can't" , 
                  "I don't know, they don't fit, I can't open", 
                  "don't go, doesn't work, can't catch", 
                  "I can't, Jane doesn't, mine didn't", 
@@ -336,16 +335,20 @@ neg_tag <- function(arg)
 }
  
 undertwo_neg <- undertwo_neg %>%
-  mutate(negation_type = unlist(lapply(condensed_p_o_s, neg_tag))) %>%
-  filter(!grepl("^no$", condensed_p_o_s))
+  mutate(negation_type = unlist(lapply(condensed_p_o_s, neg_tag)))
 
-type_counts <- undertwo_neg %>% count(bin, negation_type)
+
+type_counts <- undertwo_neg %>%
+  filter(!grepl("^no$", condensed_p_o_s)) %>% 
+  filter(!grepl("^[a-z]*n\'t$", condensed_p_o_s)) %>% 
+  filter(!grepl("^not$", condensed_p_o_s)) %>% 
+  count(bin, negation_type)
 
 ggplot(type_counts %>% within(negation_type[n < 10] <- 'other' )) +
   geom_bar(aes(bin, n, fill = negation_type), stat = "identity") +
   xlab("Age Bin") +
   ylab("Utterance Count") +
-  labs(fill = "Negation Type", title = "All Negative Utterances") +
+  labs(fill = "Negation Type", title = "All Multi-word Negative Utterances") +
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5))
 
@@ -371,20 +374,16 @@ ggplot(type_proportions %>%  within(negation_type[n < .01] <- 'other' )) +
   geom_bar(aes(bin, n, fill = negation_type), stat = "identity") +
   xlab("Age Bin") +
   ylab("Proportion of Utterances") +
-  labs(fill = "Negation Type", title = "All Negative Utterances") +
+  labs(fill = "Negation Type", title = "All Multi-word Negative Utterances") +
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
 ```{r no analysis, echo=FALSE}
-
-
-
 # No composition
 
 nos <- undertwo_neg %>%
-  filter(grepl('(^| )no($| )', condensed_p_o_s)) %>%
-  filter(!grepl('(^| )no$', condensed_p_o_s)) %>%
+  filter(grepl('(^| )no ', condensed_p_o_s)) %>%
   mutate(noN = str_count(condensed_p_o_s, '( |^)no n')) %>%
   #mutate(noNP = str_count(condensed_p_o_s, '( |^)no( det)? n')) %>%
   mutate(noV = str_count(condensed_p_o_s, '( |^)no v')) %>%
@@ -452,8 +451,7 @@ ggplot(no_sums_melted) +
 ```{r Not Composition, echo=FALSE}
 # Not Composition
 nots <- undertwo_neg %>%
-  filter(grepl('(^| )not($| )', condensed_p_o_s)) %>%
-  filter(!grepl('(^| )not$', condensed_p_o_s)) %>%
+  filter(grepl('(^| )not ', condensed_p_o_s)) %>%
   mutate(notN = str_count(condensed_p_o_s, '( |^)not n')) %>%
   #mutate(notNP = str_count(condensed_p_o_s, '( |^)not( det)? n')) %>%
   mutate(notV = str_count(condensed_p_o_s, '( |^)not v')) %>%
@@ -472,7 +470,7 @@ nots <- undertwo_neg %>%
 
 # Check for missing parts of speech; right notw contains unk, chi, and bab
 leftovers <- nots %>%
-  filter(sum == 0)
+  filter(sum == 2)
 
 # Utterance count by composition of not
 not_sums <- data.frame("Bin" = unique(nots$bin)) %>%
@@ -490,7 +488,8 @@ not_sums <- data.frame("Bin" = unique(nots$bin)) %>%
   mutate(modal = tally(group_by(nots, bin), notMOD)$n)%>%
   mutate(preposition = tally(group_by(nots, bin), notPREP)$n)%>%
   mutate(onotmatopoeia = tally(group_by(nots, bin), notON)$n)%>%
-  mutate(determiner = tally(group_by(nots, bin), notDET)$n)
+  mutate(determiner = tally(group_by(nots, bin), notDET)$n) 
+  #mutate(infinitive = tally(group_by(nots, bin), notINF)$n)
 
 # Calculate proportions of total not utterances for each pos in each bin
 not_proportions <- (not_sums[,3:14] / not_sums[,2]) %>%
@@ -501,17 +500,22 @@ not_sums_melted <- not_sums%>%subset(select = -not_Count) %>%melt(id.vars = "Bin
 not_proportions_melted <- melt(not_proportions,id.vars = "Bin")
 
 # Stacked bar graph of 'not' composition
+
 # By proportion of not utterances
+suppressWarnings(
 ggplot(filter(not_proportions_melted, value > .0)) +
   geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
   ylim(0, 1) +
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
   ggtitle("\'Not\' Composition")+
+  #scale_fill_brewer(palette=getPalette())+
   scale_fill_brewer(palette="Paired")+
+  #scale_fill_manual(values=as.vector(alphabet2()))+
   theme(plot.title = element_text(hjust = 0.5))
-
+)
 # By total count
+suppressWarnings(
 ggplot(not_sums_melted) +
   geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
   xlab("Age Bin")+
@@ -519,13 +523,13 @@ ggplot(not_sums_melted) +
   ggtitle("\'Not\' Composition")+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5))
+)
 ```
 
 ```{r mod Composition, echo=FALSE}
 # mod Composition
 mods <- undertwo_neg %>%
-  filter(grepl('(^| )mod($| )', condensed_p_o_s)) %>%
-  filter(!grepl('(^| )mod$', condensed_p_o_s)) %>%
+  filter(grepl('(^| )mod ', condensed_p_o_s)) %>%
   mutate(modN = str_count(condensed_p_o_s, '( |^)mod n')) %>%
   #mutate(modNP = str_count(condensed_p_o_s, '( |^)mod( det)? n')) %>%
   mutate(modV = str_count(condensed_p_o_s, '( |^)mod v')) %>%
@@ -592,6 +596,99 @@ ggplot(mod_sums_melted) +
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
+
+```{r nt Composition, echo=FALSE}
+
+# Finds successor of n't word; doesn't handle cases where there are multiple
+nt_successor <- function(gloss, pos)
+{
+  gloss_list = strsplit(gloss, " ")
+  pos_list <- unlist(strsplit(pos, " "))
+  #nt_list = list()
+  nt = 0
+  for (g in 1:length(gloss_list[[1]])) {
+    if (grepl('[a-z]+n\'t', gloss_list[[1]][g])){
+      return(pos_list[g+1])
+    }
+  }
+}
+
+nt_successor("hello amn't dog", "co aux n")
+
+
+### NONE OF THE BELOW IS CORRECT ITS JUST COPIED FROM MOD ###
+
+# nt Composition
+nts <- undertwo_neg %>%
+  filter(grepl('(^| )[a-z]+n\'t ', condensed_p_o_s)) %>%
+  mutate(ntN = str_count(condensed_p_o_s, '( |^)mod n')) %>%
+  #mutate(modNP = str_count(condensed_p_o_s, '( |^)mod( det)? n')) %>%
+  mutate(modV = str_count(condensed_p_o_s, '( |^)mod v')) %>%
+  mutate(modADV = str_count(condensed_p_o_s, '( |^)mod adv')) %>%
+  mutate(modADJ = str_count(condensed_p_o_s, '( |^)mod adj'))%>%
+  mutate(modCO = str_count(condensed_p_o_s, '( |^)mod co'))%>%
+  mutate(modUNI = str_count(condensed_p_o_s, '( |^)mod uni'))%>%
+  mutate(modPART = str_count(condensed_p_o_s, '( |^)mod part'))%>%
+  mutate(modQN = str_count(condensed_p_o_s, '( |^)mod qn'))%>%
+  mutate(modMOD = str_count(condensed_p_o_s, '( |^)mod mod'))%>%
+  mutate(modPREP = str_count(condensed_p_o_s, '( |^)mod prep'))%>%
+  mutate(modON = str_count(condensed_p_o_s, '( |^)mod on'))%>%
+  mutate(modDET = str_count(condensed_p_o_s, '( |^)mod det')) %>%
+  mutate(modINF = str_count(condensed_p_o_s, '( |^)mod inf')) %>%
+  mutate(sum = modN + modV + modADV + modADJ + modCO + modUNI + modPART + modQN + modMOD + modPREP + modON + modDET + modINF)
+
+# Check for missing parts of speech; right modw contains unk, chi, and bab
+leftovers <- mods %>%
+  filter(sum == 0)
+
+# Utterance count by composition of mod
+mod_sums <- data.frame("Bin" = unique(mods$bin)) %>%
+  # Count the number of times 'mod' is uttered in each bin
+  mutate(mod_Count = tally(group_by(mods, bin), sum)$n) %>%
+  # Calculate the proportion of 'mod' utterances followed by each POS in each bin
+  mutate(noun = tally(group_by(mods, bin), modN)$n) %>%
+  mutate(verb = tally(group_by(mods, bin), modV)$n)%>%
+  mutate(adverb = tally(group_by(mods, bin), modADV)$n) %>%
+  mutate(adjective = tally(group_by(mods, bin), modADJ)$n)%>%
+  mutate(co = tally(group_by(mods, bin), modCO)$n)%>%
+  mutate(uni = tally(group_by(mods, bin), modUNI)$n)%>%
+  mutate(participle = tally(group_by(mods, bin), modPART)$n)%>%
+  mutate(quantifier = tally(group_by(mods, bin), modQN)$n)%>%
+  mutate(modal = tally(group_by(mods, bin), modMOD)$n)%>%
+  mutate(preposition = tally(group_by(mods, bin), modPREP)$n)%>%
+  mutate(omodmatopoeia = tally(group_by(mods, bin), modON)$n)%>%
+  mutate(determiner = tally(group_by(mods, bin), modDET)$n)
+
+# Calculate proportions of total mod utterances for each pos in each bin
+mod_proportions <- (mod_sums[,3:14] / mod_sums[,2]) %>%
+  mutate(Bin = mod_sums$Bin)
+
+# Consolidate dataframes for graphing
+mod_sums_melted <- mod_sums%>%subset(select = -mod_Count) %>%melt(id.vars = "Bin")
+mod_proportions_melted <- melt(mod_proportions,id.vars = "Bin")
+
+# Stacked bar graph of 'mod' composition
+# By proportion of mod utterances
+ggplot(filter(mod_proportions_melted, value > .0)) +
+  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+  ylim(0, 1) +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("\'mod\' Composition")+
+  scale_fill_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+# By total count
+ggplot(mod_sums_melted) +
+  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("\'mod\' Composition")+
+  scale_fill_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
 
 ```{r Participants, echo=FALSE}
 # Participant information
