@@ -25,37 +25,38 @@ library(RColorBrewer)
 
 
 ```{r, include= FALSE}
+age_limits <- c(0, 48)
+english_negation <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
+write.csv(english_negation, file="raw_data/eng_utterances_undertwo.csv")
+all_utterances <- english_negation
 
-# english_negation <- get_utterances(language = "eng", age = c(0,24), role = "Target_Child")
-# write.csv(english_negation, file="raw_data/eng_utterances_undertwo.csv")
-# all_utterances <- english_negation
-# 
-# 
-# count_types <- function(string){
-#  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
-#  return(n)
-# }
-# 
-# count_tokens <- function(string){
-#  n <- unlist(strsplit(string, " "))
-#  return(length(n))
-# }
-# 
-# english_negation <-
-#  all_utterances %>%
-#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
-#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-#  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-#  mutate(do = grepl('^do | do | do$|don\'t|does|doesn\'t', clean_utterances)) %>%
-#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
-#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
-#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
-#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
-# 
-# 
-# write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+
+count_types <- function(string){
+ n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+ return(n)
+}
+
+count_tokens <- function(string){
+ n <- unlist(strsplit(string, " "))
+ return(length(n))
+}
+
+english_negation <-
+ all_utterances %>%
+ mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
+ filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+ filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+ filter(!grepl('^ ?$', part_of_speech)) %>%
+ mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+  #gotta add did and didn't
+ mutate(do = grepl('^do | do | do$|don\'t|does|doesn\'t', clean_utterances)) %>%
+ mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+ mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+ mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+ mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+
+
+write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 ```
 
 ```{r cleanup, include=FALSE}
@@ -285,36 +286,15 @@ filter(undertwo_neg, grepl('( |^)do not( |$)', clean_utterances))$clean_utteranc
 ```{r utterance breakdown, echo=FALSE}
 
 # Bin utterances by month
-
-tags <- c("0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", "9-10", "10-11", "11-12", "12-13", "13-14", "14-15", "15-16", "16-17", "17-18", "18-19", "19-20", "20-21", "21-22", "22-23", "23-24")
+bin_age <- function(age)
+{
+  x = floor(age)
+  paste(x, x+1, sep = "-")
+}
 
 undertwo_neg <- undertwo_neg %>% 
-  mutate(bin = case_when(
-    target_child_age < 1 ~ tags[1],
-    target_child_age >= 1 & target_child_age < 2 ~ tags[2],
-    target_child_age >= 2 & target_child_age < 3 ~ tags[3],
-    target_child_age >= 3 & target_child_age < 4 ~ tags[4],
-    target_child_age >= 4 & target_child_age < 5 ~ tags[5],
-    target_child_age >= 5 & target_child_age < 6 ~ tags[6],
-    target_child_age >= 6 & target_child_age < 7 ~ tags[7],
-    target_child_age >= 7 & target_child_age < 8 ~ tags[8],
-    target_child_age >= 8 & target_child_age < 9 ~ tags[9],
-    target_child_age >= 9 & target_child_age < 10 ~ tags[10],
-    target_child_age >= 10 & target_child_age < 11 ~ tags[11],
-    target_child_age >= 11 & target_child_age < 12 ~ tags[12],
-    target_child_age >= 12 & target_child_age < 13 ~ tags[13],
-    target_child_age >= 13 & target_child_age < 14 ~ tags[14],
-    target_child_age >= 14 & target_child_age < 15 ~ tags[15],
-    target_child_age >= 15 & target_child_age < 16 ~ tags[16],
-    target_child_age >= 16 & target_child_age < 17 ~ tags[17],
-    target_child_age >= 17 & target_child_age < 18 ~ tags[18],
-    target_child_age >= 18 & target_child_age < 19 ~ tags[19],
-    target_child_age >= 19 & target_child_age < 20 ~ tags[20],
-    target_child_age >= 20 & target_child_age < 21 ~ tags[21],
-    target_child_age >= 21 & target_child_age < 22 ~ tags[22],
-    target_child_age >= 22 & target_child_age < 23 ~ tags[23],
-    target_child_age >= 23 & target_child_age < 24 ~ tags[24]
-    ))
+  mutate(bin = bin_age(target_child_age))
+
 
 # Tag negation type 
 neg_tag <- function(arg) 
@@ -399,6 +379,7 @@ nos <- undertwo_neg %>%
   mutate(noDET = str_count(condensed_p_o_s, '( |^)no det')) %>%
   mutate(sum = noN + noV + noADV + noADJ + noCO + noUNI + noPART + noQN + noMOD + noPREP + noON + noDET)
 
+leftovers <- nos %>% filter(sum == 0)
 
 # Utterance count by composition of no
 no_sums <- data.frame("Bin" = unique(nos$bin)) %>%
