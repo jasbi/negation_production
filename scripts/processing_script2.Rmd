@@ -80,17 +80,18 @@ condense_pos <- function (gloss, pos)
   
   # Condense POS to major categories
   result <- result %>%
-    str_replace_all('pro:\\w*|n:prop', 'n') %>% 
+    str_replace_all('pro:\\w*|n:\\w*', 'n') %>% 
     str_replace_all('neg', 'not') %>% 
     str_replace_all('adv:\\w*', 'adv') %>% 
-    str_replace_all('det:\\w*', 'det')
+    str_replace_all('det:\\w*', 'det') %>%
+    str_replace_all('mod:\\w*', 'mod') 
   
   
   # Condense repeated 'no'
   result <- gsub(' (no )+', ' no ', result) 
   result <- gsub(' (no ?)+$', ' no', result)
-  result <- gsub('^(no )+', 'no ', result)
-  result <- gsub('^(no ?)+$', 'no', result)
+  result <- gsub('^ ?(no )+', 'no ', result)
+  result <- gsub('^ ?(no ?)+$', 'no', result)
   
   return (result)
 }
@@ -295,137 +296,156 @@ bin_age <- function(age)
 undertwo_neg <- undertwo_neg %>% 
   mutate(bin = bin_age(target_child_age))
 
+# Count frequency of each negation type by utterance
+# Right now I'm counting the total number; i might consider just checking if its present in the utterance to eliminate repetitions
+negs <- undertwo_neg %>%
+  mutate(no = str_count(clean_utterances, '( |^)no( |$)')) %>%
+  mutate(not = str_count(clean_utterances, '( |^)not( |$)')) %>%
+  mutate(nt = str_count(clean_utterances, '( |^)[a-z]*n\'t( |$)')) %>%
+  mutate(sum = no + not + nt) 
 
-# Tag negation type 
-neg_tag <- function(arg) 
-{
-  if(arg == ""){return("other")}
-  neg_list = list()
-  word_list = strsplit(arg, " ")[[1]]
-  for (w in 1:length(word_list)) 
-  {
-    word = word_list[[w]]
-    if (word == "no" | word == "not" | word == "mod")
-    {
-      neg_list <- append(unlist(neg_list), word)
-    }
-  }
-  if (length(neg_list) == 0) {return("other")}
-  return(paste(unique(neg_list), collapse = "_"))
-}
- 
-undertwo_neg <- undertwo_neg %>%
-  mutate(negation_type = unlist(lapply(condensed_p_o_s, neg_tag)))
+negs <- negs[order(negs$bin),]
 
+# Sum negation types by bin
+neg_sums <- data.frame("Bin" = unique(negs$bin)) %>%
+  # Count the number of times a negative is uttered in each bin
+  mutate(Neg_Count = tally(group_by(negs, bin), sum)$n) %>%
+  # Calculate the proportion of 'no' utterances followed by each POS in each bin
+  mutate(no = tally(group_by(negs, bin), no)$n) %>%
+  mutate(not = tally(group_by(negs, bin), not)$n) %>%
+  mutate(nt = tally(group_by(negs, bin), nt)$n)
 
-type_counts <- undertwo_neg %>%
-  filter(!grepl("^no$", condensed_p_o_s)) %>% 
-  filter(!grepl("^[a-z]*n\'t$", condensed_p_o_s)) %>% 
-  filter(!grepl("^not$", condensed_p_o_s)) %>% 
-  count(bin, negation_type)
+# Calculate proportion of each negation type per instances of negation by bin
+neg_proportions <- (neg_sums[,3:5] / neg_sums[,2]) %>%
+  mutate(Bin = neg_sums$Bin)
+  
 
-ggplot(type_counts %>% within(negation_type[n < 10] <- 'other' )) +
-  geom_bar(aes(bin, n, fill = negation_type), stat = "identity") +
-  xlab("Age Bin") +
-  ylab("Utterance Count") +
-  labs(fill = "Negation Type", title = "All Multi-word Negative Utterances") +
+# Consolidate data for graphing
+neg_sums_melted <- neg_sums%>%subset(select = -Neg_Count) %>%melt(id.vars = "Bin")
+neg_proportions_melted <- melt(neg_proportions,id.vars = "Bin")
+
+ggplot(mapping = aes(Bin, value, fill = variable ))+
+  geom_bar(data = neg_sums_melted, stat = "identity")+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("Negation Type: All Multi-word Negative Uttera")+
   scale_fill_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
-bin_counts <- tally(group_by(type_counts, bin), n)
-
-type_proportions <- dcast(type_counts, bin~negation_type, sum, value.var = "n") %>%
-  mutate(
-    mod = mod/bin_counts$n,
-    mod_no = mod_no/bin_counts$n,
-    mod_not = mod_not/bin_counts$n,
-    no = no/bin_counts$n,
-    no_mod = no_mod/bin_counts$n,
-    not = not/bin_counts$n,
-    other = other/bin_counts$n,
-    no_not = no_not/bin_counts$n,
-    no_mod_not = no_mod_not/bin_counts$n,
-    not_mod = not_mod/bin_counts$n,
-    not_no = not_no/bin_counts$n
-  ) %>%
-  melt(id.vars = "bin", value.name = "n", variable.name = "negation_type")
-
-ggplot(type_proportions %>%  within(negation_type[n < .01] <- 'other' )) +
-  geom_bar(aes(bin, n, fill = negation_type), stat = "identity") +
-  xlab("Age Bin") +
-  ylab("Proportion of Utterances") +
-  labs(fill = "Negation Type", title = "All Multi-word Negative Utterances") +
+ggplot(neg_proportions_melted) +
+  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("Negation type: All Multi-word Negative Utterances")+
   scale_fill_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+
 ```
 
 ```{r no analysis, echo=FALSE}
 # No composition
 
+no_tag <- function(pos) 
+{
+  pos_list = unlist(strsplit(pos, " "))
+  
+  n_list = grep("no", pos_list)
+  
+  out = pos_list[n_list+1]
+  out = out[!is.na(out)]
+  return(out)
+}
+
 nos <- undertwo_neg %>%
-  filter(grepl('(^| )no ', condensed_p_o_s)) %>%
-  mutate(noN = str_count(condensed_p_o_s, '( |^)no n')) %>%
-  #mutate(noNP = str_count(condensed_p_o_s, '( |^)no( det)? n')) %>%
-  mutate(noV = str_count(condensed_p_o_s, '( |^)no v')) %>%
-  mutate(noADV = str_count(condensed_p_o_s, '( |^)no adv')) %>%
-  mutate(noADJ = str_count(condensed_p_o_s, '( |^)no adj'))%>%
-  mutate(noCO = str_count(condensed_p_o_s, '( |^)no co'))%>%
-  mutate(noUNI = str_count(condensed_p_o_s, '( |^)no uni'))%>%
-  mutate(noPART = str_count(condensed_p_o_s, '( |^)no part'))%>%
-  mutate(noQN = str_count(condensed_p_o_s, '( |^)no qn'))%>%
-  mutate(noMOD = str_count(condensed_p_o_s, '( |^)no mod'))%>%
-  mutate(noPREP = str_count(condensed_p_o_s, '( |^)no prep'))%>%
-  mutate(noON = str_count(condensed_p_o_s, '( |^)no on'))%>%
-  mutate(noDET = str_count(condensed_p_o_s, '( |^)no det')) %>%
-  mutate(sum = noN + noV + noADV + noADJ + noCO + noUNI + noPART + noQN + noMOD + noPREP + noON + noDET)
+  #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
+  filter(grepl('(^| )no \\w+', condensed_p_o_s)) %>%
+  mutate(no = lapply(condensed_p_o_s, no_tag)) %>%
+  # Nonsense words, onomatopoeia, and L2 words
+  within(no[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no)] <- "other") %>%
+  filter(!grepl("^ *$", no)) 
 
-leftovers <- nos %>% filter(sum == 0)
 
-# Utterance count by composition of no
-no_sums <- data.frame("Bin" = unique(nos$bin)) %>%
-  # Count the number of times 'no' is uttered in each bin
-  mutate(No_Count = tally(group_by(nos, bin), sum)$n) %>%
-  # Calculate the proportion of 'no' utterances followed by each POS in each bin
-  mutate(noun = tally(group_by(nos, bin), noN)$n) %>%
-  mutate(verb = tally(group_by(nos, bin), noV)$n)%>%
-  mutate(adverb = tally(group_by(nos, bin), noADV)$n) %>%
-  mutate(adjective = tally(group_by(nos, bin), noADJ)$n)%>%
-  mutate(co = tally(group_by(nos, bin), noCO)$n)%>%
-  mutate(uni = tally(group_by(nos, bin), noUNI)$n)%>%
-  mutate(participle = tally(group_by(nos, bin), noPART)$n)%>%
-  mutate(quantifier = tally(group_by(nos, bin), noQN)$n)%>%
-  mutate(modal = tally(group_by(nos, bin), noMOD)$n)%>%
-  mutate(preposition = tally(group_by(nos, bin), noPREP)$n)%>%
-  mutate(onomatopoeia = tally(group_by(nos, bin), noON)$n)%>%
-  mutate(determiner = tally(group_by(nos, bin), noDET)$n)
+# One row per instance of no; utterances with multiple 'no's are doubled 
+nos <- nos %>% unnest(no)
 
-# Calculate proportions of total no utterances for each pos in each bin
-no_proportions <- (no_sums[,3:14] / no_sums[,2]) %>%
-  mutate(Bin = no_sums$Bin)
 
-# Consolidate dataframes for graphing
-no_sums_melted <- no_sums%>%subset(select = -No_Count) %>%melt(id.vars = "Bin")
-no_proportions_melted <- melt(no_proportions,id.vars = "Bin")
-
-# Stacked bar graph of 'no' composition
-# By proportion of no utterances
-ggplot(filter(no_proportions_melted, value > .0)) +
-  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
-  ylim(0, 1) +
-  xlab("Age Bin")+
-  ylab("Proportion of Instances")+
-  ggtitle("\'No\' Composition")+
-  scale_fill_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = 0.5))
-
-# By total count
-ggplot(no_sums_melted) +
-  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+ggplot(nos, aes(bin, fill = no)) +
+  geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
   ggtitle("\'No\' Composition")+
-  scale_fill_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech")
+  
+
+
+### Given the above, this is all obselete right now. 
+
+  # filter(grepl('(^| )no ', condensed_p_o_s)) %>%
+  # mutate(noN = str_count(condensed_p_o_s, '( |^)no n')) %>%
+  # #mutate(noNP = str_count(condensed_p_o_s, '( |^)no( det)? n')) %>%
+  # mutate(noV = str_count(condensed_p_o_s, '( |^)no v')) %>%
+  # mutate(noADV = str_count(condensed_p_o_s, '( |^)no adv')) %>%
+  # mutate(noADJ = str_count(condensed_p_o_s, '( |^)no adj'))%>%
+  # mutate(noCO = str_count(condensed_p_o_s, '( |^)no co'))%>%
+  # mutate(noUNI = str_count(condensed_p_o_s, '( |^)no uni'))%>%
+  # mutate(noPART = str_count(condensed_p_o_s, '( |^)no part'))%>%
+  # mutate(noQN = str_count(condensed_p_o_s, '( |^)no qn'))%>%
+  # mutate(noMOD = str_count(condensed_p_o_s, '( |^)no mod'))%>%
+  # mutate(noPREP = str_count(condensed_p_o_s, '( |^)no prep'))%>%
+  # mutate(noON = str_count(condensed_p_o_s, '( |^)no on'))%>%
+  # mutate(noDET = str_count(condensed_p_o_s, '( |^)no det')) %>%
+  # mutate(sum = noN + noV + noADV + noADJ + noCO + noUNI + noPART + noQN + noMOD + noPREP + noON + noDET)
+# 
+# leftovers <- nos %>% filter(sum == 0)
+# 
+# # Utterance count by composition of no
+# no_sums <- data.frame("Bin" = unique(nos$bin)) %>%
+#   # Count the number of times 'no' is uttered in each bin
+#   mutate(No_Count = tally(group_by(nos, bin), sum)$n) %>%
+#   # Calculate the proportion of 'no' utterances followed by each POS in each bin
+#   mutate(noun = tally(group_by(nos, bin), noN)$n) %>%
+#   mutate(verb = tally(group_by(nos, bin), noV)$n)%>%
+#   mutate(adverb = tally(group_by(nos, bin), noADV)$n) %>%
+#   mutate(adjective = tally(group_by(nos, bin), noADJ)$n)%>%
+#   mutate(co = tally(group_by(nos, bin), noCO)$n)%>%
+#   mutate(uni = tally(group_by(nos, bin), noUNI)$n)%>%
+#   mutate(participle = tally(group_by(nos, bin), noPART)$n)%>%
+#   mutate(quantifier = tally(group_by(nos, bin), noQN)$n)%>%
+#   mutate(modal = tally(group_by(nos, bin), noMOD)$n)%>%
+#   mutate(preposition = tally(group_by(nos, bin), noPREP)$n)%>%
+#   mutate(onomatopoeia = tally(group_by(nos, bin), noON)$n)%>%
+#   mutate(determiner = tally(group_by(nos, bin), noDET)$n)
+# 
+# # Calculate proportions of total no utterances for each pos in each bin
+# no_proportions <- (no_sums[,-(1:2)] / no_sums[,2]) %>%
+#   mutate(Bin = no_sums$Bin)
+# 
+# # Consolidate dataframes for graphing
+# no_sums_melted <- no_sums%>%subset(select = -No_Count) %>%melt(id.vars = "Bin")
+# no_proportions_melted <- melt(no_proportions,id.vars = "Bin")
+# 
+# # Stacked bar graph of 'no' composition
+# # By proportion of no utterances
+# ggplot(filter(no_proportions_melted, value > .0)) +
+#   geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+#   ylim(0, 1) +
+#   xlab("Age Bin")+
+#   ylab("Proportion of Instances")+
+#   ggtitle("\'No\' Composition")+
+#   scale_fill_brewer(palette="Paired")+
+#   theme(plot.title = element_text(hjust = 0.5))
+# 
+# # By total count
+# ggplot(no_sums_melted) +
+#   geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+#   xlab("Age Bin")+
+#   ylab("Number of Instances")+
+#   ggtitle("\'No\' Composition")+
+#   scale_fill_brewer(palette="Paired")+
+#   theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
@@ -473,7 +493,7 @@ not_sums <- data.frame("Bin" = unique(nots$bin)) %>%
   #mutate(infinitive = tally(group_by(nots, bin), notINF)$n)
 
 # Calculate proportions of total not utterances for each pos in each bin
-not_proportions <- (not_sums[,3:14] / not_sums[,2]) %>%
+not_proportions <- (not_sums[,-(1:2)] / not_sums[,2]) %>%
   mutate(Bin = not_sums$Bin)
 
 # Consolidate dataframes for graphing
@@ -550,7 +570,7 @@ mod_sums <- data.frame("Bin" = unique(mods$bin)) %>%
   mutate(determiner = tally(group_by(mods, bin), modDET)$n)
 
 # Calculate proportions of total mod utterances for each pos in each bin
-mod_proportions <- (mod_sums[,3:14] / mod_sums[,2]) %>%
+mod_proportions <- (mod_sums[,-(1:2)] / mod_sums[,2]) %>%
   mutate(Bin = mod_sums$Bin)
 
 # Consolidate dataframes for graphing
@@ -642,7 +662,7 @@ mod_sums <- data.frame("Bin" = unique(mods$bin)) %>%
   mutate(determiner = tally(group_by(mods, bin), modDET)$n)
 
 # Calculate proportions of total mod utterances for each pos in each bin
-mod_proportions <- (mod_sums[,3:14] / mod_sums[,2]) %>%
+mod_proportions <- (mod_sums[,-(1:2)] / mod_sums[,2]) %>%
   mutate(Bin = mod_sums$Bin)
 
 # Consolidate dataframes for graphing
