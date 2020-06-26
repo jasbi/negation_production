@@ -49,3 +49,6 @@ papers/
 SALT/
 
 raw_data/eng_utterances_undertwo.csv
+raw_data/eng_parent_utterances.csv
+raw_data/eng_parent_negation.csv
+
