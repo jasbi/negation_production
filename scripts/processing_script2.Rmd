@@ -7,7 +7,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_knit$set(root.dir = "~/Documents/LDS/Production_Study/negation_production")
 library(tidyverse)
 library(magrittr)
@@ -22,154 +22,182 @@ library(reshape)
 library(reshape2)
 library(RColorBrewer)
 library(pals)
+library(gridExtra)
+
+age_limits <- c(0, 36)
 ```
 
 
-```{r, include= FALSE}
-age_limits <- c(0, 48)
-english_negation <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
-write.csv(english_negation, file="raw_data/eng_utterances_undertwo.csv")
-all_utterances <- english_negation
+```{r get child data, include= FALSE}
+# child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
+# write.csv(child_utterances, file="raw_data/eng_child_utterances.csv")
+# 
+# count_types <- function(string){
+#  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+#  return(n)
+# }
+# 
+# count_tokens <- function(string){
+#  n <- unlist(strsplit(string, " "))
+#  return(length(n))
+# }
+# 
+# child_negation <-
+#  child_utterances %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+#  filter(!grepl('^ ?$', part_of_speech)) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+# 
+# # Function removing repeated 'no'
+# fix_nos <- function(x)
+# {
+#   result <- gsub(' (no )+', ' no ', x)
+#   result <- gsub(' (no ?)+$', ' no', result)
+#   result <- gsub('^ ?(no )+', 'no ', result)
+#   result <- gsub('^ ?(no ?)+$', 'no', result)
+#   return(result)
+# }
+# 
+# # Modifications to part_of_speech column
+# condense_pos <- function (gloss, pos)
+# {
+#   # Replace POS with 'no' where relevant
+#   if (pos == "") {return(pos)}
+#   no_list = list()
+#   gloss_list = strsplit(gloss," ")
+#   for (g in 1:length(gloss_list[[1]])) {
+#     if (gloss_list[[1]][g] == "no"){
+#       no_list <- append(unlist(no_list), g)
+#     }
+#   }
+#   pos_list <- unlist(strsplit(pos, " "))
+#   pos_list[unlist(no_list)] <- "no"
+#   result <- removeWords(paste(pos_list, collapse = " "), "NA")
+# 
+#   # Condense POS to major categories
+#   result <- result %>%
+#     str_replace_all('pro:\\w*|n:\\w*', 'n') %>%
+#     str_replace_all('neg', 'not') %>%
+#     str_replace_all('adv:\\w*', 'adv') %>%
+#     str_replace_all('det:\\w*', 'det') %>%
+#     str_replace_all('mod:\\w*', 'mod')
+# 
+#   return (result)
+# }
+# 
+# child_negation$clean_utterances <- as.character(child_negation$clean_utterances)
+# child_negation$part_of_speech <- as.character(child_negation$part_of_speech)
+# 
+# # Add condensed part of speech column to reflect simplifications
+# child_negation <- child_negation %>%
+#   mutate(condensed_p_o_s = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
+#   mutate(condensed_p_o_s = lapply(condensed_p_o_s, fix_nos) %>% unlist()) %>%
+#   mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
+#   # remove single-word negations
+#   filter(!grepl('^no$|^not$|^[a-z]*n\'t$', condensed_p_o_s))
+# 
+# # Remove utterances that don't line up with their pos
+# check_lengths <- function(utterance, pos)
+# {
+#   return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
+# }
+# child_negation<- child_negation %>%
+#   filter(mapply(check_lengths, condensed_p_o_s, clean_utterances))
+# 
+# 
+# # Fix miscodes
+# replacements <-
+#   list(
+#     # Nouns coded incorrectly
+#     list("n no", "horsie no"),
+#     list("not n", "not baby", "not lunch", "not diaper", "not blanket"),
+#     list("n mod v n", "I can’t go living+room"),
+#     # Verbs coded incorrectly
+#     list("no v", "no tickle", "no bite", "no push", "no works", "no hold", "no play", "no touch", "no look", "no help", "no see"),
+#     list("no v n", "no like sweet+corn", "no touch Lastname",
+#          "no pop weasel", "no hold it", "no hug baby", "no brush hair", "no pinch that","no ride horsie", "no stop it",
+#          "no help me", "no spin it", "no play toys"),
+#     list("no n v", "no Mommy Humm", "no mummy sneeze", "no everybody fall", "no hair wash"),
+#     list("no n n v", "no Mommy baby seep"),
+#     list("no n v n", "no Abi play toys", "no everybody play toys", "no mummy check nappie", "no Papa tie it"),
+#     list("no v n n", "no hold daddy hand", "no dump Baura puzzle", "no spin it mom", "no pinch that monkey"),
+#     list("n no v n", "man no taste it")
+#   )
+# 
+# 
+# # Insert replacements
+# fix <- function(df, replacements)
+# {
+#   for (i in 1:length(replacements))
+#   {
+#     for (j in 2:length(replacements[[i]]))
+#     {
+#       df$condensed_p_o_s[df$clean_utterances == replacements[[i]][[j]]] <- replacements[[i]][[1]]
+#     }
+#   }
+#   return(df)
+# }
+# 
+# child_negation <- fix(child_negation, replacements)
+# 
+#write.csv(child_negation, file="raw_data/eng_child_negation.csv")
 
+child_negation <- read.csv("raw_data/eng_child_negation.csv")
 
-count_types <- function(string){
- n <- nlevels(as.factor(unlist(strsplit(string, " "))))
- return(n)
-}
-
-count_tokens <- function(string){
- n <- unlist(strsplit(string, " "))
- return(length(n))
-}
-
-english_negation <-
- all_utterances %>%
- mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
- filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
- filter(!grepl('not yet transcribed need to fix', gloss)) %>%
- filter(!grepl('^ ?$', part_of_speech)) %>%
- mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-  #gotta add did and didn't
- mutate(do = grepl('^do | do | do$|don\'t|does|doesn\'t', clean_utterances)) %>%
- mutate(want = grepl('^want | want | want$', clean_utterances))%>%
- mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
- mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
- mutate(type_token_ratio = n_types_clean/n_tokens_clean)
-
-
-write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
+child_negation$condensed_p_o_s <- as.character(child_negation$condensed_p_o_s)
+child_negation$clean_utterances <- as.character(child_negation$clean_utterances)
 ```
 
-```{r cleanup, include=FALSE}
-undertwo_neg <- read.csv("raw_data/eng_negation_undertwo.csv")
+```{r get parent data, echo=FALSE}
+# parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
+# write.csv(parent_utterances, file="raw_data/eng_parent_utterances.csv")
+# 
+# parent_negation <-
+#  parent_utterances %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+#  filter(!grepl('^ ?$', part_of_speech)) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+# 
+# 
+# parent_negation$clean_utterances <- as.character(parent_negation$clean_utterances)
+# parent_negation$part_of_speech <- as.character(parent_negation$part_of_speech)
+# 
+# # Add condensed part of speech column to reflect simplifications
+# parent_negation <- parent_negation %>%
+#   mutate(condensed_p_o_s = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
+#   mutate(condensed_p_o_s = lapply(condensed_p_o_s, fix_nos) %>% unlist()) %>%
+#   mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
+#   # remove single-word negations
+#   filter(!grepl('^no$|^not$|^[a-z]*n\'t$', condensed_p_o_s))
+# 
+# # Remove utterances that don't line up with their pos
+# parent_negation<- parent_negation %>%
+#   filter(mapply(check_lengths, condensed_p_o_s, clean_utterances))
+# 
+# write.csv(parent_negation, file="raw_data/eng_parent_negation.csv", row.names = FALSE)
 
-fix_nos <- function(x) 
-{
-  result <- gsub(' (no )+', ' no ', x) 
-  result <- gsub(' (no ?)+$', ' no', result)
-  result <- gsub('^ ?(no )+', 'no ', result)
-  result <- gsub('^ ?(no ?)+$', 'no', result)
-  return(result)
-}
+parent_negation <- read.csv("raw_data/eng_parent_negation.csv")
 
-# Modifications to part_of_speech column
-condense_pos <- function (gloss, pos) 
-{
-  # Replace POS with 'no' where relevant
-  if (pos == "") {return(pos)}
-  no_list = list()
-  gloss_list = strsplit(gloss," ")
-  for (g in 1:length(gloss_list[[1]])) {
-    if (gloss_list[[1]][g] == "no"){
-      no_list <- append(unlist(no_list), g)
-    }
-  }
-  pos_list <- unlist(strsplit(pos, " "))
-  pos_list[unlist(no_list)] <- "no"
-  result <- removeWords(paste(pos_list, collapse = " "), "NA")
-  
-  # Condense POS to major categories
-  result <- result %>%
-    str_replace_all('pro:\\w*|n:\\w*', 'n') %>% 
-    str_replace_all('neg', 'not') %>% 
-    str_replace_all('adv:\\w*', 'adv') %>% 
-    str_replace_all('det:\\w*', 'det') %>%
-    str_replace_all('mod:\\w*', 'mod') 
-  
-  return (result)
-}
-
-
-undertwo_neg$clean_utterances <- as.character(undertwo_neg$clean_utterances)
-undertwo_neg$part_of_speech <- as.character(undertwo_neg$part_of_speech)
-
-# Add condensed part of speech column to reflect simplifications
-undertwo_neg <- undertwo_neg %>%
-  mutate(condensed_p_o_s = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
-  mutate(condensed_p_o_s = lapply(condensed_p_o_s, fix_nos)) %>%
-  mutate(clean_utterances = lapply(clean_utterances, fix_nos)) %>%
-  # remove single-word negations
-  filter(!grepl('^no$|^not$|^[a-z]*n\'t$', condensed_p_o_s))
-
-# Remove utterances that don't line up with their pos
-check_lengths <- function(utterance, pos) 
-{
-  return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
-}
-undertwo_neg<- undertwo_neg %>%
-  filter(mapply(check_lengths, condensed_p_o_s, clean_utterances))
-
-
-
-# Fix miscodes
-replacements <- 
-  list(
-    # Nouns coded incorrectly
-    list("n no", "horsie no"), 
-    list("not n", "not baby", "not lunch", "not diaper", "not blanket"),
-    list("n mod v n", "I can’t go living+room"), 
-    # Verbs coded incorrectly
-    list("no v", "no tickle", "no bite", "no push", "no works", "no hold", "no play", "no touch", "no look", "no help", "no see"),
-    list("no v n", "no like sweet+corn", "no touch Lastname",
-         "no pop weasel", "no hold it", "no hug baby", "no brush hair", "no pinch that","no ride horsie", "no stop it",
-         "no help me", "no spin it", "no play toys"), 
-    list("no n v", "no Mommy Humm", "no mummy sneeze", "no everybody fall", "no hair wash"), 
-    list("no n n v", "no Mommy baby seep"),
-    list("no n v n", "no Abi play toys", "no everybody play toys", "no mummy check nappie", "no Papa tie it"),
-    list("no v n n", "no hold daddy hand", "no dump Baura puzzle", "no spin it mom", "no pinch that monkey"), 
-    list("n no v n", "man no taste it")
-    # Miscodes due to stem skipping repeated words
-    # list("no v n", "no no like Winnie+Pooh"),
-    # list("no", "no"), 
-    # list("no v n", "no want din+dins", "no go bathroom"),
-    # list("no n prep n", "no no piece a paper")
-  )
-
-
-# Insert replacements
-fix <- function(df, replacements) 
-{
-  for (i in 1:length(replacements))
-  {
-    for (j in 2:length(replacements[[i]]))
-    {
-      df$condensed_p_o_s[df$clean_utterances == replacements[[i]][[j]]] <- replacements[[i]][[1]]
-    }
-  }
-  return(df)
-}
-
-undertwo_neg <- fix(undertwo_neg, replacements)
-
-constructions <- count(undertwo_neg$condensed_p_o_s) %>%
-  arrange(desc(freq))
-
-filtered_constructions <- constructions %>%
-  filter(freq>10, x!="")
-
+parent_negation$condensed_p_o_s <- as.character(parent_negation$condensed_p_o_s)
+parent_negation$clean_utterances <- as.character(parent_negation$clean_utterances)
 ```
 
-Total # of utterances: `r nrow(undertwo_neg)`
+
+Total # of utterances: `r nrow(child_negation)`
 
 |Abbreviation     | Meaning       |
 |-----------------|---------------|
@@ -185,7 +213,14 @@ Total # of utterances: `r nrow(undertwo_neg)`
 | v               | verb          |
 
 
-``` {r, echo=FALSE}
+```{r construction tables}
+# Uh why doesn't this work anymore?
+# constructions <- count(child_negation$condensed_p_o_s) %>%
+#   arrange(desc(freq))
+# 
+# filtered_constructions <- constructions %>%
+#   filter(freq>10, x!="")
+
 table1 <- data.frame(
   "Construction" = c( "no n" ,  "co no" , "mod v n" , "n mod v n" , "n mod v" , "mod v", "n mod", "no qn n" , "no v" , "no n n", "no v n" , "not n",
                       "no n v n" , "not adv" ,"no adv" , "n no" , "no co" , "mod v n n",  "no n v", "no prep n" , "not adj", "n mod v prep" , "n v no" ,  "mod n" ,
@@ -228,11 +263,11 @@ table1 <- data.frame(
 
 freq <- function(pos) 
 {
-  filter(undertwo_neg, condensed_p_o_s == pos)$clean_utterances %>% length()
+  filter(child_negation, condensed_p_o_s == pos)$clean_utterances %>% length()
 }
 
 table1 <- table1 %>%
-  mutate(Frequency = sapply(Construction, freq))
+  mutate(Frequency = sapply(as.character(Construction), freq))
 
 table1 <- table1[order(-table1$Frequency),]
 
@@ -241,22 +276,22 @@ kable(table1[,c(1, 3, 2)]) %>%
   column_spec(4, width = "20em")
 
 table2 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "Don't know", "Don't like", "No _", "No more", "Not _", "Presentential \`No\'", "Pre-VP \`No\'", "Sentence-internal \`No\'", "Presentential \`Not\'", "Pre-VP \`Not\'", "Sentence-internal \'Not\'"), 
-                     "Frequency" = c(length(filter(undertwo_neg, can)$clean_utterances), 
-                                     length(filter(undertwo_neg, want)$clean_utterances),
-                                     length(filter(undertwo_neg, do)$clean_utterances), 
-                                     filter(undertwo_neg, grepl('don\'t', clean_utterances))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('don\'t want', clean_utterances))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('don\'t know', clean_utterances))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('don\'t like', clean_utterances))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^n no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^not n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(undertwo_neg, grepl('^not v ?.*', condensed_p_o_s))$clean_utterances %>% length(), 
-                                     filter(undertwo_neg, grepl('^n not v ?.*', condensed_p_o_s))$clean_utterances %>% length()), 
+                     "Frequency" = c(length(filter(child_negation, can)$clean_utterances), 
+                                     length(filter(child_negation, want)$clean_utterances),
+                                     length(filter(child_negation, do)$clean_utterances), 
+                                     filter(child_negation, grepl('don\'t', clean_utterances))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('don\'t want', clean_utterances))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('don\'t know', clean_utterances))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('don\'t like', clean_utterances))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^n no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^not n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^not v ?.*', condensed_p_o_s))$clean_utterances %>% length(), 
+                                     filter(child_negation, grepl('^n not v ?.*', condensed_p_o_s))$clean_utterances %>% length()), 
                      "Examples" = c("I can't find a blankie, can't eat, no no I can not do", 
                                     "Don't want to, no comb want brush, no want the baby",
                                     "don't like it, I don't feel good, no do it Mummy", 
@@ -286,20 +321,20 @@ kable(table2, "latex") %>%
 
 ``` {r, include=FALSE}
 #filters for 'no [anything], excluding repeated 'no'; 1183 utterances (33.8%)
-filter(undertwo_neg, grepl('^no .*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+filter(child_negation, grepl('^no .*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
 
 #filters for 'no n [anything]', excluding repeated 'no'; 236 utterances (6.75%)
-filter(undertwo_neg, grepl('^no n.*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+filter(child_negation, grepl('^no n.*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
 
 # filters for 'do not'; 22 utterances (!!!!) vs. 602 'don't' utterances
-filter(undertwo_neg, grepl('( |^)do not( |$)', clean_utterances))$clean_utterances
+filter(child_negation, grepl('( |^)do not( |$)', clean_utterances))$clean_utterances
 # Same with 'can not'; 2 utterances vs 208 'can't' utterances
 
 
 ```
 
 
-```{r utterance breakdown, echo=FALSE}
+```{r child utterance breakdown, echo=FALSE}
 
 # Bin utterances by month
 bin_age <- function(age)
@@ -308,12 +343,12 @@ bin_age <- function(age)
   paste(x, x+1, sep = "-")
 }
 
-undertwo_neg <- undertwo_neg %>% 
+child_negation <- child_negation %>% 
   mutate(bin = bin_age(target_child_age))
 
 # Count frequency of each negation type by utterance
 # Right now I'm counting the total number; i might consider just checking if its present in the utterance to eliminate repetitions
-negs <- undertwo_neg %>%
+negs <- child_negation %>%
   mutate(no = str_count(clean_utterances, '( |^)no( |$)')) %>%
   mutate(not = str_count(clean_utterances, '( |^)not( |$)')) %>%
   mutate(nt = str_count(clean_utterances, '( |^)[a-z]*n\'t( |$)')) %>%
@@ -343,7 +378,7 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
   geom_bar(data = neg_sums_melted, stat = "identity")+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("Negation Type: All Multi-word Negative Uttera")+
+  ggtitle("CHILD Negation Type: All Multi-word Negative Uttera")+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
@@ -351,16 +386,70 @@ ggplot(neg_proportions_melted) +
   geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("Negation type: All Multi-word Negative Utterances")+
+  ggtitle("CHILD Negation type: All Multi-word Negative Utterances")+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
 
 
 ```
 
-```{r no analysis, echo=FALSE}
-# No composition
 
+```{r Parents utterance breakdown, echo=FALSE}
+
+parent_negation <- parent_negation %>% 
+  mutate(bin = bin_age(target_child_age)) %>%
+  filter(target_child_age >= 13 & target_child_age <= age_limits[[2]])
+
+# Count frequency of each negation type by utterance
+# Right now I'm counting the total number; i might consider just checking if its present in the utterance to eliminate repetitions
+negs <- parent_negation %>%
+  mutate(no = str_count(clean_utterances, '( |^)no( |$)')) %>%
+  mutate(not = str_count(clean_utterances, '( |^)not( |$)')) %>%
+  mutate(nt = str_count(clean_utterances, '( |^)[a-z]*n\'t( |$)')) %>%
+  mutate(sum = no + not + nt) 
+
+negs <- negs[order(negs$bin),]
+
+# Sum negation types by bin
+neg_sums <- data.frame("Bin" = unique(negs$bin)) %>%
+  # Count the number of times a negative is uttered in each bin
+  mutate(Neg_Count = tally(group_by(negs, bin), sum)$n) %>%
+  # Calculate the proportion of 'no' utterances followed by each POS in each bin
+  mutate(no = tally(group_by(negs, bin), no)$n) %>%
+  mutate(not = tally(group_by(negs, bin), not)$n) %>%
+  mutate(nt = tally(group_by(negs, bin), nt)$n)
+
+# Calculate proportion of each negation type per instances of negation by bin
+neg_proportions <- (neg_sums[,3:5] / neg_sums[,2]) %>%
+  mutate(Bin = neg_sums$Bin)
+  
+
+# Consolidate data for graphing
+neg_sums_melted <- neg_sums%>%subset(select = -Neg_Count) %>%melt(id.vars = "Bin")
+neg_proportions_melted <- melt(neg_proportions,id.vars = "Bin")
+
+ggplot(mapping = aes(Bin, value, fill = variable ))+
+  geom_bar(data = neg_sums_melted, stat = "identity")+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT Negation Type: All Multi-word Negative Uttera")+
+  scale_fill_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
+
+ggplot(neg_proportions_melted) +
+  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT Negation type: All Multi-word Negative Utterances")+
+  scale_fill_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+
+```
+
+
+```{r child no composition, echo=FALSE}
+# No composition
 no_tag <- function(pos) 
 {
   pos_list = unlist(strsplit(pos, " "))
@@ -372,7 +461,8 @@ no_tag <- function(pos)
   return(out)
 }
 
-nos <- undertwo_neg %>%
+
+nos <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
   filter(grepl('(^| )no \\w+', condensed_p_o_s)) %>%
@@ -396,35 +486,86 @@ nos_prop <- nos_prop[,-2] %>%
 
 # Ensure same order of elements
 nos_prop <- nos_prop[order(nos_prop$bin,-nos_prop$proportion),]
-ORDER <- unique(nos_prop$PoS)
-nos_prop$PoS <- factor(nos_prop$PoS, levels = ORDER)
-nos$no <- factor(nos$no, levels = ORDER)
+no_order <- unique(nos_prop$PoS)
+nos_prop$PoS <- factor(nos_prop$PoS, levels = no_order)
+nos$no <- factor(nos$no, levels = no_order)
 
-ggplot(nos, aes(bin, fill = no)) +
-  geom_bar()+
+ggplot() +
+  geom_bar(nos, mapping = aes(bin, fill = no))+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("\'No\' Composition")+
+  ggtitle("CHILD \'No\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(nos_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot() +
+  geom_bar(nos_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("\'No\' Composition")+
+  ggtitle("CHILD \'No\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
+
 
 # Maybe make one that's just the number of things no combines with per bin
 
 ```
 
-```{r Not Composition, echo=FALSE}
+```{r parent no composition, echo=FALSE}
+nos_p <- parent_negation %>%
+  # Use to filter age range
+  #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
+  filter(grepl('(^| )no \\w+', condensed_p_o_s)) %>%
+  mutate(no = lapply(condensed_p_o_s, no_tag)) %>%
+  # Nonsense words, onomatopoeia, and L2 words
+  within(no[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no)] <- "other") %>%
+  # One row per instance of no; utterances with multiple 'no's are doubled 
+  unnest(no) %>%
+  filter(!grepl('^$', no))
+
+# Create proportion table
+nos_p_prop <- merge(
+  tally(group_by(nos_p, bin)) %>% dplyr::rename(total = n), 
+  dcast(nos_p, bin~no, value.var = "no", fun.aggregate = length), by = "bin")
+# Divide by total to get proportion by bin
+nos_p_prop[,-(1:2)] <- nos_p_prop[,-(1:2)]/nos_p_prop[,2]
+
+# Prepare for graphing
+nos_p_prop <- nos_p_prop[,-2] %>%
+  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
+
+# Ensure same order of elements
+order <- append(as.character(no_order), as.character(filter(nos_p_prop, !(PoS %in% no_order))$PoS %>% unique()))
+nos_p_prop$PoS <- factor(nos_p_prop$PoS, levels = order)
+nos_p$no <- factor(nos_p$no, levels = order)
+
+ggplot() +
+  geom_bar(nos_p, mapping = aes(bin, fill = no))+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT \'No\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+ggplot() +
+  geom_bar(nos_p_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("PARENT \'No\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+```
+
+```{r child not composition, echo=FALSE}
 
 not_tag <- function(pos) 
 {
@@ -437,7 +578,7 @@ not_tag <- function(pos)
   return(out)
 }
 
-nots <- undertwo_neg %>%
+nots <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
   filter(grepl('(^| )not \\w+', condensed_p_o_s)) %>%
@@ -460,8 +601,8 @@ nots_prop <- nots_prop[,-2] %>%
   melt(id = "bin", value.name = "proportion", variable.name = "PoS")
 
 # Ensure same order of elements
-extras <- unique(nots_prop$PoS)[!unique(nots_prop$PoS) %in% ORDER]
-not_order <- c(as.character(ORDER), as.character(extras))
+not_extras <- unique(nots_prop$PoS)[!unique(nots_prop$PoS) %in% no_order]
+not_order <- c(as.character(no_order), as.character(not_extras))
 nots_prop$PoS <- factor(nots_prop$PoS, levels = not_order)
 nots$not <- factor(nots$not, levels = not_order)
 
@@ -469,7 +610,7 @@ ggplot(nots, aes(bin, fill = not)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("\'not\' Composition")+
+  ggtitle("CHILD \'not\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -479,7 +620,7 @@ ggplot(nots_prop, aes(bin, proportion, fill = PoS)) +
   geom_bar(stat ="identity")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("\'not\' Composition")+
+  ggtitle("CHILD \'not\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -490,7 +631,58 @@ ggplot(nots_prop, aes(bin, proportion, fill = PoS)) +
 
 ```
 
-```{r mod Composition, echo=FALSE}
+```{r parent not composition, echo=FALSE}
+nots_p <- parent_negation %>%
+  # Use to filter age range
+  #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
+  filter(grepl('(^| )not \\w+', condensed_p_o_s)) %>%
+  mutate(not = lapply(condensed_p_o_s, not_tag)) %>%
+  # notnsense words, onotmatopoeia, and L2 words
+  within(not[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", not)] <- "other") %>%
+  # One row per instance of not; utterances with multiple 'not's are doubled 
+  unnest(not) %>%
+  filter(!grepl('^$', not))
+
+# Create proportion table
+nots_p_prop <- merge(
+  tally(group_by(nots_p, bin)) %>% dplyr::rename(total = n), 
+  dcast(nots_p, bin~not, value.var = "not", fun.aggregate = length), by = "bin")
+# Divide by total to get proportion by bin
+nots_p_prop[,-(1:2)] <- nots_p_prop[,-(1:2)]/nots_p_prop[,2]
+
+# Prepare for graphing
+nots_p_prop <- nots_p_prop[,-2] %>%
+  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
+
+# Ensure same order of elements
+not_extras_p <- unique(nots_p_prop$PoS)[!unique(nots_p_prop$PoS) %in% not_order]
+not_p_order <- c(as.character(not_order), as.character(not_extras_p))
+nots_p_prop$PoS <- factor(nots_p_prop$PoS, levels = not_p_order)
+nots_p$not <- factor(nots_p$not, levels = not_p_order)
+
+ggplot(nots_p, aes(bin, fill = not)) +
+  geom_bar()+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT \'not\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+ggplot(nots_p_prop, aes(bin, proportion, fill = PoS)) +
+  geom_bar(stat ="identity")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("PARENT \'not\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+```
+
+```{r child mod composition, echo=FALSE}
 
 mod_tag <- function(pos) 
 {
@@ -503,7 +695,7 @@ mod_tag <- function(pos)
   return(out)
 }
 
-mods <- undertwo_neg %>%
+mods <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
   filter(grepl('(^| )mod \\w+', condensed_p_o_s)) %>%
@@ -526,8 +718,8 @@ mods_prop <- mods_prop[,-2] %>%
   melt(id = "bin", value.name = "proportion", variable.name = "PoS")
 
 # Ensure same order of elements
-extras <- unique(mods_prop$PoS)[!unique(mods_prop$PoS) %in% ORDER]
-mod_order <- c(as.character(ORDER), as.character(extras))
+mod_extras <- unique(mods_prop$PoS)[!unique(mods_prop$PoS) %in% no_order]
+mod_order <- c(as.character(no_order), as.character(mod_extras))
 mods_prop$PoS <- factor(mods_prop$PoS, levels = mod_order)
 mods$mod <- factor(mods$mod, levels = mod_order)
 
@@ -535,7 +727,7 @@ ggplot(mods, aes(bin, fill = mod)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("\'mod\' Composition")+
+  ggtitle("CHILD \'mod\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -545,7 +737,7 @@ ggplot(mods_prop, aes(bin, proportion, fill = PoS)) +
   geom_bar(stat ="identity")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("\'mod\' Composition")+
+  ggtitle("CHILD \'mod\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -554,27 +746,71 @@ ggplot(mods_prop, aes(bin, proportion, fill = PoS)) +
 
 ```
 
+```{r parent mod composition, echo=FALSE}
+mods_p <- parent_negation %>%
+  # Use to filter age range
+  #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
+  filter(grepl('(^| )mod \\w+', condensed_p_o_s)) %>%
+  mutate(mod = lapply(condensed_p_o_s, mod_tag)) %>%
+  # modnsense words, omodmatopoeia, and L2 words
+  within(mod[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", mod)] <- "other") %>%
+  # One row per instance of mod; utterances with multiple 'mod's are doubled 
+  unnest(mod) %>%
+  filter(!grepl('^$', mod))
 
-```{r nt Composition, echo=FALSE}
+# Create proportion table
+mods_p_prop <- merge(
+  tally(group_by(mods_p, bin)) %>% dplyr::rename(total = n), 
+  dcast(mods_p, bin~mod, value.var = "mod", fun.aggregate = length), by = "bin")
+# Divide by total to get proportion by bin
+mods_p_prop[,-(1:2)] <- mods_p_prop[,-(1:2)]/mods_p_prop[,2]
+
+# Prepare for graphing
+mods_p_prop <- mods_p_prop[,-2] %>%
+  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
+
+# Ensure same order of elements
+mod_p_extras <- unique(mods_p_prop$PoS)[!unique(mods_p_prop$PoS) %in% mod_order]
+mod_p_order <- c(as.character(mod_order), as.character(mod_p_extras))
+mods_p_prop$PoS <- factor(mods_p_prop$PoS, levels = mod_p_order)
+mods_p$mod <- factor(mods_p$mod, levels = mod_p_order)
+
+ggplot(mods_p, aes(bin, fill = mod)) +
+  geom_bar()+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT \'mod\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+ggplot(mods_p_prop, aes(bin, proportion, fill = PoS)) +
+  geom_bar(stat ="identity")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("PARENT \'mod\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+```
+
+```{r child nt composition, echo=FALSE}
 
 # Finds successor of n't word; doesn't handle cases where there are multiple
 nt_tag <- function(gloss, pos)
 {
-  gloss_list = strsplit(gloss, " ")
-  pos_list <- unlist(strsplit(pos, " "))
-  #nt_list = list()
-  nt = 0
-  for (g in 1:length(gloss_list[[1]])) {
-    if (grepl('[a-z]+n\'t', gloss_list[[1]][g])){
+  gloss_list = strsplit(gloss, " ")[[1]]
+  pos_list = strsplit(pos, " ")[[1]]
+  for (g in 1:length(gloss_list)) {
+    if (grepl('[a-z]+n\'t', gloss_list[g])){
       return(pos_list[g+1])
     }
   }
 }
 
-nt_tag("hello amn't dog", "co aux n")
-
-
-nts <- undertwo_neg %>%
+nts <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
   filter(grepl('(^| )[a-z]+n\'t \\w+', clean_utterances)) %>%
@@ -597,8 +833,8 @@ nts_prop <- nts_prop[,-2] %>%
   melt(id = "bin", value.name = "proportion", variable.name = "PoS")
 
 # Ensure same order of elements
-extras <- unique(nts_prop$PoS)[!unique(nts_prop$PoS) %in% ORDER]
-nt_order <- c(as.character(ORDER), as.character(extras))
+nt_extras <- unique(nts_prop$PoS)[!unique(nts_prop$PoS) %in% no_order]
+nt_order <- c(as.character(no_order), as.character(nt_extras))
 nts_prop$PoS <- factor(nts_prop$PoS, levels = nt_order)
 nts$nt <- factor(nts$nt, levels = nt_order)
 
@@ -606,7 +842,7 @@ ggplot(nts, aes(bin, fill = nt)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("\'nt\' Composition")+
+  ggtitle("CHILD \'nt\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -616,7 +852,7 @@ ggplot(nts_prop, aes(bin, proportion, fill = PoS)) +
   geom_bar(stat ="identity")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("\'nt\' Composition")+
+  ggtitle("CHILD \'nt\' Composition")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -624,47 +860,70 @@ ggplot(nts_prop, aes(bin, proportion, fill = PoS)) +
 
 ```
 
+```{r parent nt composition, echo=FALSE}
+
+nts_p <- parent_negation %>%
+  # Use to filter age range
+  #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
+  filter(grepl('(^| )[a-z]+n\'t \\w+', clean_utterances)) %>%
+  mutate(nt = mapply(nt_tag, clean_utterances, condensed_p_o_s)) %>%
+  # ntnsense words, ontmatopoeia, and L2 words
+  within(nt[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", nt)] <- "other") %>%
+  # One row per instance of nt; utterances with multiple 'nt's are doubled 
+  unnest(nt) %>%
+  filter(!grepl('^$', nt))
+
+# Create proportion table
+nts_p_prop <- merge(
+  tally(group_by(nts_p, bin)) %>% dplyr::rename(total = n), 
+  dcast(nts_p, bin~nt, value.var = "nt", fun.aggregate = length), by = "bin")
+# Divide by total to get proportion by bin
+nts_p_prop[,-(1:2)] <- nts_p_prop[,-(1:2)]/nts_p_prop[,2]
+
+# Prepare for graphing
+nts_p_prop <- nts_p_prop[,-2] %>%
+  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
+
+# Ensure same order of elements_p
+nt_p_extras <- unique(nts_p_prop$PoS)[!unique(nts_p_prop$PoS) %in% nt_order]
+nt_p_order <- c(as.character(nt_order), as.character(nt_p_extras))
+nts_p_prop$PoS <- factor(nts_p_prop$PoS, levels = nt_p_order)
+nts_p$nt <- factor(nts_p$nt, levels = nt_p_order)
+
+ggplot(nts_p, aes(bin, fill = nt)) +
+  geom_bar()+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT \'nt\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+ggplot(nts_p_prop, aes(bin, proportion, fill = PoS)) +
+  geom_bar(stat ="identity")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("PARENT \'nt\' Composition")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+```
 
 ```{r Participants, echo=FALSE}
 # Participant information
 
 # 173
-undertwo_neg$speaker_id %>% unique() %>% length()
+child_negation$speaker_id %>% unique() %>% length()
 
-speaker_counts <- undertwo_neg %>% count(speaker_id)
+speaker_counts <- child_negation %>% count(speaker_id)
 
 # Proportion of total (0, 24) utterances that include negation by age bin (maybe split bar graph?)
 #all_utterances
 # Proportion of children in each age bin producing negation
 # Proportion of utterances that include negation by child (?)
-```
-
-
-
-
-PARENTS:
-
-```{r Parents, echo=FALSE}
-parent_utterances <- get_utterances(language = "eng", age = age_limits, role_exclude ="Target_Child")
-write.csv(parent_utterances, file="raw_data/eng_parent_utterances.csv")
-
-
-parent_negation <-
- all_utterances %>%
- mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
- filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
- filter(!grepl('not yet transcribed need to fix', gloss)) %>%
- filter(!grepl('^ ?$', part_of_speech)) %>%
- mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-  #gotta add did and didn't
- mutate(do = grepl('^do | do | do$|don\'t|does|doesn\'t', clean_utterances)) %>%
- mutate(want = grepl('^want | want | want$', clean_utterances))%>%
- mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
- mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
- mutate(type_token_ratio = n_types_clean/n_tokens_clean)
-
-
-write.csv(english_negation, file="raw_data/eng_negation_undertwo.csv")
 ```
 
 
