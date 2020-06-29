@@ -48,7 +48,7 @@ processed_data/english_tokens_processed.feather
 papers/
 SALT/
 
-raw_data/eng_utterances_undertwo.csv
+raw_data/eng_child_utterances.csv
+raw_data/eng_child_negation.csv
 raw_data/eng_parent_utterances.csv
 raw_data/eng_parent_negation.csv
-
