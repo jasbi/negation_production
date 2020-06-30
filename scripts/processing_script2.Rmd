@@ -30,7 +30,6 @@ age_limits <- c(0, 36)
 
 ```{r get child data, include= FALSE}
 # child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
-# write.csv(child_utterances, file="raw_data/eng_child_utterances.csv")
 # 
 # count_types <- function(string){
 #  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
@@ -42,18 +41,24 @@ age_limits <- c(0, 36)
 #  return(length(n))
 # }
 # 
-# child_negation <-
-#  child_utterances %>%
+# child_utterances <- child_utterances %>%
 #  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
 #  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
-#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+#  filter(!grepl('^ ?$',clean_utterances)) %>%
 #  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
 #  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
 #  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
+# 
+# write.csv(child_utterances, file="raw_data/eng_child_utterances.csv")
+# 
+# 
+# child_negation <-
+#  child_utterances %>%
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))
 # 
 # # Function removing repeated 'no'
 # fix_nos <- function(x)
@@ -147,7 +152,7 @@ age_limits <- c(0, 36)
 # 
 # child_negation <- fix(child_negation, replacements)
 # 
-#write.csv(child_negation, file="raw_data/eng_child_negation.csv")
+# write.csv(child_negation, file="raw_data/eng_child_negation.csv")
 
 child_negation <- read.csv("raw_data/eng_child_negation.csv")
 
@@ -156,22 +161,25 @@ child_negation$clean_utterances <- as.character(child_negation$clean_utterances)
 ```
 
 ```{r get parent data, echo=FALSE}
-# parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
-# write.csv(parent_utterances, file="raw_data/eng_parent_utterances.csv")
-# 
-# parent_negation <-
-#  parent_utterances %>%
+#parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
+#
+# parent_utterances <- parent_utterances %>%
 #  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-#  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
-#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
-#  mutate(want = grepl('^want | want | want$', clean_utterances))%>%
+#  filter(!grepl('^ ?$', part_of_speech))%>%
+#  filter(!grepl('^ ?$',clean_utterances)) %>%
 #  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
 #  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
 #  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 # 
+# write.csv(parent_utterances, file="raw_data/eng_parent_utterances.csv")
+# 
+# parent_negation <-
+#  parent_utterances %>%
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))
 # 
 # parent_negation$clean_utterances <- as.character(parent_negation$clean_utterances)
 # parent_negation$part_of_speech <- as.character(parent_negation$part_of_speech)
@@ -333,14 +341,52 @@ filter(child_negation, grepl('( |^)do not( |$)', clean_utterances))$clean_uttera
 
 ```
 
-
 ```{r child utterance breakdown, echo=FALSE}
+
+neg_tag <- function(gloss)
+{
+  neg <- list()
+  if(grepl('(^| )no( |$)', gloss)) {neg = append(unlist(neg), "no")}
+  if(grepl('(^| )not( |$)', gloss)) {neg = append(unlist(neg), "not")}
+  if(grepl('(^| )[a-z]*n\'t( |$)', gloss)) {neg = append(unlist(neg), "nt")}
+  if(length(neg) == 0){return(list("no_negation")[[1]])}
+  else {return(neg)}
+}
+
+neg_tag("dog")
+
+child_utterances <- child_utterances %>%
+  mutate(bin = bin_age(target_child_age)) %>%
+  mutate(neg = mapply(neg_tag, gloss))
+  
+child_utterances <- child_utterances %>%
+  mutate(length = )
+
+
+child_utterances$n_tokens_clean <- factor(child_utterances$n_tokens_clean, levels = as.character(1:20))
+ggplot(child_utterances, aes(bin, fill = n_tokens_clean))+
+  geom_bar() +
+  ggtitle("Utterance Length")+
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+  
+  
+  
+# Plot negation as a proportion of utterances; this isn't a very good graph
+class(child_utterances$neg) = "character"
+ggplot(child_utterances, aes(bin, fill = neg))  +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+```
+
+
+```{r child negation breakdown, echo=FALSE}
 
 # Bin utterances by month
 bin_age <- function(age)
 {
   x = floor(age)
-  paste(x, x+1, sep = "-")
+  paste(formatC(x, width=2, flag="0"), formatC(x+1, width=2, flag="0"), sep = "-")
 }
 
 child_negation <- child_negation %>% 
@@ -394,7 +440,7 @@ ggplot(neg_proportions_melted) +
 ```
 
 
-```{r Parents utterance breakdown, echo=FALSE}
+```{r parent negation breakdown, echo=FALSE}
 
 parent_negation <- parent_negation %>% 
   mutate(bin = bin_age(target_child_age)) %>%
@@ -803,12 +849,16 @@ nt_tag <- function(gloss, pos)
 {
   gloss_list = strsplit(gloss, " ")[[1]]
   pos_list = strsplit(pos, " ")[[1]]
+  result = list()
   for (g in 1:length(gloss_list)) {
     if (grepl('[a-z]+n\'t', gloss_list[g])){
-      return(pos_list[g+1])
+      result =append(unlist(result), pos_list[g+1])
     }
   }
+  result = result[!is.na(result)]
+  return(result)
 }
+
 
 nts <- child_negation %>%
   # Use to filter age range
