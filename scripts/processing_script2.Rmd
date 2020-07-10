@@ -367,11 +367,11 @@ child_utterances <- child_utterances %>%
   mutate(neg = mapply(neg_tag, gloss))
 
 child_utterances <- child_utterances %>%
-  mutate(n_tokens_clean = factor(n_tokens_clean, levels = append(as.character(1:21), c(">20"))))
+  mutate(n_tokens_clean = factor(n_tokens_clean, levels = append(as.character(1:4), c(">4"))))
 
-child_utterances$n_tokens_clean[is.na(child_utterances$n_tokens_clean)] <- ">20"
+child_utterances$n_tokens_clean[is.na(child_utterances$n_tokens_clean)] <- ">4"
 
-ggplot(child_utterances, aes(bin, fill = n_tokens_clean))+
+ggplot(child_utterances %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
   geom_bar() +
   xlab("Age Bin")+
   ylab("Number of Instances")+
@@ -381,7 +381,7 @@ ggplot(child_utterances, aes(bin, fill = n_tokens_clean))+
   scale_fill_manual(values=as.vector(alphabet2()))+ 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
   
-ggplot(filter(child_utterances, neg == "no_negation"), aes(bin, fill = n_tokens_clean))+
+ggplot(child_utterances %>% filter(neg == "no_negation") %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
   geom_bar() +
   xlab("Age Bin")+
   ylab("Number of Instances")+
@@ -401,8 +401,35 @@ ggplot(filter(child_utterances, neg != "no_negation"), aes(bin, fill = n_tokens_
   scale_fill_manual(values=as.vector(alphabet2()))+ 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
 
+ggplot(child_utterances %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+  
+ggplot(child_utterances %>% filter(neg == "no_negation") %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD Non-negative Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
 
-
+ggplot(filter(child_utterances, neg != "no_negation"), aes(bin,fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD Negative Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
   
   
 # Plot negation as a proportion of utterances; this isn't a very good graph
@@ -439,14 +466,9 @@ neg_sums <- data.frame("Bin" = unique(negs$bin)) %>%
   mutate(not = tally(group_by(negs, bin), not)$n) %>%
   mutate(nt = tally(group_by(negs, bin), nt)$n)
 
-# Calculate proportion of each negation type per instances of negation by bin
-neg_proportions <- (neg_sums[,-(1:2)] / neg_sums[,2]) %>%
-  mutate(Bin = neg_sums$Bin)
-  
 
 # Consolidate data for graphing
 neg_sums_melted <- neg_sums%>%subset(select = -Neg_Count) %>%melt(id.vars = "Bin")
-neg_proportions_melted <- melt(neg_proportions,id.vars = "Bin")
 
 ggplot(mapping = aes(Bin, value, fill = variable ))+
   geom_bar(data = neg_sums_melted, stat = "identity")+
@@ -456,14 +478,13 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
-ggplot(neg_proportions_melted) +
-  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+ggplot(mapping = aes(Bin, value, fill = variable ))+
+  geom_bar(data = neg_sums_melted, stat = "identity", position = "fill")+
   xlab("Age Bin")+
-  ylab("Number of Instances")+
-  ggtitle("CHILD Negation type: All Multi-word Negative Utterances")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD Negation Type: All Multi-word Negative Uttera")+
   scale_fill_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
-
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
 ```
 
@@ -494,14 +515,8 @@ neg_sums <- data.frame("Bin" = unique(negs$bin)) %>%
   mutate(not = tally(group_by(negs, bin), not)$n) %>%
   mutate(nt = tally(group_by(negs, bin), nt)$n)
 
-# Calculate proportion of each negation type per instances of negation by bin
-neg_proportions <- (neg_sums[,-(1:2)] / neg_sums[,2]) %>%
-  mutate(Bin = neg_sums$Bin)
-  
-
 # Consolidate data for graphing
 neg_sums_melted <- neg_sums%>%subset(select = -Neg_Count) %>%melt(id.vars = "Bin")
-neg_proportions_melted <- melt(neg_proportions,id.vars = "Bin")
 
 ggplot(mapping = aes(Bin, value, fill = variable ))+
   geom_bar(data = neg_sums_melted, stat = "identity")+
@@ -511,143 +526,18 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
-ggplot(neg_proportions_melted) +
-  geom_bar(stat = "identity", aes(Bin, value, fill = variable ))+
+ggplot(mapping = aes(Bin, value, fill = variable ))+
+  geom_bar(data = neg_sums_melted, stat = "identity", position = "fill")+
   xlab("Age Bin")+
-  ylab("Number of Instances")+
-  ggtitle("PARENT Negation type: All Multi-word Negative Utterances")+
+  ylab("Proportion of Instances")+
+  ggtitle("PARENT Negation Type: All Multi-word Negative Uttera")+
   scale_fill_brewer(palette="Paired")+
-  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
-
-
-```
-
-
-```{r child no:co composition, echo=FALSE}
-# No:co composition
-no_co_tag <- function(pos) 
-{
-  pos_list = unlist(strsplit(pos, " "))
-  
-  n_list = grep("^no:co$", pos_list)
-  
-  out = pos_list[n_list+1]
-  out = out[!is.na(out)]
-  return(out)
-}
-
-
-no_cos <- child_negation %>%
-  filter(grepl('(^| )no:co \\w+', condensed_p_o_s)) %>%
-  mutate(no_co = lapply(condensed_p_o_s, no_co_tag)) %>%
-  # Nonsense words, onomatopoeia, and L2 words
-  within(no_co[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_co)] <- "other") %>%
-  # One row per instance of no; utterances with multiple 'no's are doubled 
-  unnest(no_co) %>%
-  filter(!grepl('^$', no_co))
-
-# Create proportion table
-no_cos_prop <- merge(
-  tally(group_by(no_cos, bin)) %>% dplyr::rename(total = n), 
-  dcast(no_cos, bin~no_co, value.var = "no_co", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-no_cos_prop[,-(1:2)] <- no_cos_prop[,-(1:2)]/no_cos_prop[,2]
-
-# Prepare for graphing
-no_cos_prop <- no_cos_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
-# Ensure same order of elements
-no_cos_prop <- no_cos_prop[order(rev(no_cos_prop$bin),-no_cos_prop$proportion),]
-order <- unique(no_cos_prop$PoS)
-no_cos_prop$PoS <- factor(no_cos_prop$PoS, levels = order)
-no_cos$no_co <- factor(no_cos$no_co, levels = order)
-
-# FILTER TO TWO WORD UTTERANCES
-# no_cos <- no_cos %>%
-#   filter(n_tokens_clean ==2)
-
-ggplot() +
-  geom_bar(no_cos, mapping = aes(bin, fill = no_co))+
-  xlab("Age Bin")+
-  ylab("Number of Instances")+
-  ggtitle("CHILD \'no (co)\' Composition")+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
-  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
-  labs(fill = "Part of Speech") +
-  scale_fill_manual(values=as.vector(alphabet2()))
-
-ggplot() +
-  geom_bar(no_cos_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
-  xlab("Age Bin")+
-  ylab("Proportion of Instances")+
-  ggtitle("CHILD \'no (co)\' Composition")+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
-  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
-  labs(fill = "Part of Speech") +
-  scale_fill_manual(values=as.vector(alphabet2()))
-
-
-# Maybe make one that's just the number of things no combines with per bin
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
 ```
 
-
-```{r parent no:co composition, echo=FALSE}
-
-p_no_cos <- parent_negation %>%
-  filter(grepl('(^| )no:co \\w+', condensed_p_o_s)) %>%
-  mutate(no_co = lapply(condensed_p_o_s, no_co_tag)) %>%
-  # Nonsense words, onomatopoeia, and L2 words
-  within(no_co[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_co)] <- "other") %>%
-  # One row per instance of no; utterances with multiple 'no's are doubled 
-  unnest(no_co) %>%
-  filter(!grepl('^$', no_co))
-
-# Create proportion table
-p_no_cos_prop <- merge(
-  tally(group_by(no_cos, bin)) %>% dplyr::rename(total = n), 
-  dcast(no_cos, bin~no_co, value.var = "no_co", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-p_no_cos_prop[,-(1:2)] <-p_no_cos_prop[,-(1:2)]/p_no_cos_prop[,2]
-
-# Prepare for graphing
-p_no_cos_prop <- p_no_cos_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
-# Ensure same order of elements
-p_no_co_order <- append(as.character(order), as.character(filter(p_no_cos_prop, !(PoS %in% order))$PoS %>% unique()))
-p_no_cos_prop$PoS <- factor(p_no_cos_prop$PoS, levels = p_no_co_order)
-p_no_cos$no_co <- factor(p_no_cos$no_co, levels = order)
-
-# FILTER TO TWO WORD UTTERANCES
-# p_no_cos <- p_no_cos %>%
-#   filter(n_tokens_clean ==2)
-
-ggplot() +
-  geom_bar(p_no_cos, mapping = aes(bin, fill = no_co))+
-  xlab("Age Bin")+
-  ylab("Number of Instances")+
-  ggtitle("PARENT \'no (co)\' Composition")+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
-  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
-  labs(fill = "Part of Speech") +
-  scale_fill_manual(values=as.vector(alphabet2()))
-
-ggplot() +
-  geom_bar(p_no_cos_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
-  xlab("Age Bin")+
-  ylab("Proportion of Instances")+
-  ggtitle("PARENT \'no (co)\' Composition")+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
-  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
-  labs(fill = "Part of Speech") +
-  scale_fill_manual(values=as.vector(alphabet2()))
-
-```
-
-```{r child no:qn composition, echo=FALSE}
-# No:qn composition
+```{r child no:qn Environment, echo=FALSE}
+# No:qn Environment
 no_qn_tag <- function(pos) 
 {
   pos_list = unlist(strsplit(pos, " "))
@@ -669,21 +559,12 @@ no_qns <- child_negation %>%
   unnest(no_qn) %>%
   filter(!grepl('^$', no_qn))
 
-# Create proportion table
-no_qns_prop <- merge(
-  tally(group_by(no_qns, bin)) %>% dplyr::rename(total = n), 
-  dcast(no_qns, bin~no_qn, value.var = "no_qn", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-no_qns_prop[,-(1:2)] <- no_qns_prop[,-(1:2)]/no_qns_prop[,2]
+# Define order to ensure consistency across graphs
+no_qn_counts <- (count(no_qns, no_qn))
+order <- (no_qn_counts[order(-no_qn_counts$n),])$no_qn
+order <- append(order[order!= "other"], "other")
+no_qns$no_qn <- factor(no_qns$no_qn, levels = order)
 
-# Prepare for graphing
-no_qns_prop <- no_qns_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
-# Ensure same order of elements
-no_qn_order <- append(as.character(order), as.character(filter(no_cos_prop, !(PoS %in% order))$PoS %>% unique()))
-no_qns_prop$PoS <- factor(no_qns_prop$PoS, levels = no_qn_order)
-no_qns$no_qn <- factor(no_qns$no_qn, levels = no_qn_order)
 
 # FILTER TO TWO WORD UTTERANCES
 # no_qns <- no_qns %>%
@@ -693,29 +574,84 @@ ggplot() +
   geom_bar(no_qns, mapping = aes(bin, fill = no_qn))+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("CHILD \'no (qn)\' Composition")+
+  ggtitle("CHILD \'no (qn)\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
 ggplot() +
-  geom_bar(no_qns_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
+  geom_bar(no_qns, mapping = aes(bin, fill = no_qn), position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("CHILD \'no (qn)\' Composition")+
+  ggtitle("CHILD \'no (qn)\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
+# Maybe make one that's just the number of things no combines with per bin
+
+```
+
+```{r child no:co Environment, echo=FALSE}
+# No:co Environment
+no_co_tag <- function(pos) 
+{
+  pos_list = unlist(strsplit(pos, " "))
+  
+  n_list = grep("^no:co$", pos_list)
+  
+  out = pos_list[n_list+1]
+  out = out[!is.na(out)]
+  return(out)
+}
+
+
+no_cos <- child_negation %>%
+  filter(grepl('(^| )no:co \\w+', condensed_p_o_s)) %>%
+  mutate(no_co = lapply(condensed_p_o_s, no_co_tag)) %>%
+  # Nonsense words, onomatopoeia, and L2 words
+  within(no_co[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_co)] <- "other") %>%
+  # One row per instance of no; utterances with multiple 'no's are doubled 
+  unnest(no_co) %>%
+  filter(!grepl('^$', no_co))
+
+# Ensure same order of elements
+no_co_counts <- count(no_cos, no_co)
+no_co_order <- append(as.character(order), as.character(filter(no_co_counts, !(no_co %in% order))$no_co %>% unique()))
+no_cos$no_co <- factor(no_cos$no_co, levels = no_co_order)
+
+# FILTER TO TWO WORD UTTERANCES
+# no_cos <- no_cos %>%
+#   filter(n_tokens_clean ==2)
+
+ggplot() +
+  geom_bar(no_cos, mapping = aes(bin, fill = no_co))+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD \'no (co)\' Environment")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+ggplot() +
+  geom_bar(no_cos, mapping = aes(bin, fill = no_co), position = "fill")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD \'no (co)\' Environment")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
 
 # Maybe make one that's just the number of things no combines with per bin
 
 ```
 
 
-```{r parent no:qn composition, echo=FALSE}
+```{r parent no:qn Environment, echo=FALSE}
 
 p_no_qns <- parent_negation %>%
   filter(grepl('(^| )no:qn \\w+', condensed_p_o_s)) %>%
@@ -726,20 +662,9 @@ p_no_qns <- parent_negation %>%
   unnest(no_qn) %>%
   filter(!grepl('^$', no_qn))
 
-# Create proportion table
-p_no_qns_prop <- merge(
-  tally(group_by(no_qns, bin)) %>% dplyr::rename(total = n), 
-  dcast(no_qns, bin~no_qn, value.var = "no_qn", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-p_no_qns_prop[,-(1:2)] <-p_no_qns_prop[,-(1:2)]/p_no_qns_prop[,2]
-
-# Prepare for graphing
-p_no_qns_prop <- p_no_qns_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
 # Ensure same order of elements
-p_no_qn_order <- append(as.character(p_no_co_order), as.character(filter(p_no_qns_prop, !(PoS %in% p_no_co_order))$PoS %>% unique()))
-p_no_qns_prop$PoS <- factor(p_no_qns_prop$PoS, levels = p_no_qn_order)
+p_no_qn_counts <- count(p_no_qns, no_qn)
+p_no_qn_order <- append(as.character(no_co_order), as.character(filter(p_no_qn_counts, !(no_qn %in% no_co_order))$no_qn %>% unique()))
 p_no_qns$no_qn <- factor(p_no_qns$no_qn, levels = p_no_qn_order)
 
 # FILTER TO TWO WORD UTTERANCES
@@ -750,17 +675,17 @@ ggplot() +
   geom_bar(p_no_qns, mapping = aes(bin, fill = no_qn))+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("PARENT \'no (qn)\' Composition")+
+  ggtitle("PARENT \'no (qn)\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
 ggplot() +
-  geom_bar(p_no_qns_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
+  geom_bar(p_no_qns, mapping = aes(bin, fill = no_qn), position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("PARENT \'no (qn)\' Composition")+
+  ggtitle("PARENT \'no (qn)\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -768,7 +693,51 @@ ggplot() +
 
 ```
 
-```{r parent all no composition, include=FALSE}
+
+
+```{r parent no:co Environment, echo=FALSE}
+
+p_no_cos <- parent_negation %>%
+  filter(grepl('(^| )no:co \\w+', condensed_p_o_s)) %>%
+  mutate(no_co = lapply(condensed_p_o_s, no_co_tag)) %>%
+  # Nonsense words, onomatopoeia, and L2 words
+  within(no_co[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_co)] <- "other") %>%
+  # One row per instance of no; utterances with multiple 'no's are doubled 
+  unnest(no_co) %>%
+  filter(!grepl('^$', no_co))
+
+# Ensure same order of elements
+p_no_co_counts <- count(p_no_cos, no_co)
+p_no_co_order <- append(as.character(order), as.character(filter(p_no_co_counts, !(no_co %in% order))$no_co %>% unique()))
+p_no_cos$no_co <- factor(p_no_cos$no_co, levels = p_no_co_order)
+
+# FILTER TO TWO WORD UTTERANCES
+# p_no_cos <- p_no_cos %>%
+#   filter(n_tokens_clean ==2)
+
+ggplot() +
+  geom_bar(p_no_cos, mapping = aes(bin, fill = no_co))+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("PARENT \'no (co)\' Environment")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+ggplot() +
+  geom_bar(p_no_cos, mapping = aes(bin, fill = no_co), position = "fill")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("PARENT \'no (co)\' Environment")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Part of Speech") +
+  scale_fill_manual(values=as.vector(alphabet2()))
+
+```
+
+```{r parent all no Environment, include=FALSE}
 # nos_p <- parent_negation %>%
 #   # Use to filter age range
 #   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
@@ -800,7 +769,7 @@ ggplot() +
 #   geom_bar(nos_p, mapping = aes(bin, fill = no))+
 #   xlab("Age Bin")+
 #   ylab("Number of Instances")+
-#   ggtitle("PARENT \'No\' Composition")+
+#   ggtitle("PARENT \'No\' Environment")+
 #   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
 #   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
 #   labs(fill = "Part of Speech") +
@@ -810,7 +779,7 @@ ggplot() +
 #   geom_bar(nos_p_prop, mapping = aes(bin, proportion, fill = PoS), stat ="identity")+
 #   xlab("Age Bin")+
 #   ylab("Proportion of Instances")+
-#   ggtitle("PARENT \'No\' Composition")+
+#   ggtitle("PARENT \'No\' Environment")+
 #   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
 #   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
 #   labs(fill = "Part of Speech") +
@@ -818,7 +787,7 @@ ggplot() +
 
 ```
 
-```{r child not composition, echo=FALSE}
+```{r child not Environment, echo=FALSE}
 
 not_tag <- function(pos) 
 {
@@ -842,49 +811,37 @@ nots <- child_negation %>%
   unnest(not) %>%
   filter(!grepl('^$', not))
 
-# Create proportion table
-nots_prop <- merge(
-  tally(group_by(nots, bin)) %>% dplyr::rename(total = n), 
-  dcast(nots, bin~not, value.var = "not", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-nots_prop[,-(1:2)] <- nots_prop[,-(1:2)]/nots_prop[,2]
-
-# Prepare for graphing
-nots_prop <- nots_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
 # Ensure same order of elements
-not_extras <- unique(nots_prop$PoS)[!unique(nots_prop$PoS) %in% order]
-not_order <- c(as.character(order), as.character(not_extras))
-nots_prop$PoS <- factor(nots_prop$PoS, levels = not_order)
+not_counts <- count(nots, not)
+not_order <- append(as.character(order), as.character(filter(not_counts, !(not %in% order))$not %>% unique()))
 nots$not <- factor(nots$not, levels = not_order)
+
 
 ggplot(nots, aes(bin, fill = not)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("CHILD \'not\' Composition")+
+  ggtitle("CHILD \'not\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(nots_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot(nots, aes(bin, fill = not)) +
+  geom_bar(position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("CHILD \'not\' Composition")+
+  ggtitle("CHILD \'not\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
-
 
 
 
 ```
 
-```{r parent not composition, echo=FALSE}
+```{r parent not Environment, echo=FALSE}
 nots_p <- parent_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
@@ -896,38 +853,28 @@ nots_p <- parent_negation %>%
   unnest(not) %>%
   filter(!grepl('^$', not))
 
-# Create proportion table
-nots_p_prop <- merge(
-  tally(group_by(nots_p, bin)) %>% dplyr::rename(total = n), 
-  dcast(nots_p, bin~not, value.var = "not", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-nots_p_prop[,-(1:2)] <- nots_p_prop[,-(1:2)]/nots_p_prop[,2]
-
-# Prepare for graphing
-nots_p_prop <- nots_p_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
 
 # Ensure same order of elements
-not_extras_p <- unique(nots_p_prop$PoS)[!unique(nots_p_prop$PoS) %in% not_order]
-not_p_order <- c(as.character(not_order), as.character(not_extras_p))
-nots_p_prop$PoS <- factor(nots_p_prop$PoS, levels = not_p_order)
-nots_p$not <- factor(nots_p$not, levels = not_p_order)
+not_counts_p <- count(nots_p, not)
+not_order_p <- append(as.character(not_order), as.character(filter(not_counts_p, !(not %in% not_order))$not %>% unique()))
+nots_p$not <- factor(nots_p$not, levels = not_order_p)
+
 
 ggplot(nots_p, aes(bin, fill = not)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("PARENT \'not\' Composition")+
+  ggtitle("PARENT \'not\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(nots_p_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot(nots_p, aes(bin, fill = not)) +
+  geom_bar(position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("PARENT \'not\' Composition")+
+  ggtitle("PARENT \'not\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -935,7 +882,7 @@ ggplot(nots_p_prop, aes(bin, proportion, fill = PoS)) +
 
 ```
 
-```{r child mod composition, echo=FALSE}
+```{r child mod Environment, echo=FALSE}
 
 mod_tag <- function(pos) 
 {
@@ -959,38 +906,26 @@ mods <- child_negation %>%
   unnest(mod) %>%
   filter(!grepl('^$', mod))
 
-# Create proportion table
-mods_prop <- merge(
-  tally(group_by(mods, bin)) %>% dplyr::rename(total = n), 
-  dcast(mods, bin~mod, value.var = "mod", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-mods_prop[,-(1:2)] <- mods_prop[,-(1:2)]/mods_prop[,2]
-
-# Prepare for graphing
-mods_prop <- mods_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
 # Ensure same order of elements
-mod_extras <- unique(mods_prop$PoS)[!unique(mods_prop$PoS) %in% order]
-mod_order <- c(as.character(order), as.character(mod_extras))
-mods_prop$PoS <- factor(mods_prop$PoS, levels = mod_order)
+mod_counts <- count(mods, mod)
+mod_order <- append(as.character(order), as.character(filter(mod_counts, !(mod %in% order))$mod %>% unique()))
 mods$mod <- factor(mods$mod, levels = mod_order)
 
 ggplot(mods, aes(bin, fill = mod)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("CHILD \'mod\' Composition")+
+  ggtitle("CHILD \'mod\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(mods_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot(mods, aes(bin, fill = mod)) +
+  geom_bar()+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("CHILD \'mod\' Composition")+
+  ggtitle("CHILD \'mod\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -999,7 +934,7 @@ ggplot(mods_prop, aes(bin, proportion, fill = PoS)) +
 
 ```
 
-```{r parent mod composition, echo=FALSE}
+```{r parent mod Environment, echo=FALSE}
 mods_p <- parent_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
@@ -1011,45 +946,33 @@ mods_p <- parent_negation %>%
   unnest(mod) %>%
   filter(!grepl('^$', mod))
 
-# Create proportion table
-mods_p_prop <- merge(
-  tally(group_by(mods_p, bin)) %>% dplyr::rename(total = n), 
-  dcast(mods_p, bin~mod, value.var = "mod", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-mods_p_prop[,-(1:2)] <- mods_p_prop[,-(1:2)]/mods_p_prop[,2]
-
-# Prepare for graphing
-mods_p_prop <- mods_p_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
 # Ensure same order of elements
-mod_p_extras <- unique(mods_p_prop$PoS)[!unique(mods_p_prop$PoS) %in% mod_order]
-mod_p_order <- c(as.character(mod_order), as.character(mod_p_extras))
-mods_p_prop$PoS <- factor(mods_p_prop$PoS, levels = mod_p_order)
-mods_p$mod <- factor(mods_p$mod, levels = mod_p_order)
+mod_counts_p <- count(mods_p, mod)
+mod_order_p <- append(as.character(mod_order), as.character(filter(mod_counts_p, !(mod %in% mod_order))$mod %>% unique()))
+mods_p$mod <- factor(mods_p$mod, levels = mod_order_p)
 
 ggplot(mods_p, aes(bin, fill = mod)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("PARENT \'mod\' Composition")+
+  ggtitle("PARENT \'mod\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(mods_p_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot(mods_p, aes(bin, fill = mod)) +
+  geom_bar(position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("PARENT \'mod\' Composition")+
+  ggtitle("PARENT \'mod\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 ```
 
-```{r child nt composition, echo=FALSE}
+```{r child nt Environment, echo=FALSE}
 
 # Finds successor of n't word; doesn't handle cases where there are multiple
 nt_tag <- function(gloss, pos)
@@ -1078,38 +1001,26 @@ nts <- child_negation %>%
   unnest(nt) %>%
   filter(!grepl('^$', nt))
 
-# Create proportion table
-nts_prop <- merge(
-  tally(group_by(nts, bin)) %>% dplyr::rename(total = n), 
-  dcast(nts, bin~nt, value.var = "nt", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-nts_prop[,-(1:2)] <- nts_prop[,-(1:2)]/nts_prop[,2]
-
-# Prepare for graphing
-nts_prop <- nts_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
 # Ensure same order of elements
-nt_extras <- unique(nts_prop$PoS)[!unique(nts_prop$PoS) %in% order]
-nt_order <- c(as.character(order), as.character(nt_extras))
-nts_prop$PoS <- factor(nts_prop$PoS, levels = nt_order)
+nt_counts <- count(nts, nt)
+nt_order <- append(as.character(order), as.character(filter(nt_counts, !(nt %in% order))$nt %>% unique()))
 nts$nt <- factor(nts$nt, levels = nt_order)
 
 ggplot(nts, aes(bin, fill = nt)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("CHILD \'nt\' Composition")+
+  ggtitle("CHILD \'nt\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(nts_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot(nts, aes(bin, fill = nt)) +
+  geom_bar(position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("CHILD \'nt\' Composition")+
+  ggtitle("CHILD \'nt\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
@@ -1117,7 +1028,7 @@ ggplot(nts_prop, aes(bin, proportion, fill = PoS)) +
 
 ```
 
-```{r parent nt composition, echo=FALSE}
+```{r parent nt Environment, echo=FALSE}
 
 nts_p <- parent_negation %>%
   # Use to filter age range
@@ -1130,38 +1041,26 @@ nts_p <- parent_negation %>%
   unnest(nt) %>%
   filter(!grepl('^$', nt))
 
-# Create proportion table
-nts_p_prop <- merge(
-  tally(group_by(nts_p, bin)) %>% dplyr::rename(total = n), 
-  dcast(nts_p, bin~nt, value.var = "nt", fun.aggregate = length), by = "bin")
-# Divide by total to get proportion by bin
-nts_p_prop[,-(1:2)] <- nts_p_prop[,-(1:2)]/nts_p_prop[,2]
-
-# Prepare for graphing
-nts_p_prop <- nts_p_prop[,-2] %>%
-  melt(id = "bin", value.name = "proportion", variable.name = "PoS")
-
 # Ensure same order of elements_p
-nt_p_extras <- unique(nts_p_prop$PoS)[!unique(nts_p_prop$PoS) %in% nt_order]
-nt_p_order <- c(as.character(nt_order), as.character(nt_p_extras))
-nts_p_prop$PoS <- factor(nts_p_prop$PoS, levels = nt_p_order)
-nts_p$nt <- factor(nts_p$nt, levels = nt_p_order)
+nt_counts_p <- count(nts_p, nt)
+nt_order_p <- append(as.character(nt_order), as.character(filter(nt_counts_p, !(nt %in% nt_order))$nt %>% unique()))
+nts_p$nt <- factor(nts_p$nt, levels = nt_order_p)
 
 ggplot(nts_p, aes(bin, fill = nt)) +
   geom_bar()+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("PARENT \'nt\' Composition")+
+  ggtitle("PARENT \'nt\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
   scale_fill_manual(values=as.vector(alphabet2()))
 
-ggplot(nts_p_prop, aes(bin, proportion, fill = PoS)) +
-  geom_bar(stat ="identity")+
+ggplot(nts_p, aes(bin, fill = nt)) +
+  geom_bar(position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("PARENT \'nt\' Composition")+
+  ggtitle("PARENT \'nt\' Environment")+
   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
   labs(fill = "Part of Speech") +
