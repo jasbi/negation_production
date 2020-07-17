@@ -50,7 +50,7 @@ age_limits <- c(0, 36)
 #  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
 #  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 # 
-#write.csv(child_utterances, file="raw_data/eng_child_utterances.csv")
+# write.csv(child_utterances, "raw_data/eng_child_utterances.csv")
 
 child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
 # 
@@ -75,18 +75,17 @@ child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
 # # Modifications to part_of_speech column
 # condense_pos <- function (gloss, pos)
 # {
-#   gloss = fix_nos(gloss)
 #   # Replace POS with 'no' where relevant
-#   if (pos == "") {return(pos)}
-#   no_list = list()
-#   gloss_list = strsplit(gloss," ")
-#   pos_list <- unlist(strsplit(pos, " "))
-#   for (g in 1:length(gloss_list[[1]])) {
-#     if (gloss_list[[1]][g] == "no"){
-#       pos_list[g] <- paste("no", pos_list[g], sep = ":")
-#     }
-#   }
-#   result <- removeWords(paste(pos_list, collapse = " "), "NA")
+  # if (pos == "") {return(pos)}
+  # no_list = list()
+  # gloss_list = strsplit(gloss," ")
+  # pos_list <- unlist(strsplit(pos, " "))
+  # for (g in 1:length(gloss_list[[1]])) {
+  #   if (gloss_list[[1]][g] == "no"){
+  #     pos_list[g] <- paste("no", pos_list[g], sep = ":")
+  #   }
+  # }
+  # result <- removeWords(paste(pos_list, collapse = " "), "NA")
 # 
 #   # Condense POS to major categories
 #   result <- result %>%
@@ -99,24 +98,33 @@ child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
 #   return (result)
 # }
 # 
+# # Return true if utterance length matches pos length
+check_lengths <- function(utterance, pos)
+{
+  return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
+}
+# 
 # child_negation$clean_utterances <- as.character(child_negation$clean_utterances)
 # child_negation$part_of_speech <- as.character(child_negation$part_of_speech)
 # 
-# # Add condensed part of speech column to reflect simplifications
+# 
 # child_negation <- child_negation %>%
-#   mutate(condensed_p_o_s = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
+#   #remove repeated 'no'
 #   mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
+#   # Remove utterances that don't line up with their pos
+#   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
+#   # Add condensed part of speech column to reflect simplifications
+#   mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
 #   # remove single-word negations
-#   filter(!grepl('^no$|^not$|^[a-z]*n\'t$', condensed_p_o_s))
+#   filter(!grepl('^no:\\w{2}$|^not$|^[a-z]*n\'t$', condensed_pos))
 # 
-# # Remove utterances that don't line up with their pos
-# check_lengths <- function(utterance, pos)
-# {
-#   return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
-# }
-# child_negation<- child_negation %>%
-#   filter(mapply(check_lengths, condensed_p_o_s, clean_utterances))
+# #Remove eventually; to show Susan what is removed
+# removed_co <- child_negation %>%
+#   filter(grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*[a-z]+n\'t( co)*$',condensed_pos)) 
 # 
+# child_negation <- child_negation %>%
+#   # remove 'no co' and 'co no' etc.-- essentially single word negations
+#   filter(!grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*[a-z]+n\'t( co)*$',condensed_pos))
 # 
 # # Fix miscodes
 # replacements <-
@@ -145,7 +153,7 @@ child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
 #   {
 #     for (j in 2:length(replacements[[i]]))
 #     {
-#       df$condensed_p_o_s[df$clean_utterances == replacements[[i]][[j]]] <- replacements[[i]][[1]]
+#       df$condensed_pos[df$clean_utterances == replacements[[i]][[j]]] <- replacements[[i]][[1]]
 #     }
 #   }
 #   return(df)
@@ -153,17 +161,17 @@ child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
 # 
 # child_negation <- fix(child_negation, replacements)
 # 
-# write.csv(child_negation, file="raw_data/eng_child_negation.csv")
+# write.csv(child_negation, "raw_data/eng_child_negation.csv")
 
 child_negation <- read.csv("raw_data/eng_child_negation.csv")
 
-child_negation$condensed_p_o_s <- as.character(child_negation$condensed_p_o_s)
+child_negation$condensed_pos <- as.character(child_negation$condensed_pos)
 child_negation$clean_utterances <- as.character(child_negation$clean_utterances)
 ```
 
 ```{r get parent data, echo=FALSE}
-#parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
-#
+# parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
+# 
 # parent_utterances <- parent_utterances %>%
 #  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
@@ -173,9 +181,9 @@ child_negation$clean_utterances <- as.character(child_negation$clean_utterances)
 #  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
 #  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 # 
-# write.csv(parent_utterances, file="raw_data/eng_parent_utterances.csv")
-# 
-parent_utterances <- read_csv("raw_data/eng_parent_utterances.csv")
+# write.csv(parent_utterances, "raw_data/eng_parent_utterances.csv")
+
+parent_utterances <- read.csv("raw_data/eng_parent_utterances.csv")
 # parent_negation <-
 #  parent_utterances %>%
 #  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
@@ -186,23 +194,28 @@ parent_utterances <- read_csv("raw_data/eng_parent_utterances.csv")
 # parent_negation$clean_utterances <- as.character(parent_negation$clean_utterances)
 # parent_negation$part_of_speech <- as.character(parent_negation$part_of_speech)
 # 
-# # Add condensed part of speech column to reflect simplifications
+# #Add condensed part of speech column to reflect simplifications
 # parent_negation <- parent_negation %>%
-#   mutate(condensed_p_o_s = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
-#   mutate(condensed_p_o_s = lapply(condensed_p_o_s, fix_nos) %>% unlist()) %>%
+#   #remove repeated 'no'
 #   mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
+#   # Remove utterances that don't line up with their pos
+#   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
+#   # Add condensed part of speech column to reflect simplifications
+#   mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
 #   # remove single-word negations
-#   filter(!grepl('^no:\\w*$|^not$|^[a-z]*n\'t$', condensed_p_o_s))
+#   filter(!grepl('^no:\\w{2}$|^not$|^[a-z]*n\'t$', condensed_pos)) %>%
+#   # remove 'no co' and 'co no' etc.-- essentially single word negations
+#   filter(!grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*[a-z]+n\'t( co)*$',condensed_pos))
 # 
 # # Remove utterances that don't line up with their pos
 # parent_negation<- parent_negation %>%
-#   filter(mapply(check_lengths, condensed_p_o_s, clean_utterances))
+#   filter(mapply(check_lengths, condensed_pos, clean_utterances))
 # 
-# write.csv(parent_negation, file="raw_data/eng_parent_negation.csv", row.names = FALSE)
+# write.csv(parent_negation, "raw_data/eng_parent_negation.csv")
 
 parent_negation <- read.csv("raw_data/eng_parent_negation.csv")
 
-parent_negation$condensed_p_o_s <- as.character(parent_negation$condensed_p_o_s)
+parent_negation$condensed_pos <- as.character(parent_negation$condensed_pos)
 parent_negation$clean_utterances <- as.character(parent_negation$clean_utterances)
 ```
 
@@ -225,7 +238,7 @@ Total # of utterances: `r nrow(child_negation)`
 
 ```{r construction tables}
 # Uh why doesn't this work anymore?
-# constructions <- count(child_negation$condensed_p_o_s) %>%
+# constructions <- count(child_negation$condensed_pos) %>%
 #   arrange(desc(freq))
 # 
 # filtered_constructions <- constructions %>%
@@ -273,7 +286,7 @@ table1 <- data.frame(
 
 freq <- function(pos) 
 {
-  filter(child_negation, condensed_p_o_s == pos)$clean_utterances %>% length()
+  filter(child_negation, condensed_pos == pos)$clean_utterances %>% length()
 }
 
 table1 <- table1 %>%
@@ -293,15 +306,15 @@ table2 <- data.frame("Category" = c("Can", "Want", "Do","Don't", "Don't want", "
                                      filter(child_negation, grepl('don\'t want', clean_utterances))$clean_utterances %>% length(),
                                      filter(child_negation, grepl('don\'t know', clean_utterances))$clean_utterances %>% length(),
                                      filter(child_negation, grepl('don\'t like', clean_utterances))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^no [a-z]+$', condensed_p_o_s) & condensed_p_o_s != "no no")$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^no [a-z]+$', condensed_pos) & condensed_pos != "no no")$clean_utterances %>% length(),
                                      filter(child_negation, grepl('( |^)no more( |$)', clean_utterances))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^not [a-z]+$', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^no n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^n no v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^not n v ?.*', condensed_p_o_s))$clean_utterances %>% length(),
-                                     filter(child_negation, grepl('^not v ?.*', condensed_p_o_s))$clean_utterances %>% length(), 
-                                     filter(child_negation, grepl('^n not v ?.*', condensed_p_o_s))$clean_utterances %>% length()), 
+                                     filter(child_negation, grepl('^not [a-z]+$', condensed_pos))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^no n v ?.*', condensed_pos))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^no v ?.*', condensed_pos))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^n no v ?.*', condensed_pos))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^not n v ?.*', condensed_pos))$clean_utterances %>% length(),
+                                     filter(child_negation, grepl('^not v ?.*', condensed_pos))$clean_utterances %>% length(), 
+                                     filter(child_negation, grepl('^n not v ?.*', condensed_pos))$clean_utterances %>% length()), 
                      "Examples" = c("I can't find a blankie, can't eat, no no I can not do", 
                                     "Don't want to, no comb want brush, no want the baby",
                                     "don't like it, I don't feel good, no do it Mummy", 
@@ -331,10 +344,10 @@ kable(table2, "latex") %>%
 
 ``` {r, include=FALSE}
 #filters for 'no [anything], excluding repeated 'no'; 1183 utterances (33.8%)
-filter(child_negation, grepl('^no .*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+filter(child_negation, grepl('^no .*', condensed_pos) & !grepl('^(no ?)+$', condensed_pos))$clean_utterances %>% length()
 
 #filters for 'no n [anything]', excluding repeated 'no'; 236 utterances (6.75%)
-filter(child_negation, grepl('^no n.*', condensed_p_o_s) & !grepl('^(no ?)+$', condensed_p_o_s))$clean_utterances %>% length()
+filter(child_negation, grepl('^no n.*', condensed_pos) & !grepl('^(no ?)+$', condensed_pos))$clean_utterances %>% length()
 
 # filters for 'do not'; 22 utterances (!!!!) vs. 602 'don't' utterances
 filter(child_negation, grepl('( |^)do not( |$)', clean_utterances))$clean_utterances
@@ -351,10 +364,20 @@ bin_age <- function(age)
   paste(formatC(x, width=2, flag="0"), formatC(x+1, width=2, flag="0"), sep = "-")
 }
 
-neg_tag <- function(gloss)
+neg_tag <- function(gloss, pos)
 {
+  
+  if (pos == "") {return("no_negation")}
   neg <- list()
-  if(grepl('(^| )no( |$)', gloss)) {neg = append(unlist(neg), "no")}
+  gloss_list = strsplit(gloss," ")
+  pos_list <- unlist(strsplit(pos, " "))
+  for (g in 1:length(gloss_list[[1]])) {
+    if (gloss_list[[1]][g] == "no"){
+      neg = append(unlist(neg), paste("no", pos_list[g], sep = ":"))
+    }
+  }
+  
+  
   if(grepl('(^| )not( |$)', gloss)) {neg = append(unlist(neg), "not")}
   if(grepl('(^| )[a-z]*n\'t( |$)', gloss)) {neg = append(unlist(neg), "nt")}
   if(length(neg) == 0){return(list("no_negation")[[1]])}
@@ -362,16 +385,22 @@ neg_tag <- function(gloss)
 }
 
 
+child_utterances$part_of_speech <- as.character(child_utterances$part_of_speech)
+child_utterances$clean_utterances <- as.character(child_utterances$clean_utterances)
+
 child_utterances <- child_utterances %>%
+  filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
   mutate(bin = bin_age(target_child_age)) %>%
-  mutate(neg = mapply(neg_tag, gloss))
+  mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
 
 child_utterances <- child_utterances %>%
   mutate(n_tokens_clean = factor(n_tokens_clean, levels = append(as.character(1:4), c(">4"))))
 
 child_utterances$n_tokens_clean[is.na(child_utterances$n_tokens_clean)] <- ">4"
 
-ggplot(child_utterances %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
+
+
+ggplot(child_utterances, aes(bin, fill = n_tokens_clean))+
   geom_bar() +
   xlab("Age Bin")+
   ylab("Number of Instances")+
@@ -381,7 +410,7 @@ ggplot(child_utterances %>% filter(target_child_age >= 12.), aes(bin, fill = n_t
   scale_fill_manual(values=as.vector(alphabet2()))+ 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
   
-ggplot(child_utterances %>% filter(neg == "no_negation") %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
+ggplot(child_utterances %>% filter(neg == "no_negation"), aes(bin, fill = n_tokens_clean))+
   geom_bar() +
   xlab("Age Bin")+
   ylab("Number of Instances")+
@@ -401,7 +430,63 @@ ggplot(filter(child_utterances, neg != "no_negation"), aes(bin, fill = n_tokens_
   scale_fill_manual(values=as.vector(alphabet2()))+ 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
 
-ggplot(child_utterances %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
+ggplot(filter(child_utterances, neg == "no:co"), aes(bin, fill = n_tokens_clean))+
+  geom_bar() +
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD no:co Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, neg == "no:qn"), aes(bin, fill = n_tokens_clean))+
+  geom_bar() +
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD no:qn Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, neg == "not"), aes(bin, fill = n_tokens_clean))+
+  geom_bar() +
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD not Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, neg == "nt"), aes(bin, fill = n_tokens_clean))+
+  geom_bar() +
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD nt Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+
+ggplot(filter(child_utterances, grepl('(^| )big( |$)', clean_utterances)), aes(bin, fill = n_tokens_clean))+
+  geom_bar() +
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD \'big\' Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+
+
+
+print("a")
+
+ggplot(child_utterances, aes(bin, fill = n_tokens_clean))+
   geom_bar(position = "fill") +
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
@@ -411,7 +496,7 @@ ggplot(child_utterances %>% filter(target_child_age >= 12.), aes(bin, fill = n_t
   scale_fill_manual(values=as.vector(alphabet2()))+ 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
   
-ggplot(child_utterances %>% filter(neg == "no_negation") %>% filter(target_child_age >= 12.), aes(bin, fill = n_tokens_clean))+
+ggplot(child_utterances %>% filter(neg == "no_negation"), aes(bin, fill = n_tokens_clean))+
   geom_bar(position = "fill") +
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
@@ -430,7 +515,59 @@ ggplot(filter(child_utterances, neg != "no_negation"), aes(bin,fill = n_tokens_c
   labs(fill = "Number of Words") +
   scale_fill_manual(values=as.vector(alphabet2()))+ 
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
-  
+
+ggplot(filter(child_utterances, neg == "no:co"), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD no:co Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, neg == "no:qn"), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD no:qn Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, neg == "not"), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD not Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, neg == "nt"), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD nt Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+ggplot(filter(child_utterances, grepl('(^| )big( |$)', clean_utterances)), aes(bin, fill = n_tokens_clean))+
+  geom_bar(position = "fill") +
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD \'big\' Utterance Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Number of Words") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+
+
+print("a")
   
 # Plot negation as a proportion of utterances; this isn't a very good graph
 # class(child_utterances$neg) = "character"
@@ -449,8 +586,10 @@ child_negation <- child_negation %>%
 # Count frequency of each negation type by utterance
 # Right now I'm counting the total number; i might consider just checking if its present in the utterance to eliminate repetitions
 negs <- child_negation %>%
-  mutate(no_co = str_count(condensed_p_o_s, '( |^)no:co( |$)')) %>%
-  mutate(no_qn = str_count(condensed_p_o_s, '( |^)no:qn( |$)')) %>%
+  mutate(no_co = str_count(condensed_pos, '( |^)no:co( |$)')) %>%
+  mutate(no_qn = str_count(condensed_pos, '( |^)no:qn( |$)')) %>%
+  mutate(no_bab = str_count(condensed_pos, '( |^)no:bab( |$)')) %>%
+#  mutate(no_other = str_count(condensed_pos, '( |^)no:[^(co|qn)]+( |$)')) %>%
   mutate(not = str_count(clean_utterances, '( |^)not( |$)')) %>%
   mutate(nt = str_count(clean_utterances, '( |^)[a-z]*n\'t( |$)')) %>%
   mutate(sum = no_co + no_qn + not + nt) 
@@ -464,7 +603,9 @@ neg_sums <- data.frame("Bin" = unique(negs$bin)) %>%
   mutate(no_co = tally(group_by(negs, bin), no_co)$n) %>%
   mutate(no_qn = tally(group_by(negs, bin), no_qn)$n) %>%
   mutate(not = tally(group_by(negs, bin), not)$n) %>%
-  mutate(nt = tally(group_by(negs, bin), nt)$n)
+  mutate(nt = tally(group_by(negs, bin), nt)$n) %>%
+  mutate(no_bab = tally(group_by(negs, bin), no_bab)$n)
+#  mutate(no_other = tally(group_by(negs, bin), no_other)$n)
 
 
 # Consolidate data for graphing
@@ -474,7 +615,7 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
   geom_bar(data = neg_sums_melted, stat = "identity")+
   xlab("Age Bin")+
   ylab("Number of Instances")+
-  ggtitle("CHILD Negation Type: All Multi-word Negative Uttera")+
+  ggtitle("CHILD Negation Type: All Multi-word Negative Utterances")+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
@@ -482,7 +623,7 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
   geom_bar(data = neg_sums_melted, stat = "identity", position = "fill")+
   xlab("Age Bin")+
   ylab("Proportion of Instances")+
-  ggtitle("CHILD Negation Type: All Multi-word Negative Uttera")+
+  ggtitle("CHILD Negation Type: All Multi-word Negative Utterances")+
   scale_fill_brewer(palette="Paired")+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
@@ -498,8 +639,8 @@ parent_negation <- parent_negation %>%
 # Count frequency of each negation type by utterance
 # Right now I'm counting the total number; i might consider just checking if its present in the utterance to eliminate repetitions
 negs <- parent_negation %>%
-  mutate(no_co = str_count(condensed_p_o_s, '( |^)no:co( |$)')) %>%
-  mutate(no_qn = str_count(condensed_p_o_s, '( |^)no:qn( |$)')) %>%
+  mutate(no_co = str_count(condensed_pos, '( |^)no:co( |$)')) %>%
+  mutate(no_qn = str_count(condensed_pos, '( |^)no:qn( |$)')) %>%
   mutate(not = str_count(clean_utterances, '( |^)not( |$)')) %>%
   mutate(nt = str_count(clean_utterances, '( |^)[a-z]*n\'t( |$)')) %>%
   mutate(sum = no_co + no_qn + not + nt) 
@@ -535,6 +676,32 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
   theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
 
 ```
+
+
+```{r individual child analysis, echo=FALSE}
+
+dense_children <- child_utterances %>% filter(target_child_age < 16) %>% count(speaker_id) %>% filter(n>500)
+
+for(i in 1:length(dense_children$n)) {
+  id = dense_children$speaker_id[[i]]
+  id_n = as.integer(id)
+  print(
+  ggplot(child_utterances %>% filter(speaker_id == id_n), aes(bin, fill = n_tokens_clean))+
+    geom_bar(position = "fill") +
+    xlab("Age Bin")+
+    ylab("Proportion of Instances")+
+    ggtitle(paste(id, ": Utterance Length", sep = ""))+
+    theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+    labs(fill = "Number of Words") +
+    scale_fill_manual(values=as.vector(alphabet2()))+ 
+    theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
+  )
+}
+
+```
+
+
+
 
 ```{r child no:qn Environment, echo=FALSE}
 # No:qn Environment
@@ -551,8 +718,8 @@ no_qn_tag <- function(pos)
 
 
 no_qns <- child_negation %>%
-  filter(grepl('(^| )no:qn \\w+', condensed_p_o_s)) %>%
-  mutate(no_qn = lapply(condensed_p_o_s, no_qn_tag)) %>%
+  filter(grepl('(^| )no:qn \\w+', condensed_pos)) %>%
+  mutate(no_qn = lapply(condensed_pos, no_qn_tag)) %>%
   # Nonsense words, onomatopoeia, and L2 words
   within(no_qn[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_qn)] <- "other") %>%
   # One row per instance of no; utterances with multiple 'no's are doubled 
@@ -609,8 +776,8 @@ no_co_tag <- function(pos)
 
 
 no_cos <- child_negation %>%
-  filter(grepl('(^| )no:co \\w+', condensed_p_o_s)) %>%
-  mutate(no_co = lapply(condensed_p_o_s, no_co_tag)) %>%
+  filter(grepl('(^| )no:co \\w+', condensed_pos)) %>%
+  mutate(no_co = lapply(condensed_pos, no_co_tag)) %>%
   # Nonsense words, onomatopoeia, and L2 words
   within(no_co[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_co)] <- "other") %>%
   # One row per instance of no; utterances with multiple 'no's are doubled 
@@ -654,8 +821,8 @@ ggplot() +
 ```{r parent no:qn Environment, echo=FALSE}
 
 p_no_qns <- parent_negation %>%
-  filter(grepl('(^| )no:qn \\w+', condensed_p_o_s)) %>%
-  mutate(no_qn = lapply(condensed_p_o_s, no_qn_tag)) %>%
+  filter(grepl('(^| )no:qn \\w+', condensed_pos)) %>%
+  mutate(no_qn = lapply(condensed_pos, no_qn_tag)) %>%
   # Nonsense words, onomatopoeia, and L2 words
   within(no_qn[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_qn)] <- "other") %>%
   # One row per instance of no; utterances with multiple 'no's are doubled 
@@ -698,8 +865,8 @@ ggplot() +
 ```{r parent no:co Environment, echo=FALSE}
 
 p_no_cos <- parent_negation %>%
-  filter(grepl('(^| )no:co \\w+', condensed_p_o_s)) %>%
-  mutate(no_co = lapply(condensed_p_o_s, no_co_tag)) %>%
+  filter(grepl('(^| )no:co \\w+', condensed_pos)) %>%
+  mutate(no_co = lapply(condensed_pos, no_co_tag)) %>%
   # Nonsense words, onomatopoeia, and L2 words
   within(no_co[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no_co)] <- "other") %>%
   # One row per instance of no; utterances with multiple 'no's are doubled 
@@ -741,8 +908,8 @@ ggplot() +
 # nos_p <- parent_negation %>%
 #   # Use to filter age range
 #   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
-#   filter(grepl('(^| )no \\w+', condensed_p_o_s)) %>%
-#   mutate(no = lapply(condensed_p_o_s, no_tag)) %>%
+#   filter(grepl('(^| )no \\w+', condensed_pos)) %>%
+#   mutate(no = lapply(condensed_pos, no_tag)) %>%
 #   # Nonsense words, onomatopoeia, and L2 words
 #   within(no[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", no)] <- "other") %>%
 #   # One row per instance of no; utterances with multiple 'no's are doubled 
@@ -803,8 +970,8 @@ not_tag <- function(pos)
 nots <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
-  filter(grepl('(^| )not \\w+', condensed_p_o_s)) %>%
-  mutate(not = lapply(condensed_p_o_s, not_tag)) %>%
+  filter(grepl('(^| )not \\w+', condensed_pos)) %>%
+  mutate(not = lapply(condensed_pos, not_tag)) %>%
   # notnsense words, onotmatopoeia, and L2 words
   within(not[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", not)] <- "other") %>%
   # One row per instance of not; utterances with multiple 'not's are doubled 
@@ -845,8 +1012,8 @@ ggplot(nots, aes(bin, fill = not)) +
 nots_p <- parent_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
-  filter(grepl('(^| )not \\w+', condensed_p_o_s)) %>%
-  mutate(not = lapply(condensed_p_o_s, not_tag)) %>%
+  filter(grepl('(^| )not \\w+', condensed_pos)) %>%
+  mutate(not = lapply(condensed_pos, not_tag)) %>%
   # notnsense words, onotmatopoeia, and L2 words
   within(not[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", not)] <- "other") %>%
   # One row per instance of not; utterances with multiple 'not's are doubled 
@@ -898,8 +1065,8 @@ mod_tag <- function(pos)
 mods <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
-  filter(grepl('(^| )mod \\w+', condensed_p_o_s)) %>%
-  mutate(mod = lapply(condensed_p_o_s, mod_tag)) %>%
+  filter(grepl('(^| )mod \\w+', condensed_pos)) %>%
+  mutate(mod = lapply(condensed_pos, mod_tag)) %>%
   # modnsense words, omodmatopoeia, and L2 words
   within(mod[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", mod)] <- "other") %>%
   # One row per instance of mod; utterances with multiple 'mod's are doubled 
@@ -938,8 +1105,8 @@ ggplot(mods, aes(bin, fill = mod)) +
 mods_p <- parent_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
-  filter(grepl('(^| )mod \\w+', condensed_p_o_s)) %>%
-  mutate(mod = lapply(condensed_p_o_s, mod_tag)) %>%
+  filter(grepl('(^| )mod \\w+', condensed_pos)) %>%
+  mutate(mod = lapply(condensed_pos, mod_tag)) %>%
   # modnsense words, omodmatopoeia, and L2 words
   within(mod[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", mod)] <- "other") %>%
   # One row per instance of mod; utterances with multiple 'mod's are doubled 
@@ -994,7 +1161,7 @@ nts <- child_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
   filter(grepl('(^| )[a-z]+n\'t \\w+', clean_utterances)) %>%
-  mutate(nt = mapply(nt_tag, clean_utterances, condensed_p_o_s)) %>%
+  mutate(nt = mapply(nt_tag, clean_utterances, condensed_pos)) %>%
   # ntnsense words, ontmatopoeia, and L2 words
   within(nt[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", nt)] <- "other") %>%
   # One row per instance of nt; utterances with multiple 'nt's are doubled 
@@ -1034,7 +1201,7 @@ nts_p <- parent_negation %>%
   # Use to filter age range
   #filter(bin %in% unlist(lapply(1:23, bin_age)))%>%
   filter(grepl('(^| )[a-z]+n\'t \\w+', clean_utterances)) %>%
-  mutate(nt = mapply(nt_tag, clean_utterances, condensed_p_o_s)) %>%
+  mutate(nt = mapply(nt_tag, clean_utterances, condensed_pos)) %>%
   # ntnsense words, ontmatopoeia, and L2 words
   within(nt[grepl("chi|unk|bab|sing|on|uni|wplay|dia|L2|int|fam|neo", nt)] <- "other") %>%
   # One row per instance of nt; utterances with multiple 'nt's are doubled 
