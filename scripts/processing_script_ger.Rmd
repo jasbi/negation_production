@@ -1,0 +1,31 @@
+---
+title: 'Negation Production Processing Script: Study 2 German'
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_knit$set(root.dir = "~/Documents/LDS/Production_Study/negation_production")
+library(tidyverse)
+library(magrittr)
+library(feather)
+library(binom)
+library(childesr)
+library(lubridate)
+library(tm)
+library(knitr)
+library(kableExtra)
+library(reshape)
+library(reshape2)
+library(RColorBrewer)
+library(pals)
+library(gridExtra)
+
+age_limits <- c(0, 36)
+```
+
+```{r}
+child_utterances_ger <- get_utterances(language = "german", age = age_limits, role = "Target_Child")
+```

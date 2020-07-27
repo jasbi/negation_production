@@ -29,7 +29,7 @@ age_limits <- c(0, 36)
 
 
 ```{r get child data, include= FALSE}
-# child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
+child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
 # 
 # count_types <- function(string){
 #  n <- nlevels(as.factor(unlist(strsplit(string, " "))))
@@ -682,10 +682,10 @@ ggplot(mapping = aes(Bin, value, fill = variable ))+
 ```{r presentential analysis}
 
 pre_no_tag <- function(pos) {
-  if(grepl('^no:\\w+ n v ?.*', pos)) {return("presentential")}
+  if(grepl('no:\\w+ (det )?n v ?.*', pos)) {return("presentential")}
   else if (grepl('n no:\\w+ v ?.*', pos)){return("pre-verb (w/ subject)")}
-  else if (grepl('[^n]*no:\\w+ v ?.*', pos)){return("pre-verb (w/o subject)")}
-  else if (grepl('no:\\w+ n ?.*', pos)){return("pre-noun")}
+  else if (grepl('no:\\w+ v ?.*', pos)){return("pre-verb (w/o subject)")}
+  else if (grepl('no:\\w+ (det )?n ?.*', pos)){return("pre-noun")}
   else {return("other")}
 }
 
@@ -718,10 +718,10 @@ ggplot(pre_no, aes(bin, fill = no)) +
 
 
 pre_not_tag <- function(pos) {
-  if(grepl('^not n v ?.*', pos)) {return("presentential")}
+  if(grepl('not (det )?n v ?.*', pos)) {return("presentential")}
   else if (grepl('n not v ?.*', pos)){return("pre-verb (w/ subject)")}
-  else if (grepl('[^n]*not v ?.*', pos)){return("pre-verb (w/o subject)")}
-  else if (grepl('not n ?.*', pos)){return("pre-noun")}
+  else if (grepl('not v ?.*', pos)){return("pre-verb (w/o subject)")}
+  else if (grepl('not (det )?n ?.*', pos)){return("pre-noun")}
   else {return("other")}
 }
 
