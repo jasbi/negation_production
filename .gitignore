@@ -52,3 +52,5 @@ raw_data/eng_child_utterances.csv
 raw_data/eng_child_negation.csv
 raw_data/eng_parent_utterances.csv
 raw_data/eng_parent_negation.csv
+raw_data/ger_child_utterances.csv
+raw_data/ger_child_negation.csv

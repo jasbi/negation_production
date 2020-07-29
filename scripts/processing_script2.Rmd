@@ -53,6 +53,9 @@ child_utterances <- get_utterances(language = "eng", age = age_limits, role = "T
 # write.csv(child_utterances, "raw_data/eng_child_utterances.csv")
 
 child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
+
+child_utterances$part_of_speech <- as.character(child_utterances$part_of_speech)
+child_utterances$clean_utterances <- as.character(child_utterances$clean_utterances)
 # 
 # 
 # child_negation <-
@@ -150,7 +153,7 @@ child_utterances <- read.csv("raw_data/eng_child_utterances.csv")
 #   # Add condensed part of speech column to reflect simplifications
 #   mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
 #   # remove single-word negations
-#   filter(!grepl('^no:\\w{2}$|^not$|^[a-z]*n\'t$', condensed_pos))
+#   filter(!grepl('^ ?no:\\w{2} ?$|^ ?not ?$|^ ?[a-z]*n\'t ?$', condensed_pos))
 # 
 # #Remove eventually; to show Susan what is removed
 # removed_co <- child_negation %>%
@@ -392,20 +395,26 @@ neg_tag <- function(gloss, pos)
   else {return(neg)}
 }
 
-
-child_utterances$part_of_speech <- as.character(child_utterances$part_of_speech)
-child_utterances$clean_utterances <- as.character(child_utterances$clean_utterances)
-
 child_utterances <- child_utterances %>%
   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
   mutate(bin = bin_age(target_child_age)) %>%
-  mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
+  mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech)) %>%
+  unnest(neg)
 
 child_utterances <- child_utterances %>%
   mutate(n_tokens_clean = factor(n_tokens_clean, levels = append(as.character(1:4), c(">4"))))
 
 child_utterances$n_tokens_clean[is.na(child_utterances$n_tokens_clean)] <- ">4"
 
+ggplot(child_utterances, aes(n_tokens_clean, fill = neg))+
+  geom_bar() +
+  xlab("Utterance length")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD Negation by Utterances Length")+
+  theme(legend.key=element_blank(), legend.key.size=unit(12,"point"))+
+  labs(fill = "Negation Type") +
+  scale_fill_manual(values=as.vector(alphabet2()))+ 
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1))
 
 
 ggplot(child_utterances, aes(bin, fill = n_tokens_clean))+
@@ -590,7 +599,6 @@ negs <- child_negation %>%
   mutate(no_co = str_count(condensed_pos, '( |^)no:co( |$)')) %>%
   mutate(no_qn = str_count(condensed_pos, '( |^)no:qn( |$)')) %>%
   mutate(no_bab = str_count(condensed_pos, '( |^)no:bab( |$)')) %>%
-#  mutate(no_other = str_count(condensed_pos, '( |^)no:[^(co|qn)]+( |$)')) %>%
   mutate(not = str_count(clean_utterances, '( |^)not( |$)')) %>%
   mutate(nt = str_count(clean_utterances, '( |^)[a-z]*n\'t( |$)')) %>%
   mutate(sum = no_co + no_qn + not + nt) 

@@ -26,6 +26,160 @@ library(gridExtra)
 age_limits <- c(0, 36)
 ```
 
-```{r}
-child_utterances_ger <- get_utterances(language = "german", age = age_limits, role = "Target_Child")
+```{r functions}
+count_types <- function(string){
+ n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+ return(n)
+}
+
+count_tokens <- function(string){
+ n <- unlist(strsplit(string, " "))
+ return(length(n))
+}
+
+# Function removing repeated 'nein'
+fix_neins <- function(x)
+{
+  result <- gsub(' (nein )+', ' nein ', x)
+  result <- gsub(' (nein ?)+$', ' nein', result)
+  result <- gsub('^ ?(nein )+', 'nein ', result)
+  result <- gsub('^ ?(nein ?)+$', 'nein', result)
+  return(result)
+}
+
+# Modifications to part_of_speech column
+g_condense_pos <- function (gloss, pos)
+{
+  # Replace POS with 'nein' where relevant
+if (pos == "") {return(pos)}
+nein_list = list()
+gloss_list = strsplit(gloss," ")
+pos_list <- unlist(strsplit(pos, " "))
+for (g in 1:length(gloss_list[[1]])) {
+  if (gloss_list[[1]][g] == "nein"){
+    pos_list[g] <- "nein"
+  }
+  else if(gloss_list[[1]][g] == "nicht"){
+    pos_list[g] <- "nicht"
+  }
+  else if(gloss_list[[1]][g] == "kein"){
+    pos_list[g] <- "kein"
+  }
+}
+result <- removeWords(paste(pos_list, collapse = " "), "NA")
+
+  # Condense POS to major categories
+  result <- result %>%
+    str_replace_all('pro:\\w*|n:\\w*', 'n') %>%
+    str_replace_all('neg', 'not') %>%
+    str_replace_all('adv:\\w*', 'adv') %>%
+    str_replace_all('det:\\w*', 'det') %>%
+    str_replace_all('mod:\\w*', 'mod')
+
+  return (result)
+}
+
+# Return true if utterance length matches pos length
+check_lengths <- function(utterance, pos)
+{
+  return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
+}
+
+# Bin utterances by month
+bin_age <- function(age)
+{
+  x = floor(age)
+  paste(formatC(x, width=2, flag="0"), formatC(x+1, width=2, flag="0"), sep = "-")
+}
 ```
+
+```{r get utterances}
+#ger_child_utterances <- get_utterances(language = "deu", age = age_limits, role = "Target_Child")
+# 
+# ger_child_utterances <- ger_child_utterances %>%
+#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?"))) %>%
+#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+#  filter(!grepl('^ ?$', part_of_speech)) %>%
+#  filter(!grepl('^ ?$',clean_utterances)) %>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)%>%
+#  mutate(bin = lapply(target_child_age, bin_age))
+# 
+# write.csv(ger_child_utterances, "raw_data/ger_child_utterances.csv")
+ger_child_utterances <- read.csv("raw_data/ger_child_utterances.csv")
+
+ger_child_utterances$clean_utterances <- as.character(ger_child_utterances$clean_utterances)
+ger_child_utterances$part_of_speech <- as.character(ger_child_utterances$part_of_speech)
+
+ger_child_negation <- ger_child_utterances %>%
+  filter(grepl('( |^)nein( |$)|( |^)nicht( |$)|( |^)kein( |$)', clean_utterances))
+
+
+
+ger_child_negation <- ger_child_negation %>%
+  #remove repeated 'nein'
+  mutate(clean_utterances = lapply(clean_utterances, fix_neins) %>% unlist()) %>%
+  # Remove utterances that don't line up with their pos
+  filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
+  # Add condensed part of speech column to reflect simplifications
+  mutate(condensed_pos = mapply(g_condense_pos, clean_utterances, part_of_speech)) %>%
+  # remove single-word negations and 'no co' and 'co no' etc.-- essentially single word negations
+  filter(!grepl('^(co )*nein( co)*$|^(co )*nicht( co)*$|^(co )*kein( co)*$', condensed_pos)) %>%
+  mutate(bin = bin_age(target_child_age))
+
+write.csv(ger_child_negation, "raw_data/ger_child_negation.csv")
+
+ger_child_negation <- read.csv("raw_data/ger_child_negation.csv")
+
+ger_child_negation$condensed_pos <- as.character(ger_child_negation$condensed_pos)
+ger_child_negation$clean_utterances <- as.character(ger_child_negation$clean_utterances)
+ger_child_negation$bin <- as.character(ger_child_negation$bin)
+n_total <- nrow(ger_child_negation)
+```
+
+
+```{r}
+
+
+# Count frequency of each negation type by utterance
+# Right now I'm counting the total number; i might consider just checking if its present in the utterance to eliminate repetitions
+ger_negs <- ger_child_negation %>%
+  mutate(nein = str_count(condensed_pos, '( |^)nein( |$)')) %>%
+  mutate(kein = str_count(clean_utterances, '( |^)kein( |$)')) %>%
+  mutate(nicht = str_count(clean_utterances, '( |^)nicht( |$)')) %>%
+  mutate(sum = nein + nicht + kein) 
+
+ger_negs <- ger_negs[order(ger_negs$bin),]
+
+# Sum negation types by bin
+ger_neg_sums <- data.frame("Bin" = unique(ger_negs$bin)) %>%
+  # Count the number of times a negative is uttered in each bin
+  mutate(Neg_Count = tally(group_by(ger_negs, bin), sum)$n) %>%
+  mutate(nein = tally(group_by(ger_negs, bin), nein)$n) %>%
+  mutate(kein = tally(group_by(ger_negs, bin), kein)$n) %>%
+  mutate(nicht = tally(group_by(ger_negs, bin), nicht)$n)
+
+
+# Consolidate data for graphing
+ger_neg_sums_melted <- ger_neg_sums%>%subset(select = -Neg_Count) %>%melt(id.vars = "Bin")
+
+ggplot(mapping = aes(Bin, value, fill = variable ))+
+  geom_bar(data = ger_neg_sums_melted, stat = "identity")+
+  xlab("Age Bin")+
+  ylab("Number of Instances")+
+  ggtitle("CHILD German negation Type: All Multi-word ger_negative Utterances")+
+  scale_fill_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
+
+ggplot(mapping = aes(Bin, value, fill = variable ))+
+  geom_bar(data = ger_neg_sums_melted, stat = "identity", position = "fill")+
+  xlab("Age Bin")+
+  ylab("Proportion of Instances")+
+  ggtitle("CHILD German negation Type: All Multi-word ger_negative Utterances")+
+  scale_fill_brewer(palette="Paired")+
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 70, vjust = 1, hjust=1)) 
+
+```
+
+
