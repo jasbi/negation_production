@@ -244,31 +244,6 @@ Essentially the answers to these questions:
 # Study 2: Early Productions
 
 
-<!--
-Participant information:
-1. what is the distribution of words per participant?
-2. what proportion of children in each monthly age bin produce negative morphemes?
-
-Filtering Process:
-- all utterances by target child between 0 and 24 months
-- filter to only utterances containing ‘no’, ‘not’, and ‘n’t’
-- to create clean_utterances column
-  - remove entries with ‘not yet transcribed need to fix’ 
-  - remove ‘xxx’, ‘yyy’, ‘um’, ‘uh’, ‘ah’ from gloss
-- to create condensed_p_o_s column
-  - all pronouns, nouns, proper nouns become ‘n’
-  - all ‘neg’ become ‘not’
-  - condense all advs to ‘adv’
-  - condense all dets to ‘det’
-  - replace ‘co’ and ‘qn’ with ‘no’ where they correspond to a ‘no’
-- to create constructions from condensed p_o_s
-  - filter any constructions used <10 times
-  - filter ‘no’, ‘no no’, ‘no no no’, ‘no no no no’, ‘no no no no no’, and ‘’
-
-- filtered to constructions that occur at least 10 times
-- filtered out "no", "no no", "no no no", "no no no no", and ""
--->
-
 
 ```{r construction, eval=FALSE}
 filtered_constructions %>%
@@ -294,6 +269,19 @@ undertwo_neg %>%
 
 
 ## Participants
+
+<!--
+Participant information:
+1. what is the distribution of words per participant?
+2. what proportion of children in each monthly age bin produce negative morphemes?
+-->
+total utterances: 
+- number of children: `r child_utterances$speaker_id %>% unique() %>% length`
+- number of utterances: `r nrows(child_utterances)`
+- mean age of participants: `r `
+negative utterances: 
+- number of children: `r child_negation$speaker_id %>% unique() %>% length`
+- number of utterances: `r nrows(child_negation)`
 
 <<<<<<< HEAD
 ```{r population}
