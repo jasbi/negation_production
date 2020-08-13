@@ -45,5 +45,9 @@ raw_data/english_tokens.feather
 raw_data/eng_utterances.feather
 processed_data/english_tokens_processed.feather
 
-papers/
-SALT/
+/papers/
+/SALT/
+/bucld_abstract/
+/negation_production_files/
+
+.gitignore
