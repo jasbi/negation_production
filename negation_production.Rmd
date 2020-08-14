@@ -201,35 +201,8 @@ We also investigated whether negative auxiliary forms such as *can't* and *don't
 
 The aim of this study was to assess the prevalence of non-adult-like utterances in children's productions. @klimaBellugi1966's account of negation development relies on two types of non-adult-like utterances: 1. Pre-sentential instances where a negative morpheme is modifying a sentence (NEG + NP + VP); and 2. Intra-sentential instances where in some cases fails to show the adult-like agreement (NP + *no*/*not*/*don't* + VP). How prevalent are such errors and what are their most likely sources?
 
-```{r construction, eval=FALSE}
-filtered_constructions %>%
-  ggplot(aes(reorder(x, -freq), freq)) + 
-  geom_bar(stat = "identity") +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-undertwo_neg %>%
-  filter(condensed_p_o_s %in% filtered_constructions$x) %>%
-  group_by(condensed_p_o_s) %>%
-  mutate(mean_by_construction = median(target_child_age)) %>%
-  arrange(mean_by_construction) %>%
-  ungroup(condensed_p_o_s) %>%
-  mutate(condensed_p_o_s = fct_reorder(condensed_p_o_s, mean_by_construction)) %>%
-  ggplot(mapping = aes(x =condensed_p_o_s, y =target_child_age)) +
-  geom_jitter(size = .5, width = .2) +
-  stat_summary(geom = "crossbar", width=0.65, fatten=2, color="red", fun.data = function(x){ return(c(y=median(x), ymin=median(x), ymax=median(x))) })+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-```
-
-
 ## Method
 
-```{r population, eval=FALSE}
-undertwo_neg$speaker_id %>%
-  unique() %>% length()
-```
 
 ## Results
 

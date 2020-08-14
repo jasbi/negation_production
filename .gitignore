@@ -40,6 +40,8 @@ rsconnect/
 
 negation_production.log
 negation_production.fff
+negation_production.tex
+negation_production.ttt
 
 raw_data/english_tokens.feather
 raw_data/eng_utterances.feather
@@ -50,4 +52,9 @@ processed_data/english_tokens_processed.feather
 /bucld_abstract/
 /negation_production_files/
 
-.gitignore
+raw_data/eng_child_utterances.csv
+raw_data/eng_child_negation.csv
+raw_data/eng_parent_utterances.csv
+raw_data/eng_parent_negation.csv
+raw_data/ger_child_utterances.csv
+raw_data/ger_child_negation.csv
