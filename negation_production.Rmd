@@ -244,30 +244,6 @@ Essentially the answers to these questions:
 # Study 2: Early Productions
 
 
-
-```{r construction, eval=FALSE}
-filtered_constructions %>%
-  ggplot(aes(reorder(x, -freq), freq)) + 
-  geom_bar(stat = "identity") +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-undertwo_neg %>%
-  filter(condensed_p_o_s %in% filtered_constructions$x) %>%
-  group_by(condensed_p_o_s) %>%
-  mutate(mean_by_construction = median(target_child_age)) %>%
-  arrange(mean_by_construction) %>%
-  ungroup(condensed_p_o_s) %>%
-  mutate(condensed_p_o_s = fct_reorder(condensed_p_o_s, mean_by_construction)) %>%
-  ggplot(mapping = aes(x =condensed_p_o_s, y =target_child_age)) +
-  geom_jitter(size = .5, width = .2) +
-  stat_summary(geom = "crossbar", width=0.65, fatten=2, color="red", fun.data = function(x){ return(c(y=median(x), ymin=median(x), ymax=median(x))) })+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-
-```
-
-
 ## Participants
 
 <!--
@@ -284,15 +260,6 @@ negative utterances:
 - number of utterances: `r nrows(child_negation)`
 
 <<<<<<< HEAD
-```{r population}
-#undertwo_neg$speaker_id %>%
-#  unique() %>% length()
-=======
-```{r population, eval=FALSE}
-undertwo_neg$speaker_id %>%
-  unique() %>% length()
->>>>>>> 9cd6424fe63fc80f114c1ca04fb952c90eaf9aee
-```
 
 ## Material
 
