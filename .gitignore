@@ -40,13 +40,17 @@ rsconnect/
 
 negation_production.log
 negation_production.fff
+negation_production.tex
+negation_production.ttt
 
 raw_data/english_tokens.feather
 raw_data/eng_utterances.feather
 processed_data/english_tokens_processed.feather
 
-papers/
-SALT/
+/papers/
+/SALT/
+/bucld_abstract/
+/negation_production_files/
 
 raw_data/eng_child_utterances.csv
 raw_data/eng_child_negation.csv

@@ -12,6 +12,7 @@ library(feather)
 library(binom)
 library(childesr)
 library(lubridate)
+library(stringr)
 ```
 
 #CHILDES-DB Imports
@@ -49,23 +50,31 @@ write_csv(d_transcripts, "../raw_data/corpora_info.csv")
 write_feather(eng_utterances, "../raw_data/eng_utterances.feather")
 ```
 
-# Token Processing (Study 1)
+# Token Processing
 
 ## Exclusions
 
 The following script cleans up the data to exclude: unintelligible tokens and tokens above 72 months of the child's age. All exclusions are stored in a file called exclusions.csv
 
-```{r exclusions}
+```{r exclusionsTokens}
 english_tokens <- read_feather("../raw_data/english_tokens.feather")
 
 # count the tokens before exclusions
 initial <- nrow(english_tokens)
 
+# number of children before exclusions
+n_chi_initial <-
+  english_tokens$target_child_id %>% unique() %>% length()
+
 # remove the unintelligible tokens
-english_tokens %<>% filter(gloss!="xxx", gloss!="yyy")
+english_tokens %<>% filter(gloss!="xxx", gloss!="xx", gloss!="yyy", gloss!="www", gloss!="zzz")
 
 # count the tokens after excluding unintelligible ones
 unintels <- nrow(english_tokens)
+
+# number of children after excluding unintelligible tokens
+n_chi_unintels <-
+  english_tokens$target_child_id %>% unique() %>% length()
 
 # remove NAs target_child_age
 english_tokens %<>% drop_na(target_child_age)
@@ -73,65 +82,39 @@ english_tokens %<>% drop_na(target_child_age)
 # count the tokens after removing NA tokens
 nas <- nrow(english_tokens)
 
+# number of children after excluding NAs
+n_chi_nas <-
+  english_tokens$target_child_id %>% unique() %>% length()
+
 #Take out data for the age range below 1 and above 6 years, this is because there is not much data in that range
-english_tokens %<>% filter(target_child_age < 72, target_child_age >= 12)
+english_tokens %<>% 
+  filter(target_child_age < 72) %>%
+  filter(!(speaker_role=="Target_Child" & target_child_age <= 12))
 
 # count the tokens after excluding the below 1 and older than 6 age range
 age_ex <- nrow(english_tokens)
 
 # number of children left after exclusions
-n_children <-
+n_chi_age <-
   english_tokens$target_child_id %>% unique() %>% length()
-
-# early erroneous tagging
 
 # record the dataframe of exclusions
 exclusions <-
-  data.frame (Unintelligible = initial - unintels,
-             missing = unintels - nas,
-             age_ex = nas - age_ex,
-             n_children = n_children)
+  data.frame (
+    initial = initial,
+    after_unintels = unintels,
+    after_nas = nas,
+    after_age = age_ex,
+    unintelligible = initial - unintels,
+    missing = unintels - nas,
+    age = nas - age_ex,
+    n_chi_total = n_chi_initial,
+    n_chi_unintels = n_chi_unintels,
+    n_chi_nas = n_chi_nas,
+    n_chi_age = n_chi_age)
 
 # save the exclusion data in a file
-write.csv(exclusions, "../processed_data/exclusions.csv", row.names=FALSE)
-
-# Exclusions for Utterances
-eng_utterances <- saved_eng_utterances
-# count tokens before exclusion
-u_initial <- nrow(eng_utterances)
-
-# remove the unintelligible tokens
-eng_utterances %<>% filter(!grepl("xxx", gloss)) %>% filter(!grepl("^$", part_of_speech))
-
-# count the tokens after excluding unintelligible ones
-u_unintels <- nrow(eng_utterances)
-
-# remove NAs target_child_age
-eng_utterances %<>% drop_na(target_child_age) %>%
-  drop_na(part_of_speech)
-
-# count the tokens after removing NA tokens
-u_nas <- nrow(eng_utterances)
-
-#Take out data for the age range below 1 and above 6 years, this is because there is not much data in that range
-eng_utterances %<>% filter(target_child_age < 24)
-
-# count the tokens after excluding the below 1 and older than 6 age range
-u_age_ex <- nrow(eng_utterances)
-
-# number of children left after exclusions
-u_n_children <-
-  eng_utterances$target_child_id %>% unique() %>% length()
-
-# record the dataframe of exclusions
-u_exclusions <-
-  data.frame (Unintelligible = u_initial - u_unintels,
-              missing = u_unintels - u_nas,
-              age_ex = u_nas - u_age_ex,
-              n_children = u_n_children)
-
-# save the exclusion data in a file
-write.csv(u_exclusions, "../processed_data/u_exclusions.csv", row.names=FALSE)
+write.csv(exclusions, "../processed_data/token_exclusions.csv", row.names=FALSE)
 ```
 
 ## Coding Speaker Roles
@@ -180,7 +163,7 @@ english_tokens$utterance_type <-
 
 ## Coding Different Forms of Negation
 
-Layers: word, category (no, not, auxiliary, quantifier, adverb, derivational), polarity (positive, negative)
+Layers: word, category (no, not, auxiliary n't, quantifier, adverb, derivational), polarity (positive, negative)
 
 ```{r lowerCase}
 english_tokens$gloss <- english_tokens$gloss %>% tolower()
@@ -314,7 +297,7 @@ english_tokens$category[english_tokens$word=="no"] <- "no"
 # 
 english_tokens$category[english_tokens$word=="not" | english_tokens$word=="cannot"] <- "not"
 # coding for contracted negation N'T
-english_tokens[grep("n't", english_tokens$gloss),]$category <- "auxiliary"
+english_tokens[grep("n't", english_tokens$gloss),]$category <- "nt"
 # coding for Aux positive
 english_tokens$category[english_tokens$word=="is" | 
                           english_tokens$word=="am" | 
@@ -338,7 +321,7 @@ english_tokens$category[english_tokens$word=="is" |
                           english_tokens$word=="might" |
                           english_tokens$word=="would" |
                           english_tokens$word=="must"
-                          ] <- "auxiliary"
+                          ] <- "nt"
 
 # quantifier
 english_tokens$category[english_tokens$word=="everything" | 
@@ -417,25 +400,132 @@ write_feather(english_tokens, "../processed_data/english_tokens_processed.feathe
 ```
 
 
-# Utterance Processing (Study 2)
+# Utterance Processing
 
-## Grouping utterances by construction
+First we import all the utterances in the English_US and English_UK corpora: 
 
-```{r}
+```{r import}
+eng_utterances <- read_feather("../raw_data/eng_utterances.feather")
+```
+
+## Exclusions
+
+We need to exclude utterances with no age information as well as those after age 6 years:
+
+```{r UtteranceExclusions}
+# count utterances before exclusion
+u_initial <- nrow(eng_utterances)
+
+# number of children before exclusions
+u_n_chi_before <-
+  eng_utterances$target_child_id %>% unique() %>% length()
+
+# removing the unintelligible utterances
+eng_utterances %<>%
+  filter(gloss!="xxx", gloss!="yyy", gloss!="www", gloss!="zzz")
+
+# count the utterances after removing unintelligibles
+u_unintel <- nrow(eng_utterances)
+
+# remove NAs target_child_age and create a lower case utterance column
+eng_utterances %<>%
+  drop_na(target_child_age) %>%
+  drop_na(gloss) %>%
+  filter(gloss!="", gloss!="not yet transcribed need to fix child's age")
+
+# count the utterances after removing NA tokens
+u_nas <- nrow(eng_utterances)
+
+# Take out data after 6 years
+eng_utterances %<>% filter(target_child_age < 73)
+
+# count the utterances after excluding the below 6 age range
+u_age <- nrow(eng_utterances)
+
+u_n_chi_after <-
+  eng_utterances$target_child_id %>% unique() %>% length()
+
+# record the dataframe of exclusions
+u_exclusions <-
+  data.frame (
+    initial = u_initial,
+    after_unintel = u_unintel,
+    after_nas = u_nas,
+    after_age = u_age,
+    unintel = u_initial - u_unintel,
+    missing = u_initial - u_nas,
+    age = u_nas - u_age,
+    n_chi_before = u_n_chi_before,
+    n_chi_after = u_n_chi_after)
+
+# save the exclusion data in a file
+write.csv(u_exclusions, "../processed_data/utterance_exclusions.csv", row.names=FALSE)
+```
+
+## Coding Speaker Roles
+
+Here we create a speaker column where mothers and fathers are grouped together as "parents" and children as "child":
+
+```{r USpeakerRoles}
+# Collapse mothers and fathers into parents
+eng_utterances$speaker <- "parent"
+eng_utterances$speaker[eng_utterances$speaker_role=="Target_Child"] <- "child"
+```
+
+## Coding Age
+
+Here we bin the age data per month.
+
+```{r Uage}
 eng_utterances$age <- eng_utterances$target_child_age %>% floor()
+```
 
-construction_byAge <-
-  eng_utterances %>%
-  group_by(part_of_speech, age) %>%
-  summarize(count = n()) %>% 
-  group_by(age) %>%
-  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+## Grouping Utterance Types
 
-#weird error???
-selection <- c("co n", "qn qn n", "qn n", "n")
-construction_byAge %>%
-  filter(part_of_speech %in% selection) %>%
-  ggplot(mapping = aes(age, ppt)) +
-  geom_point(stat="identity") +
-  facet_wrap(part_of_speech~., scales="free_y")
+Grouping utterances as declarative, imperative, interrogative, and other.
+
+```{r utterance_types}
+# Prepare the utterance_type categories for this study based on the utterance_types in childes-db
+## Categories: declarative, impertaive, interrogative, and other
+eng_utterances$utterance_type <-
+  recode(eng_utterances$type, 
+         question = "interrogative",
+         `broken for coding`="other",
+          `imperative_emphatic` = "imperative",
+         interruption = "other",
+         `interruption question` = "interrogative",
+         `missing CA terminator` = "other",
+         `no break TCU continuation` = "other",
+         `question exclamation` = "interrogative",
+         `quotation next line` = "other",
+         `quotation precedes` = "other",
+         `self interruption` = "other",
+         `self interruption question` = "interrogative",
+         `trail off` = "other",
+         `trail off question` = "interrogative"
+         )
+```
+
+## Coding No, Not, and N't
+
+```{r lowerCase}
+eng_utterances$utterance <- eng_utterances$gloss %>% tolower()
+
+eng_utterances$no <-
+  eng_utterances$utterance %>%
+  str_count(pattern = "(^|[^a-z])no([^a-z]|$)")
+
+eng_utterances$not <-
+  eng_utterances$utterance %>%
+  str_count(pattern = "(^|[^a-z])not([^a-z]|$)")
+
+eng_utterances$nt <-
+  eng_utterances$utterance %>%
+  str_count(pattern = "n't")
+```
+
+## Saving Processed Utterances
+
+```{r save_dataframe}
+write_feather(eng_utterances, "../processed_data/english_utterances_processed.feather")
 ```
