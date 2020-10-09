@@ -202,11 +202,11 @@ def study2(trajectory):
 			info.append([age, 'Duplicate', statistics.mean(all_duplicate), all_duplicate[250], all_duplicate[9750], full_sent_c, len(sentences)])
 			info.append([age, 'Duplicate_annotation', statistics.mean(all_duplicate_annotation), all_duplicate_annotation[250], all_duplicate_annotation[9750], full_sent_c, len(sentences)])
 			info.append([age, 'Pre', statistics.mean(all_pre), all_pre[250], all_pre[9750], full_sent_c, len(sentences)])
-			info.append([age, 'Pre_annotation', statistics.mean(all_inter), all_inter[250], all_inter[9750], full_sent_c, len(sentences)])
+			info.append([age, 'Pre_annotation', statistics.mean(all_pre_annotation), all_pre_annotation[250], all_pre_annotation[9750], full_sent_c, len(sentences)])
 			info.append([age, 'Post', statistics.mean(all_post), all_post[250], all_post[9750], full_sent_c, len(sentences)])
-			info.append([age, 'Post_annotation', statistics.mean(all_pre_annotation), all_pre_annotation[250], all_pre_annotation[9750], full_sent_c, len(sentences)])
-			info.append([age, 'Inter', statistics.mean(all_inter_annotation), all_inter_annotation[250], all_inter_annotation[9750], full_sent_c, len(sentences)])
-			info.append([age, 'Inter_annotation', statistics.mean(all_post_annotation), all_post_annotation[250], all_post_annotation[9750], full_sent_c, len(sentences)])
+			info.append([age, 'Post_annotation', statistics.mean(all_post_annotation), all_post_annotation[250], all_post_annotation[9750], full_sent_c, len(sentences)])
+			info.append([age, 'Inter', statistics.mean(all_inter), all_inter[250], all_inter[9750], full_sent_c, len(sentences)])
+			info.append([age, 'Inter_annotation', statistics.mean(all_inter_annotation), all_inter_annotation[250], all_inter_annotation[9750], full_sent_c, len(sentences)])
 
 	return info
 
@@ -228,27 +228,33 @@ def Expelliarmus(file_handle, directory):
 
 			age = sent[0][-1].split()[1]
 
-			if age != 'nan' and float(age) <= 72:
+			if age != 'nan':
+				age = int(float(age))
 
-				role = sent[0][-2].split()
+				if age <= 72:
 
-				child = role[0]
+					role = sent[0][-2].split()
 
-				if role[-1] in ['Mother', 'Father']:
-					parent_trajectory[age] = []
+					child = role[0]
 
-				if role[-1] in ['Target_Child']:
-					child_trajectory[age] = []
+					if role[-1] in ['Mother', 'Father']:
+						parent_trajectory[age] = []
 
-				data.append(sent)
+					if role[-1] in ['Target_Child']:
+						child_trajectory[age] = []
+
+					data.append(sent)
 
 			sent = conll_read_sentence(f)
 
 	if len(data) != 0:
+
+		for k, v in child_trajectory.items():
+			print(k)
 #		print(len(data))
 		for sent in data:
 		
-			age = sent[0][-1].split()[1]
+			age = int(float(sent[0][-1].split()[1]))
 			role = sent[0][-2].split()
 
 			if role[-1] in ['Target_Child']:
@@ -277,7 +283,7 @@ if __name__ == '__main__':
 	output = io.open(args.output, 'w', newline = '', encoding = 'utf-8')
 	writer = csv.writer(output)
 
-	writer.writerow(['Role', 'Age', 'Feature', 'Mean', 'CI25', 'CI975', 'Num_full_sentence', 'Num_of_sentence'])
+	writer.writerow(['Role', 'Age', 'Syntactic Position', 'Mean', 'CI25', 'CI975', 'Num_full_sentence', 'Num_of_sentence'])
 
 	for file in os.listdir(path):
 
@@ -296,6 +302,13 @@ if __name__ == '__main__':
 			for tok in parent_info:
 				tok.insert(0, 'Parent')
 				writer.writerow(tok)
+
+
+
+
+
+
+
 
 
 
