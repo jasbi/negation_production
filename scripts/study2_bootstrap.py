@@ -283,7 +283,7 @@ if __name__ == '__main__':
 	output = io.open(args.output, 'w', newline = '', encoding = 'utf-8')
 	writer = csv.writer(output)
 
-	writer.writerow(['Role', 'Age', 'Syntactic Position', 'Mean', 'CI25', 'CI975', 'Num_full_sentence', 'Num_of_sentence'])
+	writer.writerow(['Role', 'Age', 'Feature', 'Mean', 'CI25', 'CI975', 'Num_full_sentence', 'Num_of_sentence'])
 
 	for file in os.listdir(path):
 
