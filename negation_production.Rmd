@@ -324,6 +324,14 @@ ggplot(neg_3sg,
 
 ```
 
+To validate our findings so far in study 2, we take advantage of the available syntactic dependency annotations in the English-NA and the English-UK sections of CHILDES. We restricted our analyses to *full utterances*, that is, utterances that contain: (1) a verbal root with a POS tag as *v* that indicates verbs and a dependency relation as *root*, which indicates that this verb is the head of the utterance; (2) a subject token whose syntactic dependency relation with the verbal root is 'SUBJ'. This resulted in a number of X full utterances extracted from the corpus.
+
+Given these full utterances, we extracted cases with negators in two different ways. First one simply selected all utterances that contain *no*, *n't* and *not*, regardless of their syntactic dependency relation with the verbal root. This led to a total of Y negative utterances. Second one restricted to utterances where the negator directly modifies the verbal root (a direct child of the root of the utterance), or cases where the negator modifies an auxiliary or modal verb that directly modifies the verbal root (i.e. the auxiliary is the direct child of the root of the utterance with a dependency relation *AUX*; *I don't like this one*). This led to a total of Z negative utterances. In both ways, certain extracted utterances contain more than one negator; these cases 
+
+We binned these utterances based the speaker role, the child or the parent. Each utterance was tagged with three additional pieces of information: (1) the age of the child; (2) the negators that the utterance contains; (3) the relative position of the negator to the verbal root and the subject of the utterance; it was tagged as *pre* if the negator occurs before the head of the subject and the verbal root, *inter* if the negator occurs between the head of the subject and the verbal root, and *post* if the negator occurs after the verbal root. Then for each speaker role, we first computed the total number of utterances for each negator, then calculated the proportion of negator at different ages. For instance, if the production of children contains 100 utterances with *no* in total, among which 10 was produced at the age of 24 months, 60  was produced at 40 months, and 30 was produced at 60 months, the proportions of *no* at the three different ages for children would be 10%, 60% and 30% respectively.
+
+
+
 ## Conclusions
 
 The results of Study 2 indicate that, while children do produce a number of utterances of the form NEG+S/S+NEG, as proposed in @klimaBellugi1966’s Stage 1, the vast majority of these utterances are of the form no+S. Instances of this form do not swell early and then dissipate, as would be expected of an early stage of production, but rather are initially infrequent and slowly climb to adult levels. We join @bloom1970 and @wode1977four in proposing that these observations are more consistent with an analysis of no+S utterances as anaphoric, with the negative element negating a previous event or statement. 
@@ -337,8 +345,269 @@ Finally, Study 2 failed to confirm @thorntonTesan2013’s observation that the n
 In this study we ask what syntactic analyses can be attributed to children's early negative utterances. We also ask what common syntactic structures are present in parents' speech. The goal is to provide an account of children's syntactic development in the spirit of @klimaBellugi1966's pioneering work with data and computational tools available today.
 
 ## Method
+Specifically, we ask what are the syntactic functions of different negators, what are the common syntactic categories that these negators modify, and how these patterns differ between production of children and that of the parent. We considered the particular syntactic function of a negator here as being indicated by the syntactic dependency relation between the negator and its syntactic head. And we considered the syntactic category that a negator modifies as being indicated by the POS tag of the negator's syntactic head. 
+
+To do this, we again used data with syntactic dependency annotations from the English-NA and the English-UK sections of CHILDES. This led to 1,930,041 syntactically annotated utterances of 917 children from the English-NA section, and FILL IN THE GAP. We extracted all utterances that contain any of the three negators, *no*, *not*, and *n't*, regardless of whether the utterance is a *full utterance* as defined in study 2. Utterances with just one token (excluding punctuation; e.g. *no !*) were removed. Cases that contain one negator where the negator is also the root of the utterance were also not excluded. This resulted in a total of U utterances. 
+
+We grouped all utterances based on the speaker role, either the child or the parent. Each utterance was further tagged with four pieces of information: (1) the age of the child; (2) the negator that the utterance contains; (3) the syntactic dependency between the negator and its head; (4) the POS tag of the negator's syntactic head. We describe our analyses of each negator below.
 
 ## Results
+
+For *no*, we first calculated the proportions of its different syntactic functions, as well as the proportions of the different POS tags of its syntactic head. As shown in Figure \@ref(fig:noFunction), the most common dependency relation that *no* bares include:
+(1) *COM*, which supposedly represents a sentence-medial communicator (e.g. *ah, no*);
+(2) *QUANT*, which refers to a nominal quantifier (e.g. *no checkers*);
+(3) *ENUM*, which denotes enumeration of a series of items that are not combined explicitly within a coordination structure or a conjunction. 
+The overall production of *no* serving these syntactic functions is comparable between children and parents.
+
+With that being said, the differences between *no* as a communicator versus *no* as an enumerator are not straightforward. Our manual inspection of the utterances revealed that *no* is not only used in a sentence-medial position when serving as a communicator (e.g. *no I gave you the list*), and that in certain cases such *no no no I got it*, where the last *no* should be annotated as an enumerator, it is not exactly clear whether and how the syntactic functions of the three *no* are distinct, besides that they possibly share similar discourse function, i.e. functioning as the response variable to the previous utterance in the interactions. For example, consider the following interactions observed from the data.
+(1) Mother: did you see the truck
+    Child: no I see truck (Adam from the Brown Corpus)
+(2) Father: how about you make a little thing okay (Roman from the Weist Corpus)
+    Child: no no no I wanna make two big things
+(3) Father: did it happen today
+    Child: no no no I got it at school Friday (Abe from the Kuczaj Corpus)
+Therefore we combined cases where *no* has a dependency relation of *COM* and *ENUM* together for further analyses, and we refer to the syntactic function of *no* in these cases as the *discourse response variable*.
+
+
+```{r load data}
+no <- read.csv('processed_data/study3_no.csv', header = T, sep = ',')
+no_child <- subset(no, Role %in% c('Target_Child'))
+no_parent <- subset(no, Role %in% c('Parent'))
+
+no_child_function <- data.frame(table(no_child$Negation_dep))
+names(no_child_function) <- c('Dependency', 'Frequency')
+no_child_function$Dependency <- reorder(no_child_function$Dependency, -no_child_function$Frequency)
+no_child_function$Proportion <- no_child_function$Frequency * 100 / sum(no_child_function$Frequency)
+no_child_function$Role <- as.vector(rep('Target_Child', nrow(no_child_function)))
+
+no_parent_function <- data.frame(table(no_parent$Negation_dep))
+names(no_parent_function) <- c('Dependency', 'Frequency')
+no_parent_function$Dependency <- reorder(no_parent_function$Dependency, -no_parent_function$Frequency)
+no_parent_function$Proportion <- no_parent_function$Frequency * 100 / sum(no_parent_function$Frequency)
+no_parent_function$Role <- as.vector(rep('Parent', nrow(no_parent_function)))
+
+no_function <- rbind(no_child_function, no_parent_function)
+
+```
+
+```{r noFunction, fig.cap="Comparing the syntactic function of no between children and parent.", fig.env="figure", fig.height=6}
+ggplot(no_function, aes(x=Dependency, y=Proportion, fill=Role))+ 
+  geom_bar(position=position_dodge(),stat='identity')+
+  scale_fill_manual(values=c("#0072B2", "#CC79A7"))+
+  labs(x="Syntactic function (dependency relation)")+
+  labs(y="Proportion (%)")+
+  scale_y_continuous(limits=c(0,100))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+
+```
+
+To compare the production of *no* as a discourse response variable between children and parents, we calculated the proportion of cases where *no* serves as *COM* or *ENUM* by the age of the child. As presented in Figure \@ref{fig:noCommunicatorAge}, while parents have been articulating *no* with this particular function since the child was as young as 7 months old, children did not start at least more regularly produce this negator until the age of 18 months. The frequency of the production of *no* by children is gradually becoming comparable to that of the parents around the age of 23 months.
+
+
+```{r load data}
+no_child_communicator <- subset(no_child, Negation_dep %in% c('COM', 'ENUM'))
+no_child_communicator$dep <- as.vector(rep('COMMUNICATOR', nrow(no_child_communicator)))
+no_child_communicator_age <- aggregate(data.frame(no_child_communicator$dep), by=list(no_child_communicator$Age),FUN=length)
+names(no_child_communicator_age) <- c('Age', 'Frequency')
+no_child_communicator_age$Proportion <- no_child_communicator_age$Frequency * 100 / sum(no_child_communicator_age$Frequency)
+no_child_communicator_age$Role <- as.vector(rep('Target_Child', nrow(no_child_communicator_age)))
+
+no_parent_communicator <- subset(no_parent, Negation_dep %in% c('COM', 'ENUM'))
+no_parent_communicator$dep <- as.vector(rep('COMMUNICATOR', nrow(no_parent_communicator)))
+no_parent_communicator_age <- aggregate(data.frame(no_parent_communicator$dep), by=list(no_parent_communicator$Age),FUN=length)
+names(no_parent_communicator_age) <- c('Age', 'Frequency')
+no_parent_communicator_age$Proportion <- no_parent_communicator_age$Frequency * 100 / sum(no_parent_communicator_age$Frequency)
+no_parent_communicator_age$Role <- as.vector(rep('Parent', nrow(no_parent_communicator_age)))
+
+no_communicator_age <- rbind(no_child_communicator_age, no_parent_communicator_age)
+```
+
+
+```{r noCommunicatorAge, fig.cap="Comparing the trajectory of no as a discourse response variable between children and parent.", fig.env="figure", fig.height=6}
+ggplot(no_communicator_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+```
+
+Besides *COM* and *ENUM*, we also analyzed utterances in which *no* served as a quantifier. For each speaker role, we calculated the proportions of instances that contain *no* as a quantifier given different ages of the children. As shown in Figure \@ref{fig:noQUANTAge}, parents' usage of *no* as a quantifier precedes that of the children.
+Children did not start using *no* with this particular syntactic function until around the age of 18; their production gradually becomes comparable to that of the parents at about 23 months. These findings are similar to the production of *no* as a discourse response variable presented in Figure \@ref{fig:noCommunicatorAge}.
+
+```{r load data}
+no_child_quantifier <- subset(no_child, Negation_dep %in% c('QUANT'))
+no_child_quantifier$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier)))
+no_child_quantifier_age <- aggregate(data.frame(no_child_quantifier$dep), by=list(no_child_quantifier$Age),FUN=length)
+names(no_child_quantifier_age) <- c('Age', 'Frequency')
+no_child_quantifier_age$Proportion <- no_child_quantifier_age$Frequency * 100 / sum(no_child_quantifier_age$Frequency)
+no_child_quantifier_age$Role <- as.vector(rep('Target_Child', nrow(no_child_quantifier_age)))
+
+no_parent_quantifier <- subset(no_parent, Negation_dep %in% c('COM', 'ENUM'))
+no_parent_quantifier$dep <- as.vector(rep('quantifier', nrow(no_parent_quantifier)))
+no_parent_quantifier_age <- aggregate(data.frame(no_parent_quantifier$dep), by=list(no_parent_quantifier$Age),FUN=length)
+names(no_parent_quantifier_age) <- c('Age', 'Frequency')
+no_parent_quantifier_age$Proportion <- no_parent_quantifier_age$Frequency * 100 / sum(no_parent_quantifier_age$Frequency)
+no_parent_quantifier_age$Role <- as.vector(rep('Parent', nrow(no_parent_quantifier_age)))
+
+no_quantifier_age <- rbind(no_child_quantifier_age, no_parent_quantifier_age)
+
+```
+
+
+```{r noQUANTAge, fig.cap="Comparing the trajectory of no as a quantifier between children and parent.", fig.env="figure", fig.height=6}
+ggplot(no_quantifier_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+```
+
+Taking a closer look at the usage of *no* as a quantifier, we examined the POS tags of its syntactic head to answer the question of *what does no quantify*? Again for each speaker role, the proportions of the different POS tags were calculated. Based on results from Figure \@ref{fig:noQuantifierPos}, the most frequent syntactic categories that *no* quantifies are as follows:
+(1) *n*, which refers to nouns (e.g. *this is no time to go..*; *there's no snow out there*);
+(2) *pro*, which refers to pronouns (e.g. *no this one*; *no the other one*);
+(3) *adj*, which refers to adjectives (e.g. *no red*; *no big* ).
+The overall production of *no* is comparable between children and parents within each of these syntactic categories.
+
+
+```{r load data}
+no_child_quantifier <- subset(no_child, Negation_dep %in% c('QUANT'))
+no_child_quantifier_pos <- data.frame(table(no_child_quantifier$Head_POS))
+names(no_child_quantifier_pos) <- c('POS', 'Frequency')
+no_child_quantifier_pos$POS <- reorder(no_child_quantifier_pos$POS, -no_child_quantifier_pos$Frequency)
+no_child_quantifier_pos$Proportion <- no_child_quantifier_pos$Frequency * 100 / sum(no_child_quantifier_pos$Frequency)
+no_child_quantifier_pos$Role <- as.vector(rep('Target_Child', nrow(no_child_quantifier_pos)))
+
+no_parent_quantifier <- subset(no_parent, Negation_dep %in% c('QUANT'))
+no_parent_quantifier_pos <- data.frame(table(no_parent_quantifier$Head_POS))
+names(no_parent_quantifier_pos) <- c('POS', 'Frequency')
+no_parent_quantifier_pos$POS <- reorder(no_parent_quantifier_pos$POS, -no_parent_quantifier_pos$Frequency)
+no_parent_quantifier_pos$Proportion <- no_parent_quantifier_pos$Frequency * 100 / sum(no_parent_quantifier_pos$Frequency)
+no_parent_quantifier_pos$Role <- as.vector(rep('Parent', nrow(no_parent_quantifier_pos)))
+
+no_quantifier_pos <- rbind(no_child_quantifier_pos, no_parent_quantifier_pos)
+
+```
+
+```{r noQuantifierPos, fig.cap="Comparing the syntactic function of no between children and parent.", fig.env="figure", fig.height=6}
+ggplot(no_quantifier_pos, aes(x=POS, y=Proportion, fill=Role))+ 
+  geom_bar(position=position_dodge(),stat='identity')+
+  scale_fill_manual(values=c("#0072B2", "#CC79A7"))+
+  labs(x="POS tags")+
+  labs(y="Proportion (%)")+
+  scale_y_continuous(limits=c(0,100))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+
+```
+
+We then continued to examine the production of *no* as a quantifier given its most frequent syntactic heads. We focus specifically on cases when the syntactic head of *no* is either a noun or a pronoun, since the numbers of these cases (X for noun, Y for pronoun) are large enough to yield reliable estimates. Results from Figure \@ref{fig:noQUANTnAge} and FIgure \@ref{fig:noQUANTproAge} are comparable to each other as well as comparble to cases when *no* was used as a discourse response variable. Parents' usage of *no* as a quantifier modifying a noun or a pronoun is earlier than that of children. On the other hand, children starts using *no* to quantify nouns or pronouns after around 18 months old; their production starts to bare syntactic resemblance to that of parents around the age of 22 months.
+
+```{r load data}
+no_child_quantifier_n <- subset(no_child, Negation_dep %in% c('QUANT') & Head_POS %in% c('n'))
+no_child_quantifier_n$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier_n)))
+no_child_quantifier_n_age <- aggregate(data.frame(no_child_quantifier_n$dep), by=list(no_child_quantifier_n$Age),FUN=length)
+names(no_child_quantifier_n_age) <- c('Age', 'Frequency')
+no_child_quantifier_n_age$Proportion <- no_child_quantifier_n_age$Frequency * 100 / sum(no_child_quantifier_n_age$Frequency)
+no_child_quantifier_n_age$Role <- as.vector(rep('Target_Child', nrow(no_child_quantifier_n_age)))
+
+no_parent_quantifier_n <- subset(no_parent, Negation_dep %in% c('QUANT') & Head_POS %in% c('n'))
+no_parent_quantifier_n$dep <- as.vector(rep('quantifier', nrow(no_parent_quantifier_n)))
+no_parent_quantifier_n_age <- aggregate(data.frame(no_parent_quantifier_n$dep), by=list(no_parent_quantifier_n$Age),FUN=length)
+names(no_parent_quantifier_n_age) <- c('Age', 'Frequency')
+no_parent_quantifier_n_age$Proportion <- no_parent_quantifier_n_age$Frequency * 100 / sum(no_parent_quantifier_n_age$Frequency)
+no_parent_quantifier_n_age$Role <- as.vector(rep('Parent', nrow(no_parent_quantifier_n_age)))
+
+no_quantifier_n_age <- rbind(no_child_quantifier_n_age, no_parent_quantifier_n_age)
+
+```
+
+
+```{r noQUANTnAge, fig.cap="Comparing the trajectory of no as a quantifier of nouns between children and parent.", fig.env="figure", fig.height=6}
+ggplot(no_quantifier_n_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+```
+
+```{r load data}
+no_child_quantifier_pro <- subset(no_child, Negation_dep %in% c('QUANT') & Head_POS %in% c('pro'))
+no_child_quantifier_pro$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier_pro)))
+no_child_quantifier_pro_age <- aggregate(data.frame(no_child_quantifier_pro$dep), by=list(no_child_quantifier_pro$Age),FUN=length)
+names(no_child_quantifier_pro_age) <- c('Age', 'Frequency')
+no_child_quantifier_pro_age$Proportion <- no_child_quantifier_pro_age$Frequency * 100 / sum(no_child_quantifier_pro_age$Frequency)
+no_child_quantifier_pro_age$Role <- as.vector(rep('Target_Child', nrow(no_child_quantifier_pro_age)))
+
+no_parent_quantifier_pro <- subset(no_parent, Negation_dep %in% c('QUANT') & Head_POS %in% c('pro'))
+no_parent_quantifier_pro$dep <- as.vector(rep('quantifier', nrow(no_parent_quantifier_pro)))
+no_parent_quantifier_pro_age <- aggregate(data.frame(no_parent_quantifier_pro$dep), by=list(no_parent_quantifier_pro$Age),FUN=length)
+names(no_parent_quantifier_pro_age) <- c('Age', 'Frequency')
+no_parent_quantifier_pro_age$Proportion <- no_parent_quantifier_pro_age$Frequency * 100 / sum(no_parent_quantifier_pro_age$Frequency)
+no_parent_quantifier_pro_age$Role <- as.vector(rep('Parent', nrow(no_parent_quantifier_pro_age)))
+
+no_quantifier_pro_age <- rbind(no_child_quantifier_pro_age, no_parent_quantifier_pro_age)
+
+```
+
+
+```{r noQUANTproAge, fig.cap="Comparing the trajectory of no as a quantifier of pronouns between children and parent.", fig.env="figure", fig.height=6}
+ggplot(no_quantifier_pro_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+```
 
 # General Discussion
 
