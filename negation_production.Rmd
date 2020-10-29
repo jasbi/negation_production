@@ -345,9 +345,11 @@ Finally, Study 2 failed to confirm @thorntonTesan2013’s observation that the n
 In this study we ask what syntactic analyses can be attributed to children's early negative utterances. We also ask what common syntactic structures are present in parents' speech. The goal is to provide an account of children's syntactic development in the spirit of @klimaBellugi1966's pioneering work with data and computational tools available today.
 
 ## Method
+
 Specifically, we ask what are the syntactic functions of different negators, what are the common syntactic categories that these negators modify, and how these patterns differ between production of children and that of the parent. We considered the particular syntactic function of a negator here as being indicated by the syntactic dependency relation between the negator and its syntactic head. And we considered the syntactic category that a negator modifies as being indicated by the POS tag of the negator's syntactic head. 
 
-To do this, we again used data with syntactic dependency annotations from the English-NA and the English-UK sections of CHILDES. This led to 1,930,041 syntactically annotated utterances of 917 children from the English-NA section, and FILL IN THE GAP. We extracted all utterances that contain any of the three negators, *no*, *not*, and *n't*, regardless of whether the utterance is a *full utterance* as defined in study 2. Utterances with just one token (excluding punctuation; e.g. *no !*) were removed. Cases that contain one negator where the negator is also the root of the utterance were also not excluded. This resulted in a total of U utterances. 
+To do this, we again used the English-North America and English-UK collections of corpora from CHILDES [@macwhinney2000childes]. Since the current version of childesr [@sanchez2019childes] does not contain annotations of syntactic dependencies, we developed in-house scripts to directly extracted syntactically annotated utterances from the original xml formmated files in CHILDEs, using the programmming language python. This led to a total of 3,987,829 syntactically annotated utterances, with 
+1,930,041 from the English-NA section, and 2,057,788 from the English-UK section. We extracted all utterances that contain any of the three negators, *no*, *not*, and *n't*, regardless of whether the utterance is a *full utterance* as defined in study 2. Utterances with just one token (excluding punctuation; e.g. *no !*) were removed. Cases that contain one negator where the negator is also the root of the utterance were also not excluded. This resulted in a total of U utterances. 
 
 We grouped all utterances based on the speaker role, either the child or the parent. Each utterance was further tagged with four pieces of information: (1) the age of the child; (2) the negator that the utterance contains; (3) the syntactic dependency between the negator and its head; (4) the POS tag of the negator's syntactic head. We describe our analyses of each negator below.
 
@@ -366,7 +368,7 @@ With that being said, the differences between *no* as a communicator versus *no*
     Child: no no no I wanna make two big things
 (3) Father: did it happen today
     Child: no no no I got it at school Friday (Abe from the Kuczaj Corpus)
-Therefore we combined cases where *no* has a dependency relation of *COM* and *ENUM* together for further analyses, and we refer to the syntactic function of *no* in these cases as the *discourse response variable*.
+Therefore we combined cases where *no* has a dependency relation of *COM* and *ENUM* together for further analyses, and we refer to the syntactic function of *no* in these cases as the *discourse response variable* (*Anaphoric??*).
 
 
 ```{r load data}
@@ -407,7 +409,7 @@ ggplot(no_function, aes(x=Dependency, y=Proportion, fill=Role))+
 
 ```
 
-To compare the production of *no* as a discourse response variable between children and parents, we calculated the proportion of cases where *no* serves as *COM* or *ENUM* by the age of the child. As presented in Figure \@ref{fig:noCommunicatorAge}, while parents have been articulating *no* with this particular function since the child was as young as 7 months old, children did not start at least more regularly produce this negator until the age of 18 months. The frequency of the production of *no* by children is gradually becoming comparable to that of the parents around the age of 23 months.
+To compare the production of *no* as a discourse response variable between children and parents, we calculated the proportion of cases where *no* serves as *COM* or *ENUM* by the age of the child. As presented in Figure \@ref{fig:noCommunicatorAge}, while parents have been articulating *no* with this particular function since the child was as young as 7 months old, children did not start at least more regularly produce this negator until the age of 20 months. The frequency of the production of *no* by children is gradually becoming comparable to that of the parents around the age of 23 months.
 
 
 ```{r load data}
@@ -426,6 +428,7 @@ no_parent_communicator_age$Proportion <- no_parent_communicator_age$Frequency * 
 no_parent_communicator_age$Role <- as.vector(rep('Parent', nrow(no_parent_communicator_age)))
 
 no_communicator_age <- rbind(no_child_communicator_age, no_parent_communicator_age)
+
 ```
 
 
@@ -531,7 +534,7 @@ ggplot(no_quantifier_pos, aes(x=POS, y=Proportion, fill=Role))+
 
 ```
 
-We then continued to examine the production of *no* as a quantifier given its most frequent syntactic heads. We focus specifically on cases when the syntactic head of *no* is either a noun or a pronoun, since the numbers of these cases (X for noun, Y for pronoun) are large enough to yield reliable estimates. Results from Figure \@ref{fig:noQUANTnAge} and FIgure \@ref{fig:noQUANTproAge} are comparable to each other as well as comparble to cases when *no* was used as a discourse response variable. Parents' usage of *no* as a quantifier modifying a noun or a pronoun is earlier than that of children. On the other hand, children starts using *no* to quantify nouns or pronouns after around 18 months old; their production starts to bare syntactic resemblance to that of parents around the age of 22 months.
+We then continued to examine the production of *no* as a quantifier given its most frequent syntactic heads. We focus specifically on cases when the syntactic head of *no* is either a noun or a pronoun, since the numbers of these cases are large enough to yield reliable estimates. In children's production, there are 5,455 utterances where *no* modifies a noun, and 1,100 cases where *no* modifies a pronoun. In parent's production, there are 5,823 utterances where *no* modifies a noun, and 1,018 instances where *no* modifies a pronoun. Results from Figure \@ref{fig:noQUANTnAge} and FIgure \@ref{fig:noQUANTproAge} are comparable to each other as well as comparble to cases when *no* was used as a discourse response variable. Parents' usage of *no* as a quantifier modifying a noun or a pronoun is earlier than that of children. On the other hand, children starts using *no* to quantify nouns or pronouns after around 18 months old; their production starts to bare syntactic resemblance to that of parents around the age of 22 months.
 
 ```{r load data}
 no_child_quantifier_n <- subset(no_child, Negation_dep %in% c('QUANT') & Head_POS %in% c('n'))
