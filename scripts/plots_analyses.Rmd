@@ -486,35 +486,46 @@ nonotnt$category <- fct_relevel(nonotnt$category, "no", "not")
   theme(text = element_text(size=10, family="Times"))
 ```
 
-
 # Adult Production Permutation Model
 
 ```{r}
-hist(filter(eng_utterances, speaker=="child", num_tokens<15)$num_tokens, breaks=15)
-hist(filter(eng_utterances, speaker=="parent", num_tokens<15)$num_tokens, breaks=15)
-
-nrow(filter(eng_utterances, speaker=="child"))
-nrow(filter(eng_utterances, speaker=="parent"))
+eng_utterances <- read_feather("../processed_data/english_utterances_processed.feather")
 
 bottleneck <-
   eng_utterances %>%
   filter(speaker=="child") %>%
-  mutate(child_num_tokens = num_tokens) %>%
-  select(age, target_child_id, child_num_tokens)
+  select(num_tokens, age, utterance, no, not, nt) %>%
+  group_by(age, num_tokens) %>%
+  mutate(random_row = sample(1:n(), n()))
 
 permuterance <-
   eng_utterances %>%
   filter(speaker=="parent") %>%
-  left_join(bottleneck, by=c("age", "target_child_id")
+  select(num_tokens, age, utterance, no, not, nt) %>%
+  group_by(age, num_tokens) %>%
+  mutate(random_row = sample(1:n(), n())) %>%
+  full_join(bottleneck, by=c("age", "num_tokens", "random_row"))
 
-permuterance_relfreqs <-
+# Removing rows with no child utterance
+bottleneck_adults <-
   permuterance %>%
-  group_by(speaker, age) %>%
-  summarize(no= sum(no)/sum(num_tokens)*1000, not=sum(not)/sum(num_tokens)*1000, nt=sum(nt)/sum(num_tokens)*1000) %>%
-  gather("category", "ppt", no:nt)
+  drop_na(utterance.y, utterance.x)
 
-permuterance_relfreqs %>%
-  filter(ppt!=0) %>%
+permuterance %>%
+  filter(is.na(utterance.x))
+
+bottleneck_relfreqs <-
+  bottleneck_adults %>%
+  group_by(age) %>%
+  summarise(no_child= sum(no.y)/sum(num_tokens)*1000, not_child=sum(not.y)/sum(num_tokens)*1000, nt_child=sum(nt.y)/sum(num_tokens)*1000,
+            no_parent= sum(no.x)/sum(num_tokens)*1000, not_parent=sum(not.x)/sum(num_tokens)*1000, nt_parent=sum(nt.x)/sum(num_tokens)*1000) %>%
+  gather("category_speaker", "ppt", no_child:nt_parent) %>%
+  separate(category_speaker, c("category", "speaker"), "_")
+
+saveRDS(bottleneck_relfreqs, "../processed_data/bottleneck_relfreqs")
+
+bottleneck_relfreqs %>%
+#  filter(age>12) %>%
   ggplot(aes(age, ppt)) +
   geom_point(aes(color=category, shape=category)) + 
   geom_line(aes(color=category)) +
