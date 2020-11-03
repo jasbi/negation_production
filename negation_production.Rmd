@@ -56,6 +56,7 @@ library(childesr)
 library(tidyverse)
 library(tm)
 library(forcats)
+library(gridExtra)
 ```
 
 <!-- TO DO
@@ -204,9 +205,9 @@ The aim of this study was to assess the prevalence of non-adult-like utterances 
 ## Methods
 
 ```{r exclusions}
-child_exclusions2 <- read.csv("processed_data/study2_child_exclusions")
+child_exclusions2 <- read.csv("processed_data/study2_child_exclusions.csv")
 
-parent_exclusions2 <- read.csv("processed_data/study2_parent_exclusions")
+parent_exclusions2 <- read.csv("processed_data/study2_parent_exclusions.csv")
 
 ```
 
@@ -324,13 +325,284 @@ ggplot(neg_3sg,
 
 ```
 
-To validate our findings so far in study 2, we take advantage of the available syntactic dependency annotations in the English-NA and the English-UK sections of CHILDES. We restricted our analyses to *full utterances*, that is, utterances that contain: (1) a verbal root with a POS tag as *v* that indicates verbs and a dependency relation as *root*, which indicates that this verb is the head of the utterance; (2) a subject token whose syntactic dependency relation with the verbal root is 'SUBJ'. This resulted in a number of X full utterances extracted from the corpus.
+One caveat with the traditional *NP+VP* approach, as mentioned above, is that it makes the assumption that the negator falls out of the range of the sentence *S*, and it is not straightforward to define a clear boundary of the VP or the NP. On the other hand, if the negator is a modifier at the sentential level, in turn this indicates that the negator is modifying the main verb of the sentence. Therefore instead of looking at the relative position of the negator to the (presumed) span of *VP*, a more fine-grained approach is to examine instead the relative position of the negator to just the main verb. With this alternative approach, we take advantage of the available syntactic dependency annotations in the English-NA and the English-UK sections of CHILDES. Since the current version of childesr [@sanchez2019childes] does not contain annotations of syntactic dependencies, we developed in-house scripts to directly extracted syntactically annotated utterances from the original xml formatted files in CHILDEs, using the programming language python. We restricted our analyses to *full utterances*, that is, utterances that contain: (1) a verbal root with a POS tag as *v* that indicates verbs and a dependency relation as *root*, which indicates that this verb is the head of the utterance; (2) a subject token whose syntactic dependency relation with the verbal root is 'SUBJ'. This resulted in a number of X full utterances extracted from the corpus. This led to 207,962 full utterances produced by children and 406,242 full utterances produced by the parents.
 
-Given these full utterances, we extracted cases with negators in two different ways. First one simply selected all utterances that contain *no*, *n't* and *not*, regardless of their syntactic dependency relation with the verbal root. This led to a total of Y negative utterances. Second one restricted to utterances where the negator directly modifies the verbal root (a direct child of the root of the utterance), or cases where the negator modifies an auxiliary or modal verb that directly modifies the verbal root (i.e. the auxiliary is the direct child of the root of the utterance with a dependency relation *AUX*; *I don't like this one*). This led to a total of Z negative utterances. In both ways, certain extracted utterances contain more than one negator; these cases 
+Given these full utterances, we extracted cases with negators in two different ways. First one simply selected all utterances that contain *no*, *n't* and *not*, regardless of their syntactic dependency relation with the verbal root. This led to a total of Y negative utterances. Second one restricted to utterances where the negator directly modifies the verbal root (a direct child of the root of the utterance), or cases where the negator modifies an auxiliary or modal verb that directly modifies the verbal root (i.e. the auxiliary is the direct child of the root of the utterance with a dependency relation *AUX*; *I don't like this one*). This led to a total of Z negative utterances. 
 
-We binned these utterances based the speaker role, the child or the parent. Each utterance was tagged with three additional pieces of information: (1) the age of the child; (2) the negators that the utterance contains; (3) the relative position of the negator to the verbal root and the subject of the utterance; it was tagged as *pre* if the negator occurs before the head of the subject and the verbal root, *inter* if the negator occurs between the head of the subject and the verbal root, and *post* if the negator occurs after the verbal root. Then for each speaker role, we first computed the total number of utterances for each negator, then calculated the proportion of negator at different ages. For instance, if the production of children contains 100 utterances with *no* in total, among which 10 was produced at the age of 24 months, 60  was produced at 40 months, and 30 was produced at 60 months, the proportions of *no* at the three different ages for children would be 10%, 60% and 30% respectively.
+We binned these utterances based the speaker role, the child or the parent. Each utterance was tagged with three additional pieces of information: (1) the age of the child; (2) the negator(s) that the utterance contains; (3) the relative position of the negator to the verbal root and the subject of the utterance; it was tagged as *pre* if the negator occurs before the head of the subject and the verbal root, *inter* if the negator occurs between the head of the subject and the verbal root, and *post* if the negator occurs after the verbal root. Then for each speaker role, we first computed the total number of utterances for each negator, then calculated the proportion of negator at different ages. For instance, if the production of children contains 100 utterances with *no* in total, among which 10 was produced at the age of 24 months, 60  was produced at 40 months, and 30 was produced at 60 months, the proportions of *no* at the three different ages for children would be 10%, 60% and 30% respectively.
 
 
+```{r load data}
+study2_no <- read.csv('processed_data/study2_no.csv', header = T, sep = ',')
+study2_no_child <- subset(study2_no, Role %in% c("Target_Child") & Feature %in% c("Pre", "Inter", "Post"))
+study2_no_parent <- subset(study2_no, Role %in% c("Parent") & Feature %in% c("Pre", "Inter", "Post"))
+study2_no_child_annotation <- subset(study2_no, Role %in% c("Target_Child") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+study2_no_parent_annotation <- subset(study2_no, Role %in% c("Parent") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+
+```
+
+```{r study2_no_child, fig.cap="The relative position of no in child production.", fig.env="figure", fig.height=8}
+
+p1 <- ggplot(study2_no_child, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child no, Without annotation of negation marker')
+
+
+p2 <- ggplot(study2_no_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Chid no, With annotation of negation marker')
+
+p_child <- grid.arrange(p1, p2, ncol=1, nrow=2)
+
+```
+
+```{r study2_no_parent, fig.cap="The relative position of no in parent production.", fig.env="figure", fig.height=8}
+
+p3 <- ggplot(study2_no_parent, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent no, Without annotation of negation marker')
+
+
+p4 <- ggplot(study2_no_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent no, With annotation of negation marker')
+
+p_parent <- grid.arrange(p3, p4, ncol=1, nrow=2)
+
+```
+
+Comparing Figure \@ref(fig:study2_no_child) and Figure \@ref(fig:study_2_no_parent), it can be seen that regardless of the particular speaker role, the production of *no* before the subject of the sentence is the most prevalent. Although there was no strong difference between children's production of *no* when it occurs inbetween the subject and the head verb of the sentence, and their production when *no* appears after the head verb. The results do not seem to be dependent on whether *no* bares any direct syntactic dependency relation with the head verb
+By contrast, both *nt* and *not* occurs more frequently between the subject and the head verb. The findings for these two negators do not seem to be restricted to the particular annotation scheme neither. Across the three different negators considered here, children's production appears to be more adult-like around 26 months. Most of the negators, driven by the high frequency of *no*, occurs before the subject in the sentence-initial position.
+
+```{r load data}
+study2_nt <- read.csv('processed_data/study2_nt.csv', header = T, sep = ',')
+study2_nt_child <- subset(study2_nt, Role %in% c("Target_Child") & Feature %in% c("Pre", "Inter", "Post"))
+study2_nt_parent <- subset(study2_nt, Role %in% c("Parent") & Feature %in% c("Pre", "Inter", "Post"))
+study2_nt_child_annotation <- subset(study2_nt, Role %in% c("Target_Child") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+study2_nt_parent_annotation <- subset(study2_nt, Role %in% c("Parent") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+
+```
+
+```{r study2_nt_child, fig.cap="The relative position of n't in child production.", fig.env="figure", fig.height=8}
+
+p1 <- ggplot(study2_nt_child, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child nt, Without annotation of negation marker')
+
+
+p2 <- ggplot(study2_nt_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child nt, With annotation of negation marker')
+
+p_child <- grid.arrange(p1, p2, ncol=1, nrow=2)
+
+```
+
+```{r study2_nt_parent, fig.cap="The relative position of n't in parent production.", fig.env="figure", fig.height=8}
+
+p3 <- ggplot(study2_nt_parent, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent nt, Without annotation of negation marker')
+
+
+p4 <- ggplot(study2_nt_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent nt, With annotation of negation marker')
+
+p_parent <- grid.arrange(p3, p4, ncol=1, nrow=2)
+
+```
+
+
+```{r load data}
+study2_not <- read.csv('processed_data/study2_not.csv', header = T, sep = ',')
+study2_not_child <- subset(study2_not, Role %in% c("Target_Child") & Feature %in% c("Pre", "Inter", "Post"))
+study2_not_parent <- subset(study2_not, Role %in% c("Parent") & Feature %in% c("Pre", "Inter", "Post"))
+study2_not_child_annotation <- subset(study2_not, Role %in% c("Target_Child") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+study2_not_parent_annotation <- subset(study2_not, Role %in% c("Parent") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+
+```
+
+```{r study2_not_child, fig.cap="The relative position of not in child production.", fig.env="figure", fig.height=8}
+
+p1 <- ggplot(study2_not_child, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child not, Without annotation of negation marker')
+
+
+p2 <- ggplot(study2_not_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child not, With annotation of negation marker')
+
+p_child <- grid.arrange(p1, p2, ncol=1, nrow=2)
+
+```
+
+```{r study2_not_parent, fig.cap="The relative position of not in parent production.", fig.env="figure", fig.height=8}
+
+p3 <- ggplot(study2_not_parent, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent not, Without annotation of negation marker')
+
+
+p4 <- ggplot(study2_not_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent not, With annotation of negation marker')
+
+p_parent <- grid.arrange(p3, p4, ncol=1, nrow=2)
+
+```
+
+```{r load data}
+study2_all <- read.csv('processed_data/study2_all.csv', header = T, sep = ',')
+study2_all_child <- subset(study2_all, Role %in% c("Target_Child") & Feature %in% c("Pre", "Inter", "Post"))
+study2_all_parent <- subset(study2_all, Role %in% c("Parent") & Feature %in% c("Pre", "Inter", "Post"))
+study2_all_child_annotation <- subset(study2_all, Role %in% c("Target_Child") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+study2_all_parent_annotation <- subset(study2_all, Role %in% c("Parent") & Feature %in% c("Pre_annotation", "Inter_annotation", "Post_annotation"))
+
+```
+
+```{r study2_child, fig.cap="The relative position of all negators in child production.", fig.env="figure", fig.height=8}
+
+p1 <- ggplot(study2_all_child, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child negators, Without annotation of negation marker')
+
+
+p2 <- ggplot(study2_all_child_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Child negators, With annotation of negation marker')
+
+p_child <- grid.arrange(p1, p2, ncol=1, nrow=2)
+
+```
+
+```{r study2_parent, fig.cap="The relative position of all negators in parent production.", fig.env="figure", fig.height=8}
+
+p3 <- ggplot(study2_all_parent, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Dark2") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent negators, Without annotation of negation marker')
+
+
+p4 <- ggplot(study2_all_parent_annotation, aes(x = Age, y = Mean, color = Feature)) + 
+  geom_pointrange(aes(ymax = CI975, ymin = CI25), position=position_dodge(.9)) +
+  scale_color_brewer(palette="Paired") +
+  labs(x = 'Age') +
+  labs(y = 'Percent (%)') +
+  labs(color = 'Syntactic Position') +
+  theme(text = element_text(size = 20),
+        legend.position = 'top') +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  ggtitle('Parent negators, With annotation of negation marker')
+
+p_parent <- grid.arrange(p3, p4, ncol=1, nrow=2)
+
+```
 
 ## Conclusions
 
@@ -348,7 +620,7 @@ In this study we ask what syntactic analyses can be attributed to children's ear
 
 Specifically, we ask what are the syntactic functions of different negators, what are the common syntactic categories that these negators modify, and how these patterns differ between production of children and that of the parent. We considered the particular syntactic function of a negator here as being indicated by the syntactic dependency relation between the negator and its syntactic head. And we considered the syntactic category that a negator modifies as being indicated by the POS tag of the negator's syntactic head. 
 
-To do this, we again used the English-North America and English-UK collections of corpora from CHILDES [@macwhinney2000childes]. Since the current version of childesr [@sanchez2019childes] does not contain annotations of syntactic dependencies, we developed in-house scripts to directly extracted syntactically annotated utterances from the original xml formmated files in CHILDEs, using the programmming language python. This led to a total of 3,987,829 syntactically annotated utterances, with 
+To do this, we again used the English-North America and English-UK collections of corpora from CHILDES [@macwhinney2000childes], focusing on data with available syntactic parses. Preprocessing led to a total of 3,987,829 syntactically annotated utterances, with 
 1,930,041 from the English-NA section, and 2,057,788 from the English-UK section. We extracted all utterances that contain any of the three negators, *no*, *not*, and *n't*, regardless of whether the utterance is a *full utterance* as defined in study 2. Utterances with just one token (excluding punctuation; e.g. *no !*) were removed. Cases that contain one negator where the negator is also the root of the utterance were also not excluded. This resulted in a total of U utterances. 
 
 We grouped all utterances based on the speaker role, either the child or the parent. Each utterance was further tagged with four pieces of information: (1) the age of the child; (2) the negator that the utterance contains; (3) the syntactic dependency between the negator and its head; (4) the POS tag of the negator's syntactic head. We describe our analyses of each negator below.
@@ -610,6 +882,500 @@ ggplot(no_quantifier_pro_age, aes(x=Age, y=Proportion, fill=Role))+
         legend.title=element_text(size=15),
         legend.text=element_text(size=15))+ 
   theme(legend.position="top")
+```
+
+Now we turn to *n't*. The linguistic items that *n't* could be combined with is much more restrictive in comparison to *no* and *not*, in the sense that it mostly co-occurs with auxiliary or copula verbs. Therefore we focus on the syntactic analyses to what these auxiliary and copula verbs are that appear with *n't*. 
+
+Comparing child and parent production, the patterns are overall comparable. The most frequent syntactic head that *n't* modifies is the auxiliary verb *do*, regardless of the speaker role. While parents tend to associate *n't* more frequently with the copula verb *be* than the auxiliary *can*, our results from Figure \@ref{fig:study3_nt} show the reversed pattern in children's production.
+
+```{r load data}
+nt <- subset(read.csv('processed_data/study3_nt.csv', header = T, sep = ','), Head_dep %in% c('AUX') | Head_POS %in% c('cop'))
+nt_child <- subset(nt, Role %in% c('Target_Child'))
+nt_parent <- subset(nt, Role %in% c('Parent'))
+
+for (i in 1:nrow(nt_child)) {
+  if (grepl("doesn't", as.vector(nt_child$Utterance)[i]) & as.vector(nt_child$Head_lexical)[i] %in% c('do')) {
+#    child_does = child_does + 1
+    nt_child$Head_lexical[i] <- "does"
+  }
+}
+
+nt_child_lexical <- data.frame(table(nt_child$Head_lexical))
+names(nt_child_lexical) <- c('Lexical', 'Frequency')
+nt_child_lexical$Lexical <- reorder(nt_child_lexical$Lexical, -nt_child_lexical$Frequency)
+nt_child_lexical$Proportion <- nt_child_lexical$Frequency * 100 / sum(nt_child_lexical$Frequency)
+nt_child_lexical$Role <- as.vector(rep('Target_Child', nrow(nt_child_lexical)))
+
+for (i in 1:nrow(nt_parent)) {
+  if (grepl("doesn't", as.vector(nt_parent$Utterance)[i]) & as.vector(nt_parent$Head_lexical)[i] %in% c('do')) {
+    nt_parent$Head_lexical[i] <- "does"
+  }
+}
+
+nt_parent_lexical <- data.frame(table(nt_parent$Head_lexical))
+names(nt_parent_lexical) <- c('Lexical', 'Frequency')
+nt_parent_lexical$Lexical <- reorder(nt_parent_lexical$Lexical, -nt_parent_lexical$Frequency)
+nt_parent_lexical$Proportion <- nt_parent_lexical$Frequency * 100 / sum(nt_parent_lexical$Frequency)
+nt_parent_lexical$Role <- as.vector(rep('Parent', nrow(nt_parent_lexical)))
+nt_parent_lexical <- subset(nt_parent_lexical, !(Lexical %in% c('look', 'stay')))
+
+
+nt_lexical <- rbind(nt_child_lexical, nt_parent_lexical)
+
+```
+
+```{r study3_nt, fig.cap="Comparing the syntactic function of nt between children and parent.", fig.env="figure", fig.height=6}
+ggplot(nt_lexical, aes(x=Lexical, y=Proportion, fill=Role))+ 
+  geom_bar(position=position_dodge(),stat='identity')+
+  scale_fill_manual(values=c("#0072B2", "#CC79A7"))+
+  labs(x="Syntactic head")+
+  labs(y="Proportion (%)")+
+  scale_y_continuous(limits=c(0,100))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+
+```
+
+We took a further look at the trajectory of children's and parents' production of *n't* when it is modifying an auxiliary or a copula verb. In particular, we focused on five most frequent syntactic heads of *n't*: *do*, *can*, *be*, *does*, *will*, *have*. As shown in Figure \@ref{fig:ntMOST}, considering the five syntactic heads together, in comparison to the parents, children start using *n't* as a modifier of these auxiliary or copula verbs around the age of 20 months, then gradually reach adult-like level around 32 - 34 months with regards to the proportion that *n't* is used in these cases, and eventually use *n't* more frequently than parents at around 36 - 38 months old. Our examinations of individual syntactic head, in particular *do* and *can* revealed similar patterns to the results in Figure \@ref{fig:ntMOST}.
+
+
+```{r load data}
+nt_child_most <- subset(nt_child, Head_lexical %in% c('do', 'can', 'be', 'does', 'will', 'have'))
+nt_child_most$lexical <- as.vector(rep('lexical', nrow(nt_child_most)))
+nt_child_most_age <- aggregate(data.frame(nt_child_most$lexical), by=list(nt_child_most$Age),FUN=length)
+names(nt_child_most_age) <- c('Age', 'Frequency')
+nt_child_most_age$Proportion <- nt_child_most_age$Frequency * 100 / sum(nt_child_most_age$Frequency)
+nt_child_most_age$Role <- as.vector(rep('Target_Child', nrow(nt_child_most_age)))
+
+nt_parent_most <- subset(nt_parent, Head_lexical %in% c('do', 'can', 'be', 'does', 'will', 'have'))
+nt_parent_most$lexical <- as.vector(rep('lexical', nrow(nt_parent_most)))
+nt_parent_most_age <- aggregate(data.frame(nt_parent_most$Head_lexical), by=list(nt_parent_most$Age),FUN=length)
+names(nt_parent_most_age) <- c('Age', 'Frequency')
+nt_parent_most_age$Proportion <- nt_parent_most_age$Frequency * 100 / sum(nt_parent_most_age$Frequency)
+nt_parent_most_age$Role <- as.vector(rep('Parent', nrow(nt_parent_most_age)))
+
+nt_most_age <- rbind(nt_child_most_age, nt_parent_most_age)
+
+```
+
+
+```{r ntMOST, fig.cap="Comparing the trajectory of nt as a modifier between children and parent.", fig.env="figure", fig.height=6}
+ggplot(nt_most_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("do, can, be, does, will and have + n't")
+
+```
+
+```{r load data}
+nt_child_do <- subset(nt_child, Head_lexical %in% c('do'))
+nt_child_do_age <- aggregate(data.frame(nt_child_do$Head_lexical), by=list(nt_child_do$Age),FUN=length)
+names(nt_child_do_age) <- c('Age', 'Frequency')
+nt_child_do_age$Proportion <- nt_child_do_age$Frequency * 100 / sum(nt_child_do_age$Frequency)
+nt_child_do_age$Role <- as.vector(rep('Target_Child', nrow(nt_child_do_age)))
+
+nt_parent_do <- subset(nt_parent, Head_lexical %in% c('do'))
+nt_parent_do_age <- aggregate(data.frame(nt_parent_do$Head_lexical), by=list(nt_parent_do$Age),FUN=length)
+names(nt_parent_do_age) <- c('Age', 'Frequency')
+nt_parent_do_age$Proportion <- nt_parent_do_age$Frequency * 100 / sum(nt_parent_do_age$Frequency)
+nt_parent_do_age$Role <- as.vector(rep('Parent', nrow(nt_parent_do_age)))
+
+nt_do_age <- rbind(nt_child_do_age, nt_parent_do_age)
+
+```
+
+
+```{r ntDO, fig.cap="Comparing the trajectory of nt modifying do, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(nt_do_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("do + n't")
+
+```
+
+```{r load data}
+nt_child_can <- subset(nt_child, Head_lexical %in% c('can'))
+nt_child_can_age <- aggregate(data.frame(nt_child_can$Head_lexical), by=list(nt_child_can$Age),FUN=length)
+names(nt_child_can_age) <- c('Age', 'Frequency')
+nt_child_can_age$Proportion <- nt_child_can_age$Frequency * 100 / sum(nt_child_can_age$Frequency)
+nt_child_can_age$Role <- as.vector(rep('Target_Child', nrow(nt_child_can_age)))
+
+nt_parent_can <- subset(nt_parent, Head_lexical %in% c('can'))
+nt_parent_can_age <- aggregate(data.frame(nt_parent_can$Head_lexical), by=list(nt_parent_can$Age),FUN=length)
+names(nt_parent_can_age) <- c('Age', 'Frequency')
+nt_parent_can_age$Proportion <- nt_parent_can_age$Frequency * 100 / sum(nt_parent_can_age$Frequency)
+nt_parent_can_age$Role <- as.vector(rep('Parent', nrow(nt_parent_can_age)))
+
+nt_can_age <- rbind(nt_child_can_age, nt_parent_can_age)
+
+```
+
+
+```{r ntCAN, fig.cap="Comparing the trajectory of nt modifying can, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(nt_can_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("can + n't")
+
+```
+
+```{r load data}
+nt_child_be <- subset(nt_child, Head_lexical %in% c('be'))
+nt_child_be_age <- aggregate(data.frame(nt_child_be$Head_lexical), by=list(nt_child_be$Age),FUN=length)
+names(nt_child_be_age) <- c('Age', 'Frequency')
+nt_child_be_age$Proportion <- nt_child_be_age$Frequency * 100 / sum(nt_child_be_age$Frequency)
+nt_child_be_age$Role <- as.vector(rep('Target_Child', nrow(nt_child_be_age)))
+
+nt_parent_be <- subset(nt_parent, Head_lexical %in% c('be'))
+nt_parent_be_age <- aggregate(data.frame(nt_parent_be$Head_lexical), by=list(nt_parent_be$Age),FUN=length)
+names(nt_parent_be_age) <- c('Age', 'Frequency')
+nt_parent_be_age$Proportion <- nt_parent_be_age$Frequency * 100 / sum(nt_parent_be_age$Frequency)
+nt_parent_be_age$Role <- as.vector(rep('Parent', nrow(nt_parent_be_age)))
+
+nt_be_age <- rbind(nt_child_be_age, nt_parent_be_age)
+
+```
+
+
+```{r ntBE, fig.cap="Comparing the trajectory of nt modifying be, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(nt_be_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("be + n't")
+
+```
+
+Finally, we moved on to *not*. Our syntactic analyses of *not* followed a similar procedure as that for *no*. First we analyzed the distributions of the dependency relations between *not* and its syntactic heads between child and parent production. As presented in Figure \@ref{fig:notFunction}, the distribution of the syntactic heads of *not* is quite restricted; in almost all cases *not* serves as a negator modifier of its syntactic head, with no observable differencess between whether the speaker is the child or the parent.
+
+```{r load data}
+study3_not <- read.csv('processed_data/study3_not.csv', header = T, sep = ',')
+for (i in 1:nrow(study3_not)) {
+  if (as.vector(study3_not$Head_lexical)[i] %in% c('be') & as.vector(study3_not$Head_POS)[i] %in% c('aux')) {
+    study3_not$Head_POS[i] <- 'cop'
+  }
+}
+
+study3_not_child <- subset(study3_not, Role %in% c('Target_Child'))
+study3_not_parent <- subset(study3_not, Role %in% c('Parent'))
+
+study3_not_child_function <- data.frame(table(study3_not_child$Negation_dep))
+names(study3_not_child_function) <- c('Dependency', 'Frequency')
+study3_not_child_function$Dependency <- reorder(study3_not_child_function$Dependency, -study3_not_child_function$Frequency)
+study3_not_child_function$Proportion <- study3_not_child_function$Frequency * 100 / sum(study3_not_child_function$Frequency)
+study3_not_child_function$Role <- as.vector(rep('Target_Child', nrow(study3_not_child_function)))
+
+study3_not_parent_function <- data.frame(table(study3_not_parent$Negation_dep))
+names(study3_not_parent_function) <- c('Dependency', 'Frequency')
+study3_not_parent_function$Dependency <- reorder(study3_not_parent_function$Dependency, -study3_not_parent_function$Frequency)
+study3_not_parent_function$Proportion <- study3_not_parent_function$Frequency * 100 / sum(study3_not_parent_function$Frequency)
+study3_not_parent_function$Role <- as.vector(rep('Parent', nrow(study3_not_parent_function)))
+
+study3_not_function <- rbind(study3_not_child_function, study3_not_parent_function)
+
+```
+
+```{r notFunction, fig.cap="Comparing the syntactic function of not between children and parent.", fig.env="figure", fig.height=6}
+ggplot(study3_not_function, aes(x=Dependency, y=Proportion, fill=Role))+ 
+  geom_bar(position=position_dodge(),stat='identity')+
+  scale_fill_manual(values=c("#0072B2", "#CC79A7"))+
+  labs(x="Syntactic function (dependency relation)")+
+  labs(y="Proportion (%)")+
+  scale_y_continuous(limits=c(0,100))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+
+```
+
+Therefore we turned to examine the POS distributions of the syntactic heads when their syntactic dependency with *not* is *NEG*. As revealed in Figure \@ref{fig:notPOS}, the most common syntactic categories that *not* modify in both child and parent production are:
+(1) *cop* (e.g. *cause I'm not*; *it's not on here*)
+(2) *pro* (e.g. *I not got nothing*; *not that*)
+(3) *n* (e.g. *not my Beecer*; *not fork*)
+(4) *adv* (e.g. *not again*; *not really*)
+(5) *v* (e.g. *not find it*; *go not*)
+
+```{r load data}
+
+study3_not_child_pos <- data.frame(table(subset(study3_not_child, Negation_dep %in% c('NEG'))$Head_POS))
+names(study3_not_child_pos) <- c('POS', 'Frequency')
+study3_not_child_pos$POS <- reorder(study3_not_child_pos$POS, -study3_not_child_pos$Frequency)
+study3_not_child_pos$Proportion <- study3_not_child_pos$Frequency * 100 / sum(study3_not_child_pos$Frequency)
+study3_not_child_pos$Role <- as.vector(rep('Target_Child', nrow(study3_not_child_pos)))
+
+study3_not_parent_pos <- data.frame(table(subset(study3_not_parent, Negation_dep %in% c('NEG'))$Head_POS))
+names(study3_not_parent_pos) <- c('POS', 'Frequency')
+study3_not_parent_pos$POS <- reorder(study3_not_parent_pos$POS, -study3_not_parent_pos$Frequency)
+study3_not_parent_pos$Proportion <- study3_not_parent_pos$Frequency * 100 / sum(study3_not_parent_pos$Frequency)
+study3_not_parent_pos$Role <- as.vector(rep('Parent', nrow(study3_not_parent_pos)))
+
+study3_not_pos <- rbind(study3_not_child_pos, study3_not_parent_pos)
+
+```
+
+```{r notPOS, fig.cap="Comparing the syntactic categories of the syntactic heads of not between children and parent.", fig.env="figure", fig.height=6}
+ggplot(study3_not_pos, aes(x=POS, y=Proportion, fill=Role))+ 
+  geom_bar(position=position_dodge(),stat='identity')+
+  scale_fill_manual(values=c("#0072B2", "#CC79A7"))+
+  labs(x="Syntactic categories (POS))")+
+  labs(y="Proportion (%)")+
+  scale_y_continuous(limits=c(0,100))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top")
+
+```
+
+To compare the trajectory of *not* between child and parent production, we focused on the above top five most frequent syntactic categories that *not* modifies. Since these syntactic categories are fundamental different, we examined them individually. Comparing across the figures below, there does not seem to be a big developmental differences between the usage of *not* when modifying different syntactic categories. Children start producing *not* as a modifier around 20 - 24 months and seem to reach adult-level production around the age of 28 - 30 months.
+
+```{r load data}
+not_child_cop <- subset(study3_not_child, Head_POS %in% c('cop'))
+not_child_cop_age <- aggregate(data.frame(not_child_cop$Head_POS), by=list(not_child_cop$Age),FUN=length)
+names(not_child_cop_age) <- c('Age', 'Frequency')
+not_child_cop_age$Proportion <- not_child_cop_age$Frequency * 100 / sum(not_child_cop_age$Frequency)
+not_child_cop_age$Role <- as.vector(rep('Target_Child', nrow(not_child_cop_age)))
+
+not_parent_cop <- subset(study3_not_parent, Head_POS %in% c('cop'))
+not_parent_cop_age <- aggregate(data.frame(not_parent_cop$Head_POS), by=list(not_parent_cop$Age),FUN=length)
+names(not_parent_cop_age) <- c('Age', 'Frequency')
+not_parent_cop_age$Proportion <- not_parent_cop_age$Frequency * 100 / sum(not_parent_cop_age$Frequency)
+not_parent_cop_age$Role <- as.vector(rep('Parent', nrow(not_parent_cop_age)))
+
+not_cop_age <- rbind(not_child_cop_age, not_parent_cop_age)
+
+```
+
+
+```{r notCOP, fig.cap="Comparing the trajectory of not modifying copula verb "be", between children and parent.", fig.env="figure", fig.height=6}
+ggplot(not_cop_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("cop + not")
+
+```
+
+```{r load data}
+not_child_pro <- subset(study3_not_child, Head_POS %in% c('pro'))
+not_child_pro_age <- aggregate(data.frame(not_child_pro$Head_POS), by=list(not_child_pro$Age),FUN=length)
+names(not_child_pro_age) <- c('Age', 'Frequency')
+not_child_pro_age$Proportion <- not_child_pro_age$Frequency * 100 / sum(not_child_pro_age$Frequency)
+not_child_pro_age$Role <- as.vector(rep('Target_Child', nrow(not_child_pro_age)))
+
+not_parent_pro <- subset(study3_not_parent, Head_POS %in% c('pro'))
+not_parent_pro_age <- aggregate(data.frame(not_parent_pro$Head_POS), by=list(not_parent_pro$Age),FUN=length)
+names(not_parent_pro_age) <- c('Age', 'Frequency')
+not_parent_pro_age$Proportion <- not_parent_pro_age$Frequency * 100 / sum(not_parent_pro_age$Frequency)
+not_parent_pro_age$Role <- as.vector(rep('Parent', nrow(not_parent_pro_age)))
+
+not_pro_age <- rbind(not_child_pro_age, not_parent_pro_age)
+
+```
+
+
+```{r notPro, fig.cap="Comparing the trajectory of not modifying pronouns, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(not_pro_age, aes(x=Age, y=Proportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("pro + not")
+
+```
+
+```{r load data}
+not_child_n <- subset(study3_not_child, Head_POS %in% c('n'))
+not_child_n_age <- aggregate(data.frame(not_child_n$Head_POS), by=list(not_child_n$Age),FUN=length)
+names(not_child_n_age) <- c('Age', 'Frequency')
+not_child_n_age$nportion <- not_child_n_age$Frequency * 100 / sum(not_child_n_age$Frequency)
+not_child_n_age$Role <- as.vector(rep('Target_Child', nrow(not_child_n_age)))
+
+not_parent_n <- subset(study3_not_parent, Head_POS %in% c('n'))
+not_parent_n_age <- aggregate(data.frame(not_parent_n$Head_POS), by=list(not_parent_n$Age),FUN=length)
+names(not_parent_n_age) <- c('Age', 'Frequency')
+not_parent_n_age$nportion <- not_parent_n_age$Frequency * 100 / sum(not_parent_n_age$Frequency)
+not_parent_n_age$Role <- as.vector(rep('Parent', nrow(not_parent_n_age)))
+
+not_n_age <- rbind(not_child_n_age, not_parent_n_age)
+
+```
+
+
+```{r notN, fig.cap="Comparing the trajectory of not modifying nouns, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(not_n_age, aes(x=Age, y=nportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("n + not")
+
+```
+
+```{r load data}
+not_child_adv <- subset(study3_not_child, Head_POS %in% c('adv'))
+not_child_adv_age <- aggregate(data.frame(not_child_adv$Head_POS), by=list(not_child_adv$Age),FUN=length)
+names(not_child_adv_age) <- c('Age', 'Frequency')
+not_child_adv_age$nportion <- not_child_adv_age$Frequency * 100 / sum(not_child_adv_age$Frequency)
+not_child_adv_age$Role <- as.vector(rep('Target_Child', nrow(not_child_adv_age)))
+
+not_parent_adv <- subset(study3_not_parent, Head_POS %in% c('adv'))
+not_parent_adv_age <- aggregate(data.frame(not_parent_adv$Head_POS), by=list(not_parent_adv$Age),FUN=length)
+names(not_parent_adv_age) <- c('Age', 'Frequency')
+not_parent_adv_age$nportion <- not_parent_adv_age$Frequency * 100 / sum(not_parent_adv_age$Frequency)
+not_parent_adv_age$Role <- as.vector(rep('Parent', nrow(not_parent_adv_age)))
+
+not_adv_age <- rbind(not_child_adv_age, not_parent_adv_age)
+
+```
+
+
+```{r notADV, fig.cap="Comparing the trajectory of not modifying adverbss, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(not_adv_age, aes(x=Age, y=nportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("adv + not")
+
+```
+
+```{r load data}
+not_child_v <- subset(study3_not_child, Head_POS %in% c('v'))
+not_child_v_age <- aggregate(data.frame(not_child_v$Head_POS), by=list(not_child_v$Age),FUN=length)
+names(not_child_v_age) <- c('Age', 'Frequency')
+not_child_v_age$nportion <- not_child_v_age$Frequency * 100 / sum(not_child_v_age$Frequency)
+not_child_v_age$Role <- as.vector(rep('Target_Child', nrow(not_child_v_age)))
+
+not_parent_v <- subset(study3_not_parent, Head_POS %in% c('v'))
+not_parent_v_age <- aggregate(data.frame(not_parent_v$Head_POS), by=list(not_parent_v$Age),FUN=length)
+names(not_parent_v_age) <- c('Age', 'Frequency')
+not_parent_v_age$nportion <- not_parent_v_age$Frequency * 100 / sum(not_parent_v_age$Frequency)
+not_parent_v_age$Role <- as.vector(rep('Parent', nrow(not_parent_v_age)))
+
+not_v_age <- rbind(not_child_v_age, not_parent_v_age)
+
+```
+
+
+```{r notv, fig.cap="Comparing the trajectory of not modifying verbs, between children and parent.", fig.env="figure", fig.height=6}
+ggplot(not_v_age, aes(x=Age, y=nportion, fill=Role))+ 
+  geom_bar(position="dodge",stat='identity')+
+  scale_fill_manual(values=c("#9999CC", "#66CC99"))+
+#  geom_col(width = 0.5)+
+  labs(x="Age")+
+  labs(y="Proportion (%)")+
+  scale_x_continuous(breaks=seq(0, 72, 6))+
+  scale_y_continuous(limits=c(0,15))+
+  theme(axis.title.x = element_text(size=20), 
+        axis.text.x = element_text(size = 15, angle = 45),
+        axis.title.y = element_text(size=20),
+        axis.text.y = element_text(size = 15, angle = 45),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=15))+ 
+  theme(legend.position="top") +
+  ggtitle("v + not")
+
 ```
 
 # General Discussion
