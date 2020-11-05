@@ -1377,6 +1377,7 @@ ggplot(not_v_age, aes(x=Age, y=nportion, fill=Role))+
   ggtitle("v + not")
 
 ```
+Make it more refined;
 
 # General Discussion
 
