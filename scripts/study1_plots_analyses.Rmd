@@ -356,6 +356,13 @@ word_table %>%
 eng_utterances <- read_csv("../processed_data/english_utterances_processed.feather")
 ```
 
+```{r}
+eng_utterances %>%
+  filter(speaker == "child", no==1) %>%
+  arrange(age)
+```
+
+
 ```{r negativePercent}
 negative_percent <-
   eng_utterances %>%
@@ -486,7 +493,7 @@ nonotnt$category <- fct_relevel(nonotnt$category, "no", "not")
   theme(text = element_text(size=10, family="Times"))
 ```
 
-# Adult Production Permutation Model
+# Adult Production Bottleneck Model
 
 ```{r}
 eng_utterances <- read_feather("../processed_data/english_utterances_processed.feather")
@@ -533,5 +540,8 @@ bottleneck_relfreqs %>%
   theme_classic()
 ```
 
+# Individual Variation in Children
+
+This section looks at the same patterns for each negative morpheme in the productions of children in two dense corpora: Providence and Manchester. 
 
 

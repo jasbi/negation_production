@@ -59,7 +59,7 @@ library(forcats)
 ```
 
 <!-- TO DO
-+ Put binomial errorbars on the developmental plots
++ Put error bars on developmental plots (bootstrap)
 + Parent speech bottleneck simulation (for each month bin, sample from parent speech with the utterance length distribution children have)
 + Add individual plots for kids in Providence and Manchester, 
 + Subject-drop in negative vs. positive sentences
@@ -80,12 +80,31 @@ Under Construction!
 <!-- Start paragraph
 In a coffee shop, it is common to see the menu divided into "coffee" and "not coffee" sections. As expected, the coffee section has drinks that contain coffee like espresso, latte, and cappuccino. The "not coffee" section, however, contains a variety of items including tea, orange juice, and lemonade. What brings these items together is not what they are, but rather what they are not; and the word *not* combined with the word *coffee* allows us to capture this complex concept. All known human languages have the ability to create negative expressions from a variety of positive ones they already have in a productive and combinatorial manner. Compositionality and abstractness are important components that make human languages so powerful. But how does this linguistic ability develop? How do we learn to use linguistic negation?
 
-Possible origins: 1. Metalinguistic and conceptual categorization (labeling) 2. Higher Perceptual (existence) 3. affective (rejections, wants, likes) 4. Motor (prohibitions). Two hypothesis: 1. unified concept of negation that is incorporated to operate on different representations and 2. heterogeneous concepts of negation that develop independently but can be generalized into a single concept.
+Possible origins: 1. Metalinguistic and conceptual categorization (labeling) 2. Higher Perceptual (existence in "there is a" or with PPs like "it's in the bucket") 3. affective (rejections, wants, likes) 4. Motor (prohibitions). Two hypothesis: 1. unified concept of negation that is incorporated to operate on different representations and 2. heterogeneous concepts of negation that develop independently but can be generalized into a single concept.
 
 Negation in natural language is a concept that operates on concepts. It is higher order. It is likely that it starts as such early on with labeling acts; as a way of organizing concepts.
+
+Study 1: previous studies have suggested a non-unified or stage-like development. This study shows that even though a piecemeal and slow development of abstract negation is possible, the production data is not conclusive. We show that the proposed stages of development in production are either child-specific and not found when we aggregate data across children, or they are a phenomena likely caused by production limitations.
+
+Study 2: delves deeper into claims of non-adult like productions
+
+Study 3: investigates early constructions in parent's and children's speech as a source of insight into the possible origins of linguistic negation. We track constructions that convey existence of an object or its location (there is no book here, it's in the car, ...), constructions that classify and label objects revealing their identity (that's not a car, it's not a book), constructions that regulate action (don't do X), constructions that convey desires (I don't want X), ...
+
+Origins Hypotheses:
+1. Perceptual Origin: express nonexistence of an expected object or action -- no more X, there is no X, it's not PP, allgone?, it's not spinning, etc.
+
+2. Conceptual Origin: classify objects or actions: this is not a car, that's not running, ...
+
+3. Preferential Origin: it is used to convey desires and preferences -- combinations of negation with "want", "like", 
+
+4. Actional Origin: used in imperatives or with ability modals: "don't do X", "I cant do X", ...
+(problem: can has other uses like: you can't play with that you may break it.)
+5. Epistemic: I don't know?
+
+6. 
 -->
 
-## Previous Studies
+## Previous Production Studies of Negation in Children
 
 <!--form-->
 @klimaBellugi1966 provided the first and most influential account of negation development. They used fortnightly recordings of mother-child conversations for three children in the @brown1973first corpus: Eve (18-26 months), Adam and Sarah (26-50 months). They divided child utterances into three stages:"the first stage from the first month of study for each child; the last from the month in which the MLUs approach 4.0 for each of the three children; and the second stage between the two." They suggested that in Stage 1, the syntactic category of negation (NEG) includes *no* and *not*, produced before or after a sentence "nucleus", i.e. noun and verb phrase without tense or inflection (NEG+S or S+NEG). Examples include:  "No singing song", "No the sun shining", "No money", "No play that", "Wear mitten no", "No fall!", and "Not a teddy bear". It was hypothesized that auxiliary negatives like *don't* and *can't* are not produced or understood at this stage. In Stage 2, children add *can't* and *don't* as unanalyzed wholes to their list of negators, and move negation inside the sentence, between the subject and the verb phrase (NP+NEG+VP). The main evidence for *can't* and *don't* being unanalyzed wholes in this stage is the absence of positive auxiliary variants like *can* and *do*. Typical examples at this stage include "I can't see you", "I don't want it", "He not little, he big", "There no squirrels", "He no bite you", and "I no want envelope". In Stage 3, auxiliary verbs like *can't* and *don't* are re-analyzed as AUX+NEG, additional negative auxiliaries like *won't* and *isn't* are produced, and positive auxiliaries like *can* and *do* are produced for the first time (NP+AUX+NEG+VP). @klimaBellugi1966's account was in line with the transformational theory of negation at the time, which hypothesized that adult negation starts as a sentence modifier at deep structure, and a transformation later moves it inside the sentence [@klima1964negation]. Therefore, children's first stage was interpreted to reflect a universal innate initial state, and the second and third stages the process of learning the required surface-level transformations.  
@@ -104,9 +123,12 @@ Two relatively recent studies have focused on @klimaBellugi1966's second stage, 
 
 To summarize, prevoius research has suggested that English-speaking children learn to produce negative morphemes in a *no*<*not*<*n't* order. Among negative auxiliary forms, *can't* and *don't* are learned first and before any positive auxiliary form including *can* and *do*. @klimaBellugi1966 argued that children's production of English negation becomes adult-like after two non-adult-like stages: one in which they produce negation before a sentence and never inside it, and another in which they produce it within the sentence but do not use the right negative morpheme (e.g. "He not little" instead of "He isn't little"). There has been an active debate over each of these stages. With the exception of @drozd1995, previous studies have mainly relied on data from a few available children often including the original data from @klimaBellugi1966. Given that over the years much more corpus data and computational tools have become available, it is important to revisit previous proposals and assess their current status.
 
+<!--function-->
+
+
 ## Current Study
 
-```{r exclusions}
+```{r exclusions1}
 exclusions <- read_csv("processed_data/token_exclusions.csv")
 uexclusions <- read_csv("processed_data/u_exclusions.csv")
 ```
@@ -226,10 +248,10 @@ The aim of this study was to assess the prevalence of non-adult-like utterances 
 
 ## Methods
 
-```{r exclusions}
-child_exclusions2 <- read.csv("processed_data/study2_child_exclusions")
+```{r exclusions2}
+child_exclusions2 <- read.csv("processed_data/study2_child_exclusions.csv")
 
-parent_exclusions2 <- read.csv("processed_data/study2_parent_exclusions")
+parent_exclusions2 <- read.csv("processed_data/study2_parent_exclusions.csv")
 
 ```
 
@@ -237,27 +259,25 @@ In this study, we again used the English-North America and English-UK collection
 
 Each utterance was binned by child age in months and tagged for 1. number of tokens in the utterance, 2. the speaker role (parent vs. child), and 3. whether the utterance was negative or positive. Negative utterances were further coded for the presence of *no*, *not*, and *n’t*, as well as for syntactic position of the negator. Untranscribed utterances and utterances missing part of speech tagging were excluded (N = `r format(child_exclusions2$not_transcribed, big.mark = ",")` for children, `r format(parent_exclusions2$not_transcribed, big.mark = ",")` for parents), and unintelligible tokens were removed. Repeated instances of ‘no’ (often coded with a single part of speech tag) were condensed to a single instance. Additionally, due to a large number of coding irregularities, utterances whose number of tokens did not match the number of part of speech tokens coded were excluded (N = `r format(child_exclusions2$pos_incorrect, big.mark = ",")` for children, `r format(parent_exclusions2$pos_incorrect, big.mark = ",")` for parents). Single-token negations were removed, as well as utterances in which the negative was combined repetitively with extra-syntactic particles (eg. “ah no”, “no oh oh”) (N = `r format(child_exclusions2$one_word, big.mark = ",")` for children, `r format(parent_exclusions2$one_word, big.mark = ",")` for parents).
 
-
-
 ## Results
 
-```{r load data}
-pre_no <- read.csv("processed_data/pre_no")
+```{r load_data}
+pre_no <- read.csv("processed_data/pre_no.csv")
 pre_no$no <- factor(pre_no$no, levels = c("no + NP + VP", "no + NP + VP (NEG)", "NP + VP + no", "NP + VP + no (NEG)", "NP + no + VP", "no + VP","no + NP", "other"))
 
-p_pre_no <- read.csv("processed_data/p_pre_no")
+p_pre_no <- read.csv("processed_data/p_pre_no.csv")
 p_pre_no$no <- factor(p_pre_no$no, levels = c("no + NP + VP", "no + NP + VP (NEG)", "NP + VP + no", "NP + VP + no (NEG)", "NP + no + VP", "no + VP","no + NP", "other"))
 
-pre_not <- read.csv("processed_data/pre_not")
+pre_not <- read.csv("processed_data/pre_not.csv")
 pre_not$not <- factor(pre_not$not, levels = c("not + NP + VP", "NP + VP + not", "NP + not + VP", "not + VP","not + NP","double neg", "other"))
 
-third_sg <- read.csv("processed_data/thirdsg_neg")
+third_sg <- read.csv("processed_data/thirdsg_neg.csv")
 third_sg <- mutate(third_sg, thirdsg = "Third-singular Utterances")
 
-other_pos <- read.csv("processed_data/other_pos_neg")
+other_pos <- read.csv("processed_data/other_pos_neg.csv")
 other_pos <- mutate(other_pos, thirdsg = "Non-third-singular Utterances")
 
-neg_3sg <- read.csv("processed_data/neg_3sg")
+neg_3sg <- read.csv("processed_data/neg_3sg.csv")
 ```
 
 We first examined the claim, originally proposed by @klimaBellugi1966, that children go through an initial stage during which their negative utterances are of the form NEG+S or S+NEG, where the NEG element consists of *no* or *not*, interchangeably. @klimaBellugi1966 took examples such as “no fall” and “no play that” as evidence for this stage. However, @deVilliers1979 pointed out that in order to identify the sentence boundary, an overt subject must be present– that is, the sentence must be of the form NEG+NP+VP or NP+VP+NEG in order to ensure that the negator is truly sentence-external. We followed this convention in our analysis.
@@ -394,7 +414,7 @@ With that being said, the differences between *no* as a communicator versus *no*
 Therefore we combined cases where *no* has a dependency relation of *COM* and *ENUM* together for further analyses, and we refer to the syntactic function of *no* in these cases as the *discourse response variable* (*Anaphoric??*).
 
 
-```{r load data}
+```{r load_data2}
 no <- read.csv('processed_data/study3_no.csv', header = T, sep = ',')
 no_child <- subset(no, Role %in% c('Target_Child'))
 no_parent <- subset(no, Role %in% c('Parent'))
@@ -435,7 +455,7 @@ ggplot(no_function, aes(x=Dependency, y=Proportion, fill=Role))+
 To compare the production of *no* as a discourse response variable between children and parents, we calculated the proportion of cases where *no* serves as *COM* or *ENUM* by the age of the child. As presented in Figure \@ref{fig:noCommunicatorAge}, while parents have been articulating *no* with this particular function since the child was as young as 7 months old, children did not start at least more regularly produce this negator until the age of 20 months. The frequency of the production of *no* by children is gradually becoming comparable to that of the parents around the age of 23 months.
 
 
-```{r load data}
+```{r load_data3}
 no_child_communicator <- subset(no_child, Negation_dep %in% c('COM', 'ENUM'))
 no_child_communicator$dep <- as.vector(rep('COMMUNICATOR', nrow(no_child_communicator)))
 no_child_communicator_age <- aggregate(data.frame(no_child_communicator$dep), by=list(no_child_communicator$Age),FUN=length)
@@ -476,7 +496,7 @@ ggplot(no_communicator_age, aes(x=Age, y=Proportion, fill=Role))+
 Besides *COM* and *ENUM*, we also analyzed utterances in which *no* served as a quantifier. For each speaker role, we calculated the proportions of instances that contain *no* as a quantifier given different ages of the children. As shown in Figure \@ref{fig:noQUANTAge}, parents' usage of *no* as a quantifier precedes that of the children.
 Children did not start using *no* with this particular syntactic function until around the age of 18; their production gradually becomes comparable to that of the parents at about 23 months. These findings are similar to the production of *no* as a discourse response variable presented in Figure \@ref{fig:noCommunicatorAge}.
 
-```{r load data}
+```{r load_data4}
 no_child_quantifier <- subset(no_child, Negation_dep %in% c('QUANT'))
 no_child_quantifier$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier)))
 no_child_quantifier_age <- aggregate(data.frame(no_child_quantifier$dep), by=list(no_child_quantifier$Age),FUN=length)
@@ -521,7 +541,7 @@ Taking a closer look at the usage of *no* as a quantifier, we examined the POS t
 The overall production of *no* is comparable between children and parents within each of these syntactic categories.
 
 
-```{r load data}
+```{r load_data5}
 no_child_quantifier <- subset(no_child, Negation_dep %in% c('QUANT'))
 no_child_quantifier_pos <- data.frame(table(no_child_quantifier$Head_POS))
 names(no_child_quantifier_pos) <- c('POS', 'Frequency')
@@ -559,7 +579,7 @@ ggplot(no_quantifier_pos, aes(x=POS, y=Proportion, fill=Role))+
 
 We then continued to examine the production of *no* as a quantifier given its most frequent syntactic heads. We focus specifically on cases when the syntactic head of *no* is either a noun or a pronoun, since the numbers of these cases are large enough to yield reliable estimates. In children's production, there are 5,455 utterances where *no* modifies a noun, and 1,100 cases where *no* modifies a pronoun. In parent's production, there are 5,823 utterances where *no* modifies a noun, and 1,018 instances where *no* modifies a pronoun. Results from Figure \@ref{fig:noQUANTnAge} and FIgure \@ref{fig:noQUANTproAge} are comparable to each other as well as comparble to cases when *no* was used as a discourse response variable. Parents' usage of *no* as a quantifier modifying a noun or a pronoun is earlier than that of children. On the other hand, children starts using *no* to quantify nouns or pronouns after around 18 months old; their production starts to bare syntactic resemblance to that of parents around the age of 22 months.
 
-```{r load data}
+```{r load_data6}
 no_child_quantifier_n <- subset(no_child, Negation_dep %in% c('QUANT') & Head_POS %in% c('n'))
 no_child_quantifier_n$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier_n)))
 no_child_quantifier_n_age <- aggregate(data.frame(no_child_quantifier_n$dep), by=list(no_child_quantifier_n$Age),FUN=length)
@@ -597,7 +617,7 @@ ggplot(no_quantifier_n_age, aes(x=Age, y=Proportion, fill=Role))+
   theme(legend.position="top")
 ```
 
-```{r load data}
+```{r load_data7}
 no_child_quantifier_pro <- subset(no_child, Negation_dep %in% c('QUANT') & Head_POS %in% c('pro'))
 no_child_quantifier_pro$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier_pro)))
 no_child_quantifier_pro_age <- aggregate(data.frame(no_child_quantifier_pro$dep), by=list(no_child_quantifier_pro$Age),FUN=length)
