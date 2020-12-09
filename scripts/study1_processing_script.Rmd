@@ -117,6 +117,14 @@ exclusions <-
 write.csv(exclusions, "../processed_data/token_exclusions.csv", row.names=FALSE)
 ```
 
+```{r}
+english_tokens %>%
+  filter(age<30v, word!="other", speaker=="child") %>%
+  group_by(corpus_name, target_child_name) %>%
+  summarize(n_tokens=n()) %>%
+  arrange(desc(n_tokens))
+```
+
 ## Coding Speaker Roles
 
 Here we group mothers and fathers together as "parents".

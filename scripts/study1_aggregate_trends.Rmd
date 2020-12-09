@@ -356,13 +356,6 @@ word_table %>%
 eng_utterances <- read_csv("../processed_data/english_utterances_processed.feather")
 ```
 
-```{r}
-eng_utterances %>%
-  filter(speaker == "child", no==1) %>%
-  arrange(age)
-```
-
-
 ```{r negativePercent}
 negative_percent <-
   eng_utterances %>%

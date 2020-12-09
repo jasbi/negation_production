@@ -4,6 +4,7 @@
 
 # Session Data files
 .RData
+.RDataTmp
 
 # Example code in package build process
 *-Ex.R
@@ -61,9 +62,12 @@ raw_data/eng_child_negation.csv
 	raw_data/unfiltered_eng_parent_utterances.csv
 
 
+# Cogsci files
 
+COGSCI2021/neg_combos_cogsci2021.log
 
-
+# BUCLD
+BUCLD2020/Expanded BUCLD 2020 Negation Production.gslides
 
 
 
