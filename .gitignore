@@ -49,7 +49,7 @@ raw_data/eng_utterances.feather
 processed_data/english_tokens_processed.feather
 processed_data/english_utterances_processed.feather
 
-/papers/
+/literature/
 /SALT/
 /bucld_abstract/
 /negation_production_files/
