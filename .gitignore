@@ -17,6 +17,8 @@
 
 # RStudio files
 .Rproj.user/
+negation_production.Rproj
+COGSCI2021/COGSCI2021.Rproj
 
 # produced vignettes
 vignettes/*.html

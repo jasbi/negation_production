@@ -40,13 +40,14 @@ There has been several influential hypotheses on the conceptual origin of negati
 
 In this paper, we address the same issues with a slightly different approach. We start with the widely accepted assumption that negation is a higher order operator or function, operating on lower level concepts. The question we ask is: what type of concepts does linguistic negation operate on in early child language? Do we find negation starting in a limited conceptual domain and then expanding to others? Or do we find it operating across different conceptual domains as early as we can attest it?
 
-@darwin1872expression thought that negation has roots in the expression of human emotions and desires. He hypothesized that the earliest manifestation of negation and affirmation in infants is when they refuse food from parents, by withdrawing their heads laterally, or when they accept the food, by inclining their heads forward. He suggested that head shaking and nodding as common signs for negation and affirmation have developed from this early habit. 
+@darwin1872expression thought that negation has roots in the expression of human emotions and desires. He hypothesized that the earliest manifestation of negation and affirmation in infants is when they refuse food from parents, by withdrawing their heads laterally, or when they accept the food, by inclining their heads forward. He suggested that head shaking and nodding as common signs for negation and affirmation have developed from this early habit. In the discussion of early functions of negative morphemes like *no*, many researchers proposed that "rejection" in utterances like "" 
 
 Emotional: rejection (I not like it, not want it)
 
+Motor control: prohibition (do not spill milk), inability (I cannot zip it) 
+
 Perceptual: non-existence (no juice, no more milk, no fish in the bathroom, I do not have underpants), failure, Locatives (no in there, daddy was not on the phone), non-events (the dog not barking)
 
-Motor control: prohibition (do not spill milk), inability (I cannot zip it) 
 
 Linguistic: labeling and word learning (this is not a bunny, not red, this isn't a reptile)
 
@@ -56,6 +57,16 @@ Things that stay outside: why not, not now/today/again (temporal), the dog not b
 
 
 Caveat on production vs comprehension. 
+
+|Domain|Functions|Linguistic Signature|Examples|
+|------|--------|--------------------|
+|Emotion|Rejection| |
+|Motor Control| Prohibition, Inability | |
+|Perception| non-existence | no-N, no-more-N, locatives | the dog not barking | 
+|Language Learning| Labeling | 
+|Epistemic| communicating knowlege state | know, think, remember  | I not know |
+|Unknown| Temporal | now, today, again | not today |
+|Uknown | Causal | why | why not? |
 
 # Study
 
