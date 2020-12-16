@@ -38,13 +38,17 @@ Negation is an abstract concept, lexicalized in all previously studied human lan
 
 There has been several influential hypotheses on the conceptual origin of negation. 
 
-In this paper, we address the same issues with a slightly different approach. We start with the widely accepted assumption that negation is a higher order operator, affecting the meaning of lower level concepts. The question we ask is: what type of concepts does linguistic negation operate on in early child language? Do we find negation starting in a limited conceptual domain and then expanding to others? Or do we find it operating across different conceptual domains as early as we can attest it?
+In this paper, we address the same issues with a slightly different approach. We start with the widely accepted assumption that negation is a higher order operator or function, operating on lower level concepts. The question we ask is: what type of concepts does linguistic negation operate on in early child language? Do we find negation starting in a limited conceptual domain and then expanding to others? Or do we find it operating across different conceptual domains as early as we can attest it?
+
+@darwin1872expression thought that negation has roots in the expression of human emotions and desires. He hypothesized that the earliest manifestation of negation and affirmation in infants is when they refuse food from parents, by withdrawing their heads laterally, or when they accept the food, by inclining their heads forward. He suggested that head shaking and nodding as common signs for negation and affirmation have developed from this early habit. 
 
 Emotional: rejection (I not like it, not want it)
 
 Perceptual: non-existence (no juice, no more milk, no fish in the bathroom, I do not have underpants), failure, Locatives (no in there, daddy was not on the phone), non-events (the dog not barking)
 
-Motor control: prohibition (do not spill milk), inability (I cannot zip it) 4. Linguistic: labeling and word learning (this is not a bunny, not red, this isn't a reptile)
+Motor control: prohibition (do not spill milk), inability (I cannot zip it) 
+
+Linguistic: labeling and word learning (this is not a bunny, not red, this isn't a reptile)
 
 Epistemic: know, think, etc. (I not know)
 
