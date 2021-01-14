@@ -57,14 +57,13 @@ processed_data/english_utterances_processed.feather
 /negation_production_files/
 
 raw_data/eng_child_negation.csv
-<<<<<<< HEAD
-	raw_data/eng_child_utterances.csv
-	raw_data/eng_parent_negation.csv
-	raw_data/eng_parent_utterances.csv
-	raw_data/ger_child_utterances.csv
-	raw_data/unfiltered_eng_child_utterances.csv
-	raw_data/unfiltered_eng_parent_utterances.csv
 
+raw_data/eng_child_utterances.csv
+raw_data/eng_parent_negation.csv
+raw_data/eng_parent_utterances.csv
+raw_data/ger_child_utterances.csv
+raw_data/unfiltered_eng_child_utterances.csv
+raw_data/unfiltered_eng_parent_utterances.csv
 
 # Cogsci files
 
@@ -73,14 +72,3 @@ COGSCI2021/neg_combos_cogsci2021.log
 # BUCLD
 BUCLD2020/Expanded BUCLD 2020 Negation Production.gslides
 BUCLD2020/161_talk.mp4
-
-
-
-=======
-raw_data/eng_child_utterances.csv
-raw_data/eng_parent_negation.csv
-raw_data/eng_parent_utterances.csv
-raw_data/ger_child_utterances.csv
-raw_data/unfiltered_eng_child_utterances.csv
-raw_data/unfiltered_eng_parent_utterances.csv
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
