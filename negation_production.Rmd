@@ -71,7 +71,6 @@ library(gridExtra)
 
 Under Construction! 
 
-<<<<<<< HEAD
 <!-- Outline
 - Negation is an important abstract logical concept. How does it emerge in humans? Possible role of language.
   + In a language like English several morphemes encode negation (no, not, n't). What are their developmental profiles? (Study 1)
@@ -80,16 +79,13 @@ Under Construction!
 --->
 
 <!-- Start paragraph
-=======
 
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
 In a coffee shop, it is common to see the menu divided into "coffee" and "not coffee" sections. As expected, the coffee section has drinks that contain coffee like espresso, latte, and cappuccino. The "not coffee" section, however, contains a variety of items including tea, orange juice, and lemonade. What brings these items together is not what they are, but rather what they are not; and the word *not* combined with the word *coffee* allows us to capture this complex concept. All known human languages have the ability to create negative expressions from a variety of positive ones they already have in a productive and combinatorial manner. Compositionality and abstractness are important components that make human languages so powerful. But how does this linguistic ability develop? How do we learn to use linguistic negation?
 
 Possible origins: 1. Metalinguistic and conceptual categorization (labeling) 2. Higher Perceptual (existence in "there is a" or with PPs like "it's in the bucket") 3. affective (rejections, wants, likes) 4. Motor (prohibitions). Two hypothesis: 1. unified concept of negation that is incorporated to operate on different representations and 2. heterogeneous concepts of negation that develop independently but can be generalized into a single concept.
 
 Negation in natural language is a concept that operates on concepts. It is higher order. It is likely that it starts as such early on with labeling acts; as a way of organizing concepts.
 
-<<<<<<< HEAD
 Study 1: previous studies have suggested a non-unified or stage-like development. This study shows that even though a piecemeal and slow development of abstract negation is possible, the production data is not conclusive. We show that the proposed stages of development in production are either child-specific and not found when we aggregate data across children, or they are a phenomena likely caused by production limitations.
 
 Study 2: delves deeper into claims of non-adult like productions
@@ -109,8 +105,6 @@ Origins Hypotheses:
 
 6. 
 -->
-=======
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
 
 ## Previous Production Studies of Negation in Children
 
@@ -153,17 +147,7 @@ For samples of parents' and children's speech, we used the online database [chil
 
 In our token-based analysis, all word tokens were tagged for the following information: 1. the speaker role (parent vs. child), 2. the age of the child when the word was produced in months, 3. whether the word was positive or negative, and 4. the type of negative word produced. For this study we considerd the following classes of negative morphemes in English: the forms *no* and *not*, all instances of negative auxiliary forms with *n't* as well as their positive forms without *n't* as controls. Unintelligible tokens were excluded (N = `r format(exclusions$unintelligible, big.mark=",")`), as well as tokens that had missing information on children's age (N = `r format(exclusions$missing, big.mark=",")`). Third, tokens outside the age range of 1 to 6 years were excluded (N = `r format(exclusions$age, big.mark=",")`) since children did not produce much outside this age range. These exclusions resulted in the exclusion of data `r exclusions$n_chi_total-exclusions$n_chi_age` children from the final analysis. Similarly, in our utterance-based analysis, each utterance was tagged for the following: 1. the number of tokens in the utterance 2. the speaker role (parent vs. child), 2. the age of the child, 3. whether the utterance contained *no*, *not*, or *n't*. Utterances with missing information on children's age (N = `r format(uexclusions$missing, big.mark=",")`) as well as those outside the age range of 1 to 6 years were excluded (N = `r format(uexclusions$age, big.mark=",")`). The collection contained X utterances from N children.
 
-<<<<<<< HEAD
 We also looked at individual children's production of negative morphemes. We selected the following corpora based on the fact that they had available longitudinal data in the 1-3 years age range: Brown [@brown1973first], Bloom [@bloom1970; @bloom1974imitation], Braunwald [@braunwald1971mother], Suppes [@suppes1974semantics], Sachs [@sachs1983talking], Manchester [@theakston2001role], MPI-EVA-Manchester and Thomas [@lieven2009two], Providence [@demuth2006word], and Lara [@rowland2007explaining]. Three of these corpora have been used in previous research reported in the literature review above: Brown, Bloom, and MPI-EVA-Manchester.
-
-<!--
-=======
-
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
-3. the type of the utterance the word appeared in (declarative, question, imperative, other)[^1]
-
-[^1]: This study grouped utterance types into four main categories: "declarative", "question", "imperative", and "other". Utterance type categorization followed the convention used in the [TalkBank manual](https://talkbank.org/manuals/CHAT.html#_Toc486414422). The utterance types are similar to sentence types (declarative, interrogative, imperative) with one exception: the category "question" consists of interrogatives as well as rising declaratives (i.e. declaratives with rising question intonation). In the transcripts, declaratives are marked with a period, questions with a question mark, and imperatives with an exclamation mark. It is important to note that the manual also provides [terminators for special-type utterances](https://talkbank.org/manuals/CHAT.html#_Toc486414431). Among the special type utterances, this study included the following in the category "questions": trailing off of a question, question with exclamation, interruption of a question, and self-interrupted question. The category imperatives also included "emphatic imperatives". The rest of the special type utterances such as "interruptions" and "trailing off" were included in the category "other".
-
 
 ## Results
 
@@ -202,11 +186,7 @@ all_utterance_relfreqs %>%
   theme_classic()
 ```
 
-<<<<<<< HEAD
 @StromswoldZimmermann2000 found that in German-speaking children, the word *nein* was produced before *nicht* and discussed three potential causes for this order of production: input frequency, phonetic complexity, and syntactic complexity. They explained that input frequency cannot be the cause because in German-speaking children's input *nicht* was more frequent than *nein*. Similarly, English-speaking children hear more instances of *n't* than *no* so input frequency cannot be the cause in English either. With respect to phonetic complexity, German *nicht* has a voiceless palatal fricative that can potentially be hard for children and delay its production. However, English *no* and *not* are quite similar and do not contain phones that are known to be particularly hard for children. This leaves us with syntactic complexity which is an obvious difference between isolated one-word negators like *no*/*nein* and multiword negators like *not*/*nicht*. Given that children start with shorter utterances (typically one word) and produce longer ones as they grow up, they may produce *no* earlier than *not* and *n't* simply because *no* can appear as a single word utterance. In other words, even a hypothetical child that comprehends all negative forms *no*, *not*, and *nt* may produce *no* earlier than the other two because of production limitations. We call this the production bottleneck hypothesis.
-=======
-@StromswoldZimmermann2000 found that in German-speaking children, the word *nein* was produced before *nicht* and discussed three potential causes for this order of production: input frequency, phonetic complexity, and syntactic complexity. They explained that input frequency cannot be the cause because in German-speaking children's input *nicht* was more frequent than *nein*. Similarly, English-speaking children hear more instances of *n't* than *no* so input frequency cannot be the cause in English either. With respect to phonetic complexity, German *nicht* has a voiceless palatal fricative that can potentially be hard for children and delay its production. However, English *no* and *not* are quite similar and do not contain phones that are known to be particularly hard for children. This leaves us with syntactic complexity which is an obvious difference between isolated one-word negators like *no*/*nein* and multiword negators like *not*/*nicht*. Given that children start with shorter utterances (typically one word) and produce longer ones as they grow up, they may produce *no* earlier than *not* and *n't* simply because *no* can appear as a single word utterance. In other words, even a hypothetical child that comprehends all negative forms *no*, *not*, and *nt* may produce *no* earlier than the other two because of production limitations.
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
 
 One way to test the bottleneck hypothesis in our dataset is to focus on children's multiword utterances. Is the main contributor to the high frequency of *no* in children's speech the single-word utterances? To answer this question we removed single-token utterances like "yes", "no", and "oh", as well as utterances that combined such elements in a repetitive way like "no no" or "oh no" from children and parents' speech. If early appearance and high frequency of *no* is mainly due to short and repetitive utterances produced by children early in their development, it should disappear once we focus on multiword utterances. As Figure \@ref(fig:multiwordFrequency) shows, this is largely what we found. While the frequencies of *not* and *n't* in multi-word productions were similar to their overall frequencies seen before in Figure \@ref(fig:negationRelativeFrequency), the word *no* lost its large advantage in frequency and early occurrence, showing a very similar production trajectory as the other two negative morphemes. 
 
@@ -224,7 +204,6 @@ multiword_relfreqs <- readRDS("processed_data/multiword_relfreqs")
   theme_classic()
 ```
 
-<<<<<<< HEAD
 Another way to test the bottleneck hypothesis is to artificially impose a production limitation on parents' speech. To achieve this in our dataset, we grouped utterances into monthly age bins and sampled parents' utterances in each age bin based on the utterance lengths produced by children. This way in each monthly age bin, we only included adult utterances that matched those of children's in length. This approach limits parents' speech to be shorter earlier and longer later. The result of this artificial bottleneck on parents' production of negative morphemes is shown in Figure \@ref(fig:bottleneck) side by side with children's negative productions. While previously parents produced *n't* more frequently than *no* and *not* throughout children's development (Figure \@ref(fig:negationRelativeFrequency)), after introducing the bottleneck parents show a higher relative frequency for *no* than *not* and *n't* in younger ages similar to what is seen in children. As children's age increases, the relative frequency of *no* decreases and those of *not* and *n't* increase in a way that mimicks the pattern seen in children's production, until after 40 months the order of production reverses and adults produce *n't* more frequently than the other forms.
 
 Taken together, the two tests provided above indicate that the earlier emergence and high frequency of *no* in children's speech may be due to children's limited capacity in producing longer utterances and not necessarily earlier acquisition of this morpheme. Therefore, the question "which form is acquired earlier" may be better addressed by careful comprehension studies in the 12-24 month age range. It is important to note here that both Figure \@ref(fig:multiwordFrequency) and Figure \@ref(fig:negationRelativeFrequency) suggest the 12-24 months age range as a  period where all three negative morphemes may receive their early form-meaning mappings. In order to better understand such early mappings of negation and their development we need more comprehension studies in this age range.
@@ -242,9 +221,6 @@ bottleneck_relfreqs %>%
 ```
 
 Moving to the second question: do negative auxiliaries appear before positive ones? Figure \@ref(fig:auxRelFreq) shows the relative frequency of positive and negative auxiliary forms in the speech of children and their parents. Our results show that overall, children start producing the positive and negative auxiliary forms around the same time and always produce the positive forms at a higher rate than negative ones. This is also true for individual auxiliary words such as *do/don't* and *can/can't* which are produced earlier than others. Therefore, the claim that negative auxiliary forms are produced before their positive counterparts is not supported by the available production data and consequently production data does not provide support for the hypothesis that auxiliary negative forms are learned as unanalyzed wholes.  
-=======
-Moving to the second question: do negative auxiliaries appear before positive ones? Figure \@ref(fig:auxRelFreq) shows the relative frequency of positive and negative auxiliary forms in the speech of children and their parents. Our results show that overall, children start producing the positive and negative auxiliary forms around the same time and always produce the positive forms at a higher rate than negative ones. This is also true for individual auxiliary words such as *do/don't* and *can/can't* which are produced earlier than others. Therefore, the claim that negative auxiliary forms are produced before their positive counterparts is not supported by the available production data and consequently production data does not support the hypothesis that auxiliary negative forms are learned as unanalyzed wholes.
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
 
 ```{r auxRelFreq, fig.env="figure", fig.width=6, fig.height=2.5, fig.cap="Relative frequency (parts per thousand) of positive auxiliary forms such as *do*, *are*, and *can* as well as their contracted negatives in the speech of parents and children."}
 category_table <- readRDS(file="processed_data/category_table")
