@@ -15,10 +15,20 @@ library(childesr)
 library(tidyverse)
 library(tm)
 library(dplyr)
-age_limits <- c(18, 36)
+age_limits <- c(12, 36)
 ```
 
 ```{r functions}
+count_types <- function(string){
+ n <- nlevels(as.factor(unlist(strsplit(string, " "))))
+ return(n)
+}
+
+count_tokens <- function(string){
+ n <- unlist(strsplit(string, " "))
+ return(length(n))
+}
+
 # Function removing repeated 'no'
 fix_nos <- function(x)
 {
@@ -27,51 +37,6 @@ fix_nos <- function(x)
   result <- gsub('^ ?(no )+', 'no ', result)
   result <- gsub('^ ?(no ?)+$', 'no', result)
   return(result)
-}
-
-# Return true if utterance length matches pos length
-check_lengths <- function(utterance, pos)
-{
-  return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
-}
-
-# Bin utterances by month
-bin_age <- function(age)
-{
-  x = floor(age)
-  paste(formatC(x, width=2, flag="0"), formatC(x+1, width=2, flag="0"), sep = "-")
-}
-
-# Tag each utterance for the negation types it contains
-# neg_tag <- function(gloss, pos)
-# {
-#   
-#   if (pos == "") {return("no_negation")}
-#   neg <- list()
-#   gloss_list = strsplit(gloss," ")
-#   pos_list <- unlist(strsplit(pos, " "))
-#   for (g in 1:length(gloss_list[[1]])) {
-#     if (gloss_list[[1]][g] == "no"){
-#       neg = append(unlist(neg), paste("no", pos_list[g], sep = ":"))
-#     }
-#   }
-# }
-
-# Modify part of speech to insert form of'do' where relevant
-do_tag <- function(utt, pos)
-{
-  d <-  c("don\'t", "doesn\'t", "didn\'t", "do", "does", "did")
-  u_list <- strsplit(utt, " ")
-  pos_list <- strsplit(pos, " ")
-  for (g in 1: length(u_list[[1]]))
-  {
-    word <- u_list[[1]][g]
-    if (word %in% d)
-    {
-      pos_list[[1]][g] <- word
-    }
-  }
-  return(paste(pos_list[[1]], collapse = " "))
 }
 
 # Modifications to part_of_speech column
@@ -99,6 +64,118 @@ result <- removeWords(paste(pos_list, collapse = " "), "NA")
   return (result)
 }
 
+# Return true if utterance length matches pos length
+check_lengths <- function(utterance, pos)
+{
+  return(length(strsplit(utterance, " ")[[1]]) == length(strsplit(pos, " ")[[1]]))
+}
+
+# Bin utterances by month
+bin_age <- function(age)
+{
+  x = floor(age)
+  paste(formatC(x, width=2, flag="0"), formatC(x+1, width=2, flag="0"), sep = "-")
+}
+
+# Tag each utterance for the negation types it contains
+neg_tag <- function(gloss, pos)
+{
+  
+  if (pos == "") {return("no_negation")}
+  neg <- list()
+  gloss_list = strsplit(gloss," ")
+  pos_list <- unlist(strsplit(pos, " "))
+  for (g in 1:length(gloss_list[[1]])) {
+    if (gloss_list[[1]][g] == "no"){
+      neg = append(unlist(neg), paste("no", pos_list[g], sep = ":"))
+    }
+  }
+  
+  
+  if(grepl('(^| )not( |$)', gloss)) {neg = append(unlist(neg), "not")}
+  if(grepl('(^| )[a-z]*n\'t( |$)', gloss)) {neg = append(unlist(neg), "nt")}
+  if(length(neg) == 0){return(list("no_negation")[[1]])}
+  else {return(neg)}
+}
+
+# Modify part of speech to insert form of'do' where relevant
+do_tag <- function(utt, pos)
+{
+  d <-  c("don\'t", "doesn\'t", "didn\'t", "do", "does", "did")
+  u_list <- strsplit(utt, " ")
+  pos_list <- strsplit(pos, " ")
+  for (g in 1: length(u_list[[1]]))
+  {
+    word <- u_list[[1]][g]
+    if (word %in% d)
+    {
+      pos_list[[1]][g] <- word
+    }
+  }
+  return(paste(pos_list[[1]], collapse = " "))
+}
+
+# pre_no_tag <- function(pos, gloss) {
+#   if(grepl('^no:\\w+( det)?(( adv)* adj)* n (adv )*(v|part|mod|cop)( adv)*', pos)) {
+#     if(grepl('( |^)no .*n\'t', gloss) | grepl('( |^)no (.* )?not?', gloss)){return("no + S_NEG")}
+#     else return("no + S_POS")}
+#   else if (grepl('(det )?((adv )*adj )*n (adv )*(v|part|mod|cop)( adv)* .*no:co$', pos)& !grepl('(say|said)( oh)? no', gloss)) {
+#     if(grepl('*n\'t( .*)* no( |$)', gloss) | grepl('not( .*)* no( |$)', gloss)){return("S_NEG + no")}
+#     else return("S_POS + no")}
+#   else if (grepl('(det )?((adv )*adj )*n no:\\w+ (adv )*(v|part|mod|cop)( adv)* ?.*', pos)){return("NP + no + VP")}
+#   else if (grepl('no:\\w+ (adv )*(v|part|mod|cop)( adv)*(( det)?(( adv)* adj)*)?$', pos)){return("no + VP")}
+#   else if (grepl('no:\\w+( det )?(( adv)* adj)* n$', pos)){return("no + NP")}
+#   else {return("other")}
+# }
+
+pre_no_tag <- function(pos, gloss) {
+  if(grepl('^no:\\w+( det)?(( adv)* adj)* n (adv )*(v|part|mod|cop)( adv)*', pos)) {
+    if(grepl('( |^)no .*n\'t', gloss) | grepl('( |^)no (.* )?not?', gloss)){return("no + S_NEG")}
+    else return("no + S_POS")}
+  else if (grepl('(det )?((adv )*adj )*n (adv )*(v|part|mod|cop)( adv)* .*no:co$', pos)& !grepl('(say|said)( oh)? no', gloss)) {
+    if(grepl('*n\'t( .*)* no( |$)', gloss) | grepl('not( .*)* no( |$)', gloss)){return("S_NEG + no")}
+    else return("S_POS + no")}
+  else if (grepl('(det )?((adv )*adj )*n no:\\w+ (adv )*(v|part|mod|cop)( adv)* ?.*', pos)){return("NP + no + VP")}
+  else if (grepl('^no:\\w+ .*', pos)){return("no + X")}
+  else if (grepl('.* no:\\w+$', pos)){return("X + no")}
+  else {return("other")}
+}
+
+# pre_not_tag <- function(pos, gloss) {
+#   if(grepl('^not( det)?(( adv)* adj)* n (adv )*(v|part|mod|cop)( adv)*', pos)) {return("not + S")}
+#   else if (grepl('(det )?((adv )*adj )*n (adv )*(v|part|mod|cop)( adv)* .*not$', pos)& !grepl('(say|said)( oh)? not', gloss))
+#     {return("S + not")}
+#   else if (grepl('(det )?((adv )*adj )*n not (adv )*(v|part|mod|cop)( adv)* ?.*', pos)){return("NP + not + VP")}
+#   else if (grepl('not (adv )*(v|part|mod|cop)( adv)*(( det)?(( adv)* adj)*)?$', pos)){return("not + VP")}
+#   else if (grepl('not( det )?(( adv)* adj)* n$', pos)){return("not + NP")}
+#   else if (grepl('^(adv )*(v|part|mod|cop)( adv)*(( det)?(( adv)* adj)*)? not$', pos)){return("VP + not")}
+#   else if (grepl('^(det )?((adv )*adj )*n not$', pos)){return("NP + not")}
+#   else {return("other")}
+# }
+
+pre_not_tag <- function(pos, gloss) {
+  if(grepl('^not( det)?(( adv)* adj)* n (adv )*(v|part|mod|cop)( adv)*', pos)) {return("not + S")}
+  else if (grepl('(det )?((adv )*adj )*n (adv )*(v|part|mod|cop)( adv)* .*not$', pos)& !grepl('(say|said)( oh)? not', gloss))
+    {return("S + not")}
+  else if (grepl('(det )?((adv )*adj )*n not (adv )*(v|part|mod|cop)( adv)* ?.*', pos)){return("NP + not + VP")}
+  else if (grepl('^not .*', pos)){return("not + X")}
+  else if (grepl('^.* not$', pos)){return("X + not")}
+  else {return("other")}
+}
+
+pre_dont_tag <- function(pos, gloss) {
+  pos = str_replace_all(pos, 'pro:\\w*|n:\\w*', 'n')
+  if((grepl('( |^)no( |$)', gloss) & grepl('not', gloss)) |
+     (grepl('( |^)no( |$)', gloss) & grepl('n\'t', gloss))|
+     (grepl('not', gloss) & grepl('n\'t', gloss))) {return('double neg')}
+  else if(grepl('don\'t (det )?n( .*)? (v|part|mod|cop) ?.*', pos)) {return("don\'t + NP + VP")}
+  else if (grepl('n( .*)? (v|part|mod|cop) .*don\'t$', pos)& !grepl('(say|said) don\'t', gloss)) {return("NP + VP + don\'t")}
+  else if (grepl('n don\'t (v|part|mod|cop) ?.*', pos)){return("NP + don\'t + VP")}
+  else if (grepl('don\'t (v|part|mod|cop) ?.*', pos)){return("don\'t + VP")}
+  else if (grepl('don\'t (det )?n ?.*', pos)){return("don\'t + NP")}
+  else {return("other")}
+}
+
 # Replace lexical verbs with v and proper nouns with n:prop in gloss; for 3sg+neg+v analysis
 v_tag <- function(gloss, pos)
 {
@@ -112,30 +189,6 @@ v_tag <- function(gloss, pos)
     }
   }
   return(paste(gloss_list, collapse = " "))
-}
-
-# Tag syntactic position of 'not'
-pre_not_tag <- function(pos, gloss) {
-  if(grepl('^not( det)?(( adv)* adj)* n (adv )*(v|part|mod|cop)( adv)*', pos)) {return("not + S")}
-  else if (grepl('(det )?((adv )*adj )*n (adv )*(v|part|mod|cop)( adv)* .*not$', pos)& !grepl('(say|said)( oh)? not', gloss))
-    {return("S + not")}
-  else if (grepl('(det )?((adv )*adj )*n not (adv )*(v|part|mod|cop)( adv)* ?.*', pos)){return("NP + not + VP")}
-  else if (grepl('^not .*', pos)){return("not + X")}
-  else if (grepl('^.* not$', pos)){return("X + not")}
-  else {return("other sentence internal")}
-}
-
-pre_no_tag <- function(pos, gloss) {
-  if(grepl('^no:\\w+( det)?(( adv)* adj)* n (adv )*(v|part|mod|cop)( adv)*', pos)) {
-    if(grepl('( |^)no .*n\'t', gloss) | grepl('( |^)no (.* )?not?', gloss)){return("no + S_NEG")}
-    else return("no + S_POS")}
-  else if (grepl('(det )?((adv )*adj )*n (adv )*(v|part|mod|cop)( adv)* .*no:co$', pos)& !grepl('(say|said)( oh)? no', gloss)) {
-    if(grepl('*n\'t( .*)* no( |$)', gloss) | grepl('not( .*)* no( |$)', gloss)){return("S_NEG + no")}
-    else return("S_POS + no")}
-  else if (grepl('(det )?((adv )*adj )*n no:\\w+ (adv )*(v|part|mod|cop)( adv)* ?.*', pos)){return("NP + no + VP")}
-  else if (grepl('^no:\\w+ .*', pos)){return("no + X")}
-  else if (grepl('.* no:\\w+$', pos)){return("X + no")}
-  else {return("other sentence internal")}
 }
 
 # Returns true if proper noun ends in s
@@ -153,18 +206,13 @@ find_plurals <- function(gloss, pos)
   }
   return(FALSE)
 }
-
 ```
 
-```{r get child data}
+```{r get child data, warning=TRUE, include=FALSE}
 # child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
+# write.csv(child_utterances, "raw_data/unfiltered_eng_child_utterances.csv", row.names = FALSE)
 # 
-# 
-# ## REMOVE IN FINAL VERSION ##########
-# # write.csv(child_utterances, "raw_data/unfiltered_eng_child_utterances.csv", row.names = FALSE)
 # child_utterances <- read.csv("raw_data/unfiltered_eng_child_utterances.csv", stringsAsFactors = FALSE)
-# ############
-# 
 # 
 # child_n_original_utterances <- nrow(child_utterances)
 # n_chi_orr <- child_utterances$speaker_id %>% unique() %>% length()
@@ -181,7 +229,10 @@ find_plurals <- function(gloss, pos)
 # child_utterances <- child_utterances %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
 #  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  filter(!grepl('^ ?$',clean_utterances))
+#  filter(!grepl('^ ?$',clean_utterances)) %>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 # 
 # child_utterances <- child_utterances %>%
 #   #remove repeated 'no'
@@ -189,11 +240,14 @@ find_plurals <- function(gloss, pos)
 #   # Remove utterances that don't line up with their pos
 #   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
 #   # Bin child age by month
-#   mutate(bin = bin_age(target_child_age)) #%>%
+#   mutate(bin = bin_age(target_child_age)) %>%
 #   # Tag utterance for negation type/existence
-#   #mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
+#   mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
 # 
 # child_n_incorrect_pos <- child_n_original_utterances - child_n_not_transcribed - nrow(child_utterances)
+# 
+# child_utterances <- mutate(child_utterances, n_tokens_clean = factor(n_tokens_clean, levels = append(as.character(1:4), c(">4"))))
+# child_utterances$n_tokens_clean[is.na(child_utterances$n_tokens_clean)] <- ">4"
 # 
 # child_utterances <- child_utterances %>%
 #   mutate(dont_pos = mapply(do_tag, clean_utterances, part_of_speech))
@@ -203,7 +257,10 @@ find_plurals <- function(gloss, pos)
 # 
 # child_negation <-
 #  child_utterances %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances))
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))
 # 
 # child_n_neg <- nrow(child_negation)
 # 
@@ -221,27 +278,23 @@ find_plurals <- function(gloss, pos)
 # child_n_final_negatives <- nrow(child_negation)
 # n_chi_neg <- child_negation$speaker_id %>% unique() %>% length()
 # 
-# #child_utterances <- child_utterances %>% unnest(neg)
-# child_negation <- child_negation %>% unnest(neg)
-# 
-# 
-# #### REMOVE IN FINAL VERSION ############
+# child_utterances <- child_utterances %>% unnest(neg)
 # write.csv(child_utterances, "raw_data/eng_child_utterances.csv", row.names = FALSE)
+# 
+# child_negation <- child_negation %>% unnest(neg)
 # write.csv(child_negation, "raw_data/eng_child_negation.csv", row.names = FALSE)
 
 child_utterances <- read.csv("raw_data/eng_child_utterances.csv", stringsAsFactors=FALSE)
 child_negation <- read.csv("raw_data/eng_child_negation.csv", stringsAsFactors=FALSE)
-############################################
+
 
 ```
 
-```{r get parent data}
-#parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
-
-########### REMOVE IN FINAL VERSION ####################
+```{r get parent data, echo=FALSE}
+# parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
 # write.csv(parent_utterances, "raw_data/unfiltered_eng_parent_utterances.csv", row.names = FALSE)
-#  parent_utterances <- read.csv("raw_data/unfiltered_eng_parent_utterances.csv", stringsAsFactors=FALSE)
-# #################################
+# 
+# parent_utterances <- read.csv("raw_data/unfiltered_eng_parent_utterances.csv", stringsAsFactors=FALSE)
 # 
 # parent_n_original_utterances <- nrow(parent_utterances)
 # 
@@ -257,7 +310,10 @@ child_negation <- read.csv("raw_data/eng_child_negation.csv", stringsAsFactors=F
 # parent_utterances <- parent_utterances %>%
 #  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
 #  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  filter(!grepl('^ ?$',clean_utterances))
+#  filter(!grepl('^ ?$',clean_utterances)) %>%
+#  mutate(n_types_clean = unlist(lapply(clean_utterances, count_types))) %>%
+#  mutate(n_tokens_clean = unlist(lapply(clean_utterances, count_tokens))) %>%
+#  mutate(type_token_ratio = n_types_clean/n_tokens_clean)
 # 
 # parent_utterances <- parent_utterances %>%
 #   #remove repeated 'no'
@@ -265,20 +321,26 @@ child_negation <- read.csv("raw_data/eng_child_negation.csv", stringsAsFactors=F
 #   # Remove utterances that don't line up with their pos
 #   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
 #   # Bin child age by month
-#    mutate(bin = bin_age(target_child_age)) #%>%
+#   mutate(bin = bin_age(target_child_age)) %>%
 #   # Tag utterance for negation type/existence
-#   # mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
+#   mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
 # 
 # parent_n_incorrect_pos <- parent_n_original_utterances - parent_n_not_transcribed - nrow(parent_utterances)
 # 
+# parent_utterances <- mutate(parent_utterances, n_tokens_clean = factor(n_tokens_clean, levels = append(as.character(1:4), c(">4"))))
+# parent_utterances$n_tokens_clean[is.na(parent_utterances$n_tokens_clean)] <- ">4"
+# 
 # parent_utterances <- parent_utterances %>%
-#   mutate(dont_pos = mapply(do_tag, clean_utterances, part_of_speech))
+#   mutate(dont_pos = mapply(dont_tag, clean_utterances, part_of_speech))
 # 
 # parent_n_final_utterances <- nrow(parent_utterances)
 # 
 # parent_negation <-
 #  parent_utterances %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances))
+#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances)) %>%
+#  mutate(can = grepl('^can | can | can$|cannot|can\'t', clean_utterances)) %>%
+#  mutate(do = grepl('( |^)do( |$)|don\'t|( |^)does( |$)|doesn\'t|( |^)did( |$)|didn\'t', clean_utterances)) %>%
+#  mutate(want = grepl('^want | want | want$', clean_utterances))
 # 
 # parent_n_neg <- nrow(parent_negation)
 # 
@@ -294,16 +356,15 @@ child_negation <- read.csv("raw_data/eng_child_negation.csv", stringsAsFactors=F
 # 
 # parent_n_final_negatives <- nrow(parent_negation)
 # 
-# #parent_utterances <- parent_utterances %>% unnest(neg)
-# #parent_negation <- parent_negation %>% unnest(neg)
-# 
-# #### REMOVE IN FINAL VERSION ############
+# parent_utterances <- parent_utterances %>% unnest(neg)
 # write.csv(parent_utterances, "raw_data/eng_parent_utterances.csv", row.names = FALSE)
+# 
+# parent_negation <- parent_negation %>% unnest(neg)
 # write.csv(parent_negation, "raw_data/eng_parent_negation.csv", row.names = FALSE)
 
 parent_utterances <- read.csv("raw_data/eng_parent_utterances.csv", stringsAsFactors=FALSE)
 parent_negation <- read.csv("raw_data/eng_parent_negation.csv", stringsAsFactors=FALSE)
-#########################################
+
 ```
 
 ```{r exclusions}
@@ -337,78 +398,216 @@ child_exclusions <- read.csv("processed_data/study2_child_exclusions.csv", strin
 parent_exclusions <- read.csv("processed_data/study2_parent_exclusions.csv", stringsAsFactors=FALSE)
 ```
 
-```{r not syntactic analysis}
-# Children
-pre_not <- child_negation %>%
-  filter(grepl('( |^)not( |$)', condensed_pos)) %>%
-  mutate(no = mapply(pre_not_tag, condensed_pos, clean_utterances))
 
-write.csv(pre_not, "processed_data/pre_not.csv", row.names = FALSE)
 
-# Parents
-p_pre_not <- parent_negation %>%
-  filter(grepl('( |^)not( |$)', condensed_pos)) %>%
-  mutate(no = mapply(pre_not_tag, condensed_pos, clean_utterances))
+|Abbreviation     | Meaning       |
+|-----------------|---------------|
+| adj             | adjective     |
+| adv             | adverb        |
+| co              | ???           |
+| det             | determiner    |
+| mod             | modal         | 
+| n               | noun (includes pronouns and proper nouns) |
+| part            | participle    |
+| prep            | preposition   |
+| qn              | quantifier    |
+| v               | verb          |
 
-write.csv(p_pre_not, "processed_data/p_pre_not.csv", row.names = FALSE)
-```
-
-```{r no syntactic analysis}
-# Children
+```{r presentential analysis}
+no_labels <-  c("no + S_NEG (eg. \'no you don\'t\')", "no + S_POS (eg. \'no the sun shining\')", "S_NEG + no (eg. \'I don\'t want it no\')", "S_POS + no (eg. \'I pulled up no\')", "NP + no + VP", "no + VP", "no + NP", "other")
+not_labels <- c("not + S (eg. \'not Bob read it\')", "S + not (eg. \'I think not\')", "NP + not + VP", "not + NP", "not + VP", "NP + not", "VP + not", "double neg", "other")
+# No
 pre_no <- child_negation %>%
   filter(grepl('( |^)no:co( |$)', condensed_pos)) %>%
   mutate(no = mapply(pre_no_tag, condensed_pos, clean_utterances))
 
+
+pre_no$no <- factor(pre_no$no, levels = c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "NP + no + VP", "no + VP", "no + NP", "other"))
+
+pre_no$no <- mapvalues(pre_no$no, from = c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "NP + no + VP", "no + VP", "no + NP", "other"), to = no_labels)
+
 write.csv(pre_no, "processed_data/pre_no.csv", row.names = FALSE)
 
-# Parents
+pre_no_table <- as.data.frame.matrix(table(pre_no$bin, pre_no$no))
+pre_no_prop_table <- as.data.frame.matrix(prop.table(table(pre_no$bin, pre_no$no), 1)) *100
+
+# Parent No
 p_pre_no <- parent_negation %>%
   filter(grepl('( |^)no:co( |$)', condensed_pos)) %>%
   mutate(no = mapply(pre_no_tag, condensed_pos, clean_utterances))
 
 write.csv(p_pre_no, "processed_data/p_pre_no.csv", row.names = FALSE)
+
+p_pre_no_table <- as.data.frame.matrix(table(p_pre_no$bin, p_pre_no$no))
+p_pre_no_prop_table <- as.data.frame.matrix(prop.table(table(p_pre_no$bin, p_pre_no$no), 1)) *100
+
+# Not
+pre_not <- child_negation %>%
+  filter(grepl('( |^)not( |$)', condensed_pos)) %>%
+  mutate(no = mapply(pre_not_tag, condensed_pos, clean_utterances))
+
+pre_not$no <- mapvalues(pre_not$no, from = c("not + S", "S + not", "NP + not + VP", "not + NP", "not + VP", "NP + not", "VP + not", "double neg", "other"), to = not_labels )
+
+write.csv(pre_not, "processed_data/pre_not.csv", row.names = FALSE)
+
+pre_not_table <- as.data.frame.matrix(table(pre_not$bin, pre_not$no))
+pre_not_prop_table <- as.data.frame.matrix(prop.table(table(pre_not$bin, pre_not$no), 1)) *100
+
+
+# Parent Not
+p_pre_not <- parent_negation %>%
+  filter(grepl('( |^)not( |$)', condensed_pos)) %>%
+  mutate(no = mapply(pre_not_tag, condensed_pos, clean_utterances))
+
+p_pre_not$no <- mapvalues(p_pre_not$no, from = c("not + S", "S + not", "NP + not + VP", "not + NP", "not + VP", "NP + not", "VP + not", "double neg", "other"), to = not_labels )
+
+write.csv(p_pre_not, "processed_data/p_pre_not.csv", row.names = FALSE)
+
+# Extra-sentential only
+
+neg_sentential <- pre_no %>% filter(no %in% c('no + S_POS', 'no + S_NEG', 'S_POS + no', 'S_NEG + no')) %>%
+  rbind(pre_not %>% filter(no %in% c('not + S', 'S + not')))
+
+no_presentential <- neg_sentential %>% filter(no %in% c("no + S_NEG", "no + S_POS")) %>% group_by(bin, no) %>% summarise(counts = n()) %>% dcast(bin~no) %>% mutate(props = `no + S_POS` / `no + S_NEG`) %>% mutate(perc = 100 * `no + S_NEG` / (`no + S_NEG` + `no + S_POS`))
+
+write.csv(neg_sentential, "processed_data/neg_sentential.csv", row.names = FALSE)
+write.csv(no_presentential, "processed_data/no_presentential.csv", row.names = FALSE)
+
+p_neg_sentential <- p_pre_no %>% filter(no %in% c('no + S_POS', 'no + S_NEG', 'S_POS + no', 'S_NEG + no')) %>%
+  rbind(p_pre_not %>% filter(no %in% c('not + S', 'S + not')))
+
+write.csv(p_neg_sentential, "processed_data/p_neg_sentential.csv", row.names = FALSE)
+
+```
+
+
+```{r by child presentential}
+
+
+
+# Not a very good metric; what I really want is in each age bin if you produce no + S do you also produce intrasentential
+# in each bin, percentage producing only no + S, both, and only sentence internal
+pre_no <- read.csv("processed_data/pre_no.csv")
+  no_labels <- c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "no + X", "X + no", "NP + no + VP", "other")
+  pre_no$no <- factor(pre_no$no, levels = no_labels)
+  pre_no$no <- plyr::mapvalues(pre_no$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
+  
+# List of unique child ids older than 18 months
+
+cat_by_child <- summarise(group_by(pre_no%>% filter(target_child_age >= 18), speaker_id, no, bin), n = n())
+
+by_child <- cat_by_child[c("speaker_id", "bin")]
+
+# Determine if child used sentence external negation in a particular age bin
+by_child$external <- mapply(by_child$speaker_id, by_child$bin,
+                            FUN = function(x, y)Reduce("|", ( c("no + S", "S + no") %in% filter(cat_by_child, (speaker_id == x) && (bin == y))$no)))
+
+# Determine if child used sentence internal negation in a particular age bin
+by_child$internal <- mapply(by_child$speaker_id, by_child$bin,
+                            FUN = function(x, y)Reduce("|", ( c("NP + no + VP", "other sentence internal") %in% filter(cat_by_child, (speaker_id == x) && (bin == y))$no)))
+
+# Determine whether child used both internal and external, one or the other, or neither in a particular age bin
+by_child$stage <- mapply( function(x, y) if(x & y) {"both"} else if(x) {"external"} else if (y) {"internal"} else{NA}, by_child$external, by_child$internal)
+
+ggplot(by_child, aes(bin, fill = internal))+
+  geom_bar()
 ```
 
 ```{r dont analysis}
-pronouns3sg <- "( |^)(he|she|it|that|this|dat|dis|one|someone|everyone|somebody|everybody)"
+pronouns3sg <- "( |^)(n:prop|he|she|it|that|this|dat|dis|one|someone|everyone|somebody|everybody)"
 
-# Negatives
 child_neg_no_imperatives <- filter(child_negation, !grepl('imperative', type)) %>%
-  filter(!grepl('(who|what|when|where|why) don\'t', clean_utterances)) %>%
-  filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances))
+  filter(!mapply(find_plurals, clean_utterances, part_of_speech))
 
 dont_mistakes <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
   mutate(dont = "don\'t")
 dont_correct <- filter(child_neg_no_imperatives, grepl('pro:\\w* don\'t', dont_pos)) %>%
-  filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
+  filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances))%>%
+  filter(!grepl('(who|what|when|where|why) don\'t', clean_utterances)) %>%
   mutate(dont = "don\'t")
 doesnt_correct <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
   mutate(dont = "doesn\'t")
 doesnt_mistakes <- filter(child_neg_no_imperatives, grepl('pro:\\w* doesn\'t', dont_pos)) %>%
-  filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
+  filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances))%>%
+  filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances)) %>%
   mutate(dont = "doesn\'t")
 
-thirdsg_neg <- rbind(doesnt_correct,dont_mistakes)
-other_pos_neg <- rbind(dont_correct, doesnt_mistakes)
 
-write.csv(thirdsg_neg, "processed_data/thirdsg_neg.csv", row.names = FALSE)
-write.csv(other_pos_neg, "processed_data/other_pos_neg.csv", row.names = FALSE)
-
-# Positives
+# Positives!
 child_pos_no_imperatives <- filter(child_utterances, !grepl('imperative', type)) %>%
-  filter(!grepl('(who|what|when|where|why) do( |$)', clean_utterances)) %>%
-  filter(!grepl('(who|what|when|where|why) does( |$)', clean_utterances))
+  filter(!mapply(find_plurals, clean_utterances, part_of_speech))
 
 do_mistakes <- filter(child_pos_no_imperatives, grepl(paste(pronouns3sg, 'do( |$)', sep = " "), clean_utterances)) %>%
   mutate(do = "do")
 do_correct <- filter(child_pos_no_imperatives, grepl('pro:\\w* do( |$)', dont_pos)) %>%
-  filter(!grepl(paste(pronouns3sg, 'do( |$)', sep = " "), clean_utterances)) %>%
+  filter(!grepl(paste(pronouns3sg, 'do( |$)', sep = " "), clean_utterances))%>%
+  filter(!grepl('(who|what|when|where|why) do( |$)', clean_utterances)) %>%
   mutate(do = "do")
 does_correct <- filter(child_pos_no_imperatives, grepl(paste(pronouns3sg, 'does( |$)', sep = " "), clean_utterances)) %>%
   mutate(do = "does")
 does_mistakes <- filter(child_pos_no_imperatives, grepl('pro:\\w* does( |$)', dont_pos)) %>%
-  filter(!grepl(paste(pronouns3sg, 'does( |$)', sep = " "), clean_utterances)) %>%
+  filter(!grepl(paste(pronouns3sg, 'does( |$)', sep = " "), clean_utterances))%>%
+  filter(!grepl('(who|what|when|where|why) does( |$)', clean_utterances)) %>%
   mutate(do = "does")
+
+# remove grammatical utterances tagged as mistakes
+# dont_mistakes <- dont_mistakes %>% filter(!(gloss %in% c(
+#   "take it don\'t like it",
+#   "Mommy I\'m gonna find things that don\'t belong in here", 
+#   "your don\'t touch it don\'t touch it",
+#   "no don\'t take it don\'t take",
+#   "no ready for it don't ready for it",
+#   "you hear it don\'t",
+#   "I want that don\'t paste on",
+#   # In context this one looks metalinguistic
+#   "say it don\'t come in my house",
+#   # These are questions; these criteria don't catch most questions of this form
+#   "tastes strawberry on it don\'t it",
+#   "we need it don\'t we",
+#   "I don\'t like that don\'t I",
+#   "he\'s like it don\'t he",
+#   "you like that don\'t you",
+#   "you like that one don\'t you",
+#   "you just xxx like that don\'t you",
+#   "you like that don\'t you babies",
+#   "you have to help mix coffee with that don\'t you",
+#   "spills makes you have to clean it don\'t you",
+#   "you like that don\'t you babies",
+#   "Jay_jay sings it don\'t he",
+#   "we like that don\'t we",
+#   "we need it don\'t we", 
+#   "we use that one don\'t I", 
+#   "I want that one don\'t I",
+#   "we need another one don\'t we",
+#   "then we want a circle one don\'t we")))
+# 
+# doesnt_mistakes <- doesnt_mistakes %>% filter(!(gloss %in% c(
+#   "no because it\'s xxx doesn\'t have a hold",
+#   "he licks me doesn\'t he",
+#   "nobody doesn\'t get in",
+#   "him doesn\'t",
+#   "that\'s doesn\'t fit very well",
+#   "it\'s doesn\'t fit",
+#   "it\'s doesn\'t",
+#   "that\'s doesn\'t come in first",
+#   "one them doesn\'t work in that tunnel",
+#   "it goes on him doesn\'t it",
+#   "he's doesn't move")))
+
+thirdsg_neg <- rbind(doesnt_correct,dont_mistakes)
+other_pos_neg <- rbind(dont_correct, doesnt_mistakes)
+
+thirdsg_table <- as.data.frame.matrix(table(thirdsg_neg$bin, thirdsg_neg$dont))
+thirdsg_prop_table <- as.data.frame.matrix(prop.table(table(thirdsg_neg$bin, thirdsg_neg$dont), 1)) *100
+
+other_pos_table <- as.data.frame.matrix(table(other_pos_neg$bin, other_pos_neg$dont))
+other_pos_prop_table <- as.data.frame.matrix(prop.table(table(other_pos_neg$bin, other_pos_neg$dont), 1)) *100
+
+write.csv(thirdsg_neg, "processed_data/thirdsg_neg.csv", row.names = FALSE)
+write.csv(other_pos_neg, "processed_data/other_pos_neg.csv", row.names = FALSE)
+
+
+#Positive:
 
 thirdsg_pos <- rbind(does_correct,do_mistakes)
 other_pos_pos <- rbind(do_correct, does_mistakes)
@@ -418,18 +617,19 @@ write.csv(other_pos_pos, "processed_data/other_pos_pos.csv", row.names = FALSE)
 
 # Parents
 p_neg_no_imperatives <- filter(parent_negation, !grepl('imperative', type)) %>%
-  filter(!grepl('(who|what|when|where|why) don\'t', clean_utterances)) %>%
-  filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances))
+  filter(!mapply(find_plurals, clean_utterances, part_of_speech))
 
 p_dont_mistakes <- filter(p_neg_no_imperatives, grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
   mutate(dont = "don\'t")
 p_dont_correct <- filter(p_neg_no_imperatives, grepl('pro:\\w* don\'t', dont_pos)) %>%
-  filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
+  filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances))%>%
+  filter(!grepl('(who|what|when|where|why) don\'t', clean_utterances)) %>%
   mutate(dont = "don\'t")
 p_doesnt_correct <- filter(p_neg_no_imperatives, grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
   mutate(dont = "doesn\'t")
 p_doesnt_mistakes <- filter(p_neg_no_imperatives, grepl('pro:\\w* doesn\'t', dont_pos)) %>%
-  filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
+  filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances))%>%
+  filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances)) %>%
   mutate(dont = "doesn\'t")
 
 p_thirdsg_neg <- rbind(p_doesnt_correct,p_dont_mistakes)
@@ -441,21 +641,18 @@ write.csv(p_other_pos_neg, "processed_data/p_other_pos_neg.csv", row.names = FAL
 ```
 
 ```{r 3sg neg+VP}
-child_neg_sg <- child_neg_no_imperatives %>%
-  # Removes utterances with potentially plural proper nouns (ie. proper  nouns ending in 's')
-  filter(!mapply(find_plurals, clean_utterances, part_of_speech))
-
-# Excludes non-proper nouns because it is not possible to determine the number from these data 
-nouns3sg = "( |^)(n:prop|he|she|it|that|this|dat|dis|one|someone|everyone|somebody|everybody)"
-
-no_3sg <- filter(child_neg_no_imperatives, grepl(paste(nouns3sg, ' no( adv)* v', sep = ""), v_utterances)) %>%
+no_3sg <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, ' no( adv)? v', sep = ""), v_utterances)) %>%
   mutate(neg = "no (eg. it no fit(s))")
-not_3sg <- filter(child_neg_no_imperatives, grepl(paste(nouns3sg, 'not( adv)* v', sep = " "), v_utterances)) %>%
+not_3sg <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'not( adv)? v', sep = " "), v_utterances)) %>%
   mutate(neg = "not (eg. it not fit(s))")
-nt_3sg <- filter(child_neg_no_imperatives, grepl(paste(nouns3sg, '(.*n\'t)( adv)* v', sep = " "), v_utterances)) %>%
-  mutate(neg = "nt (eg. it don\'t/doesn\'t fit(s))")
+nt_3sg <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, '(.*n\'t)( adv)? v', sep = " "), v_utterances)) %>%
+  mutate(neg = "nt (eg.it don\'t/doesn\'t fit(s))")
 
 neg_3sg <- rbind(no_3sg, not_3sg, nt_3sg)
 
+v_3sg_table <- as.data.frame.matrix(table(neg_3sg$bin, neg_3sg$neg))
+v_3sg_prop_table <- as.data.frame.matrix(prop.table(table(neg_3sg$bin, neg_3sg$neg), 1))*100
+
 write.csv(neg_3sg, "processed_data/neg_3sg.csv", row.names = FALSE)
 ```
+

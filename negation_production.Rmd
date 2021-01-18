@@ -241,8 +241,6 @@ no_labels <- c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "no + X",
 pre_no$no <- factor(pre_no$no, levels = no_labels)
 pre_no_simple <- pre_no
 pre_no_simple$no <- mapvalues(pre_no_simple$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
-# pre_no$no <- mapvalues(pre_no$no, from = no_labels, to = c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
-
 
 ggplot(pre_no_simple %>% filter(target_child_age >= 18), aes(bin, fill = no))+
   geom_bar(position = "fill")+
