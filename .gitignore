@@ -4,6 +4,7 @@
 
 # Session Data files
 .RData
+.RDataTmp
 
 # Example code in package build process
 *-Ex.R
@@ -16,6 +17,8 @@
 
 # RStudio files
 .Rproj.user/
+negation_production.Rproj
+COGSCI2021/COGSCI2021.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -46,8 +49,9 @@ negation_production.ttt
 raw_data/english_tokens.feather
 raw_data/eng_utterances.feather
 processed_data/english_tokens_processed.feather
+processed_data/english_utterances_processed.feather
 
-/papers/
+/literature/
 /SALT/
 /bucld_abstract/
 /negation_production_files/
@@ -59,3 +63,12 @@ raw_data/eng_parent_utterances.csv
 raw_data/ger_child_utterances.csv
 raw_data/unfiltered_eng_child_utterances.csv
 raw_data/unfiltered_eng_parent_utterances.csv
+
+# Cogsci files
+
+COGSCI2021/neg_combos_cogsci2021.log
+
+# BUCLD
+BUCLD2020/Expanded BUCLD 2020 Negation Production.gslides
+BUCLD2020/161_talk.mp4
+bucld/161_talk.mp4
