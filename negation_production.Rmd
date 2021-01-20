@@ -28,7 +28,9 @@ authornote: |
 
 abstract: |
   this is the abstract
-  
+
+  <!-- https://tinyurl.com/ybremelq -->
+
 keywords          : "negation, production, child language"
 wordcount         : "X"
 
@@ -60,6 +62,9 @@ library(gridExtra)
 ```
 
 <!-- TO DO
++ Put binomial errorbars on the developmental plots
++ Parent speech bottleneck simulation (for each month bin, sample from parent speech with the utterance length distribution children have)
++ What are precise definitions of stagehood?
 + Put error bars on developmental plots (bootstrap)
 + Parent speech bottleneck simulation (for each month bin, sample from parent speech with the utterance length distribution children have)
 + Add individual plots for kids in Providence and Manchester, 
@@ -127,7 +132,6 @@ To summarize, prevoius research has suggested that English-speaking children lea
 
 <!--function-->
 
-
 ## Current Study
 
 ```{r exclusions1}
@@ -139,13 +143,22 @@ This paper builds on the rich literature on children's production of negation by
 
 # Study 1: Development of Negative Morphemes
 
+
 The aim of this study was to assess the overall production of negative forms (especially *no*, *not*, and *n't*) in parents' and children's speech, and address the following questions: 1. Does the overall production of negation in children follow a *no*<*not*<*n't* cline [@cameron2007part]? 2. Do children produce negative auxiliary forms such as *can't* and *don’t* before using their positive variants, suggesting that the negative forms are learned as unanalyzed wholes? The answer to both questions was "no"!
+
 
 ## Methods
 
 For samples of parents' and children's speech, we used the online database [childes-db](childes-db.stanford.edu) and its associated R programming package `childesr` [@sanchez2019childes]. Childes-db is an online interface to the child language components of [TalkBank](https://talkbank.org/), namely [CHILDES](https://childes.talkbank.org/) [@macwhinney2000childes] and [PhonBank](https://phonbank.talkbank.org/). Two collections of corpora were selected: English-North America and English-UK. The dataset contained `r format(exclusions$after_age, big.mark=",")` tokens from `r exclusions$n_chi_age` children, after necessary exclusions. We ran a token-based analysis of the corpora as well as an utterance-based analysis that could take utterance length and context into account.
 
 In our token-based analysis, all word tokens were tagged for the following information: 1. the speaker role (parent vs. child), 2. the age of the child when the word was produced in months, 3. whether the word was positive or negative, and 4. the type of negative word produced. For this study we considerd the following classes of negative morphemes in English: the forms *no* and *not*, all instances of negative auxiliary forms with *n't* as well as their positive forms without *n't* as controls. Unintelligible tokens were excluded (N = `r format(exclusions$unintelligible, big.mark=",")`), as well as tokens that had missing information on children's age (N = `r format(exclusions$missing, big.mark=",")`). Third, tokens outside the age range of 1 to 6 years were excluded (N = `r format(exclusions$age, big.mark=",")`) since children did not produce much outside this age range. These exclusions resulted in the exclusion of data `r exclusions$n_chi_total-exclusions$n_chi_age` children from the final analysis. Similarly, in our utterance-based analysis, each utterance was tagged for the following: 1. the number of tokens in the utterance 2. the speaker role (parent vs. child), 2. the age of the child, 3. whether the utterance contained *no*, *not*, or *n't*. Utterances with missing information on children's age (N = `r format(uexclusions$missing, big.mark=",")`) as well as those outside the age range of 1 to 6 years were excluded (N = `r format(uexclusions$age, big.mark=",")`). The collection contained X utterances from N children.
+
+3. the type of the utterance the word appeared in (declarative, question, imperative, other)[^1]
+
+[^1]: This study grouped utterance types into four main categories: "declarative", "question", "imperative", and "other". Utterance type categorization followed the convention used in the [TalkBank manual](https://talkbank.org/manuals/CHAT.html#_Toc486414422). The utterance types are similar to sentence types (declarative, interrogative, imperative) with one exception: the category "question" consists of interrogatives as well as rising declaratives (i.e. declaratives with rising question intonation). In the transcripts, declaratives are marked with a period, questions with a question mark, and imperatives with an exclamation mark. It is important to note that the manual also provides [terminators for special-type utterances](https://talkbank.org/manuals/CHAT.html#_Toc486414431). Among the special type utterances, this study included the following in the category "questions": trailing off of a question, question with exclamation, interruption of a question, and self-interrupted question. The category imperatives also included "emphatic imperatives". The rest of the special type utterances such as "interruptions" and "trailing off" were included in the category "other".
+
+
+## Results
 
 We also looked at individual children's production of negative morphemes. We selected the following corpora based on the fact that they had available longitudinal data in the 1-3 years age range: Brown [@brown1973first], Bloom [@bloom1970; @bloom1974imitation], Braunwald [@braunwald1971mother], Suppes [@suppes1974semantics], Sachs [@sachs1983talking], Manchester [@theakston2001role], MPI-EVA-Manchester and Thomas [@lieven2009two], Providence [@demuth2006word], and Lara [@rowland2007explaining]. Three of these corpora have been used in previous research reported in the literature review above: Brown, Bloom, and MPI-EVA-Manchester.
 
@@ -186,9 +199,11 @@ all_utterance_relfreqs %>%
   theme_classic()
 ```
 
+
 @StromswoldZimmermann2000 found that in German-speaking children, the word *nein* was produced before *nicht* and discussed three potential causes for this order of production: input frequency, phonetic complexity, and syntactic complexity. They explained that input frequency cannot be the cause because in German-speaking children's input *nicht* was more frequent than *nein*. Similarly, English-speaking children hear more instances of *n't* than *no* so input frequency cannot be the cause in English either. With respect to phonetic complexity, German *nicht* has a voiceless palatal fricative that can potentially be hard for children and delay its production. However, English *no* and *not* are quite similar and do not contain phones that are known to be particularly hard for children. This leaves us with syntactic complexity which is an obvious difference between isolated one-word negators like *no*/*nein* and multiword negators like *not*/*nicht*. Given that children start with shorter utterances (typically one word) and produce longer ones as they grow up, they may produce *no* earlier than *not* and *n't* simply because *no* can appear as a single word utterance. In other words, even a hypothetical child that comprehends all negative forms *no*, *not*, and *nt* may produce *no* earlier than the other two because of production limitations. We call this the production bottleneck hypothesis.
 
 One way to test the bottleneck hypothesis in our dataset is to focus on children's multiword utterances. Is the main contributor to the high frequency of *no* in children's speech the single-word utterances? To answer this question we removed single-token utterances like "yes", "no", and "oh", as well as utterances that combined such elements in a repetitive way like "no no" or "oh no" from children and parents' speech. If early appearance and high frequency of *no* is mainly due to short and repetitive utterances produced by children early in their development, it should disappear once we focus on multiword utterances. As Figure \@ref(fig:multiwordFrequency) shows, this is largely what we found. While the frequencies of *not* and *n't* in multi-word productions were similar to their overall frequencies seen before in Figure \@ref(fig:negationRelativeFrequency), the word *no* lost its large advantage in frequency and early occurrence, showing a very similar production trajectory as the other two negative morphemes. 
+
 
 ```{r multiwordFrequency, fig.env="figure", fig.width=7, fig.height=2.5, fig.cap="Relative frequency (parts per thousand) of the response particle *no*, verb phrase negation *not*, and its contracted form *n't* in multiword utterances"}
 multiword_relfreqs <- readRDS("processed_data/multiword_relfreqs")
@@ -221,6 +236,7 @@ bottleneck_relfreqs %>%
 ```
 
 Moving to the second question: do negative auxiliaries appear before positive ones? Figure \@ref(fig:auxRelFreq) shows the relative frequency of positive and negative auxiliary forms in the speech of children and their parents. Our results show that overall, children start producing the positive and negative auxiliary forms around the same time and always produce the positive forms at a higher rate than negative ones. This is also true for individual auxiliary words such as *do/don't* and *can/can't* which are produced earlier than others. Therefore, the claim that negative auxiliary forms are produced before their positive counterparts is not supported by the available production data and consequently production data does not provide support for the hypothesis that auxiliary negative forms are learned as unanalyzed wholes.  
+
 
 ```{r auxRelFreq, fig.env="figure", fig.width=6, fig.height=2.5, fig.cap="Relative frequency (parts per thousand) of positive auxiliary forms such as *do*, *are*, and *can* as well as their contracted negatives in the speech of parents and children."}
 category_table <- readRDS(file="processed_data/category_table")
@@ -264,24 +280,7 @@ Each utterance was binned by child age in months and tagged for 1. number of tok
 
 ## Results
 
-<<<<<<< HEAD
-```{r load_data}
-pre_no <- read.csv("processed_data/pre_no.csv")
-pre_no$no <- factor(pre_no$no, levels = c("no + NP + VP", "no + NP + VP (NEG)", "NP + VP + no", "NP + VP + no (NEG)", "NP + no + VP", "no + VP","no + NP", "other"))
 
-p_pre_no <- read.csv("processed_data/p_pre_no.csv")
-p_pre_no$no <- factor(p_pre_no$no, levels = c("no + NP + VP", "no + NP + VP (NEG)", "NP + VP + no", "NP + VP + no (NEG)", "NP + no + VP", "no + VP","no + NP", "other"))
-
-pre_not <- read.csv("processed_data/pre_not.csv")
-pre_not$not <- factor(pre_not$not, levels = c("not + NP + VP", "NP + VP + not", "NP + not + VP", "not + VP","not + NP","double neg", "other"))
-
-third_sg <- read.csv("processed_data/thirdsg_neg.csv")
-third_sg <- mutate(third_sg, thirdsg = "Third-singular Utterances")
-
-other_pos <- read.csv("processed_data/other_pos_neg.csv")
-other_pos <- mutate(other_pos, thirdsg = "Non-third-singular Utterances")
-
-=======
 ```{r load data}
 pre_no <- read.csv("processed_data/pre_no.csv")
 p_pre_no <- read.csv("processed_data/p_pre_no.csv")
@@ -290,7 +289,6 @@ third_sg_neg <- read.csv("processed_data/thirdsg_neg.csv")
 other_pos_neg <- read.csv("processed_data/other_pos_neg.csv")
 third_sg_pos <- read.csv("processed_data/thirdsg_pos.csv")
 other_pos_pos <- read.csv("processed_data/other_pos_pos.csv")
->>>>>>> 7a88ccf17a59fcd71941a9cbde7b9f5df37766ea
 neg_3sg <- read.csv("processed_data/neg_3sg.csv")
 ```
 
@@ -303,8 +301,6 @@ no_labels <- c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "no + X",
 pre_no$no <- factor(pre_no$no, levels = no_labels)
 pre_no_simple <- pre_no
 pre_no_simple$no <- mapvalues(pre_no_simple$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
-# pre_no$no <- mapvalues(pre_no$no, from = no_labels, to = c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
-
 
 ggplot(pre_no_simple %>% filter(target_child_age >= 18), aes(bin, fill = no))+
   geom_bar(position = "fill")+
@@ -837,6 +833,7 @@ ggplot(no_function, aes(x=Role, y=Proportion, fill=Dependency))+
 To compare the production of *no* as a discourse response variable between children and parents, we calculated the proportion of cases where *no* serves as *COM* or *ENUM* by the age of the child. As presented in Figure \@ref{fig:noCommunicatorAge}, while parents have been articulating *no* with this particular function since the child was as young as 7 months old, children did not start at least more regularly produce this negator until the age of 20 months. The frequency of the production of *no* by children is gradually becoming comparable to that of the parents around the age of 24 months.
 
 
+
 ```{r load_data3}
 no_child_communicator <- subset(no_child, Negation_dep %in% c('COM', 'ENUM'))
 no_child_communicator$dep <- as.vector(rep('COMMUNICATOR', nrow(no_child_communicator)))
@@ -876,6 +873,7 @@ ggplot(no_communicator_age, aes(x = Age, y = Proportion, shape = Role, color = R
 
 Besides *COM* and *ENUM*, we also analyzed utterances in which *no* served as a quantifier. For each speaker role, we calculated the proportions of instances that contain *no* as a quantifier given different ages of the children. As shown in Figure \@ref{fig:noQUANTAge}, parents' usage of *no* as a quantifier precedes that of the children.
 Children did not start using *no* with this particular syntactic function until around the age of 18; their production gradually becomes comparable to that of the parents at about 23 months. These findings are similar to the production of *no* as a discourse response variable presented in Figure \@ref{fig:noCommunicatorAge}.
+
 
 ```{r load_data4}
 no_child_quantifier <- subset(no_child, Negation_dep %in% c('QUANT'))
@@ -964,6 +962,7 @@ ggplot(no_quantifier_pos, aes(x=Role, y=Proportion, fill=POS))+
 
 We then continued to examine the production of *no* as a quantifier given its most frequent syntactic heads. We focus specifically on cases when the syntactic head of *no* is either a noun or a pronoun, since the numbers of these cases are large enough to yield reliable estimates (>= 1000). In children's production, there are 5,455 utterances where *no* modifies a noun, and 1,100 cases where *no* modifies a pronoun. In parent's production, there are 5,823 utterances where *no* modifies a noun, and 1,018 instances where *no* modifies a pronoun. The two subfigures from Figure \@ref{fig:noQUANTAge} are comparable to each other as well as comparable to cases when *no* was used as a discourse response variable. Parents' usage of *no* as a quantifier modifying a noun or a pronoun is earlier than that of children. On the other hand, children starts using *no* to quantify nouns or pronouns after around 18 months old; their production starts to bare syntactic resemblance to that of parents around the age of 22 months.
 
+
 ```{r load_data6}
 no_child_quantifier_n <- subset(no_child, Negation_dep %in% c('QUANT') & Head_POS %in% c('n'))
 no_child_quantifier_n$dep <- as.vector(rep('quantifier', nrow(no_child_quantifier_n)))
@@ -984,7 +983,7 @@ no_quantifier_n_age <- rbind(no_child_quantifier_n_age, no_parent_quantifier_n_a
 ```
 
 
-<<<<<<< HEAD
+
 ```{r noQUANTnAge, fig.cap="Comparing the trajectory of no as a quantifier of nouns between children and parent.", fig.env="figure", fig.height=6}
 ggplot(no_quantifier_n_age, aes(x=Age, y=Proportion, fill=Role))+ 
   geom_bar(position="dodge",stat='identity')+

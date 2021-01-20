@@ -1,0 +1,526 @@
+---
+title: "Negation Production Plots and Analyses"
+author: "Masoud Jasbi"
+date: "2/21/2018"
+output: html_document
+---
+
+```{r load_library}
+library(tidyverse)
+library(magrittr)
+library(feather)
+library(binom)
+library(childesr)
+library(lubridate)
+library(ggrepel)
+```
+
+# Token Plots
+
+```{r read_processed_data}
+english_tokens <- read_feather("../processed_data/english_tokens_processed.feather")
+```
+
+## Proportion Plot
+
+```{r negationProportion}
+negative_proportions <-
+  english_tokens %>%
+  filter(polarity=="negative") %>%
+  group_by(category, age, speaker) %>%
+  summarize(count = n()) %>%
+  group_by(age, speaker) %>%
+  mutate(total = sum(count), proportion = count / total, percent = proportion * 100)
+
+saveRDS(negative_proportions, file="../processed_data/negation_proportions")
+```
+
+```{r negationPlot}
+negative_proportions %>%
+  filter(!(age==12 & speaker=="child")) %>%
+  filter(category !="quantifier", category !="derivational", category !="adverb") %>%
+  ggplot(aes(age,percent, color=category)) +
+  geom_point(aes(color=category, shape=category)) +
+#  geom_line(aes(color=category)) +
+  geom_smooth(span=1) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+```
+
+```{r categoryTable}
+category_table <-
+  english_tokens %>%
+  group_by(speaker, category, polarity, age) %>%
+  summarize(count = n()) %>%
+  group_by(speaker, age) %>%
+  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+
+saveRDS(negation_children, file="../processed_data/category_table")
+```
+
+Positive and negative modal auxiliary forms:
+
+```{r aux}
+category_table %>%
+  filter(category=="auxiliary") %>%
+  ggplot(aes(age,ppt, color=polarity)) +
+  geom_point(aes(color=polarity, shape=speaker)) +
+#  geom_line(aes(color=polarity, linetype=speaker)) +
+  facet_grid(.~speaker) +
+  geom_smooth() +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r categoriesPlot}
+category_table %>%
+  filter(category!="other") %>%
+  ggplot(aes(age,ppt)) +
+  geom_point(aes(color=speaker)) +
+  facet_wrap(polarity~category, scales="free_y") +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  geom_smooth(aes(color=speaker), span=0.7) +
+  theme_classic()
+```
+
+# Relative Frequencies
+
+## Negation Categories
+
+Relative frequency plot of major categories (no, not, n't) for parents and children:
+
+```{r relativeFrequencyMajor}
+category_table %>%
+  filter(category!="other", category!="quantifier", category!="adverb", category!="derivational", polarity=="negative") %>%
+ggplot(aes(age,ppt, fill=category, shape = category, color=category)) +
+  geom_point(stat="identity", aes(fill=category, shape = category, color=category)) +
+  geom_line(aes(fill = category)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+Relative frequency plot for minor categories (quantifiers, derivational, adverbs):
+
+```{r relativeFreuencyMinor}
+category_table %>%
+  filter(category!="other", category!="no", category!="not", category!="auxiliary", polarity=="negative") %>%
+ggplot(aes(age,ppt, fill=category, color=category, shape=category)) +
+  geom_point(stat="identity", aes(fill=category, color=category, shape=category)) +
+  geom_line(aes(fill = category)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+## Word Level Plots
+
+Word level table:
+
+```{r}
+word_table <-
+  english_tokens %>%
+  group_by(speaker, word, category, polarity, age) %>%
+  summarize(count = n()) %>%
+  group_by(speaker, age) %>%
+  mutate(total = sum(count), rel_freq = count / total, ppt = rel_freq * 1000)
+
+saveRDS(word_table, file="../processed_data/word_table")
+```
+
+### Auxiliaries
+
+```{r cantDont}
+cando_plot <-
+  word_table %>%
+  filter(speaker== "child", word == "can" | word == "cant" | word == "do" | word == "dont")
+
+cando_plot %>%
+  filter(word == "do" | word == "dont") %>%
+  ggplot(aes(age,ppt, color=word, shape=word)) +
+  geom_point(aes(color=word, shape=word)) +
+  geom_line(aes(color=word, shape=word)) +
+#  geom_smooth() +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+
+cando_plot %>%
+  filter(word == "can" | word == "cant") %>%
+  ggplot(aes(age,ppt, color=polarity, shape=word)) +
+  geom_point(aes(color=polarity, shape=word)) +
+  geom_line(aes(color=polarity, shape=word)) +
+#  geom_smooth() +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+aux_plot <-
+  word_table %>%
+  filter(category=="auxiliary", polarity=="negative", word!="aint", word!="other", word!="amnt", word!="maynt", word!="mightnt", word!="shant")
+  
+  
+aux_plot$word <- fct_relevel(aux_plot$word, "dont", "cant", "didnt", "isnt", "doesnt", "wont", "arent", "wasnt", "havent", "hasnt", "couldnt", "wouldnt", "werent", "shouldnt", "hadnt", "mustnt")
+
+  ggplot(aux_plot, aes(age, ppt, fill=speaker, color=speaker, shape=speaker)) +
+  geom_point(stat="identity", aes(fill=speaker, color=speaker, shape=speaker)) +
+  geom_line() +
+  facet_wrap(.~word, scales = "free_y") +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  geom_vline(xintercept = 24, linetype = "dashed") +
+  theme_classic()
+```
+
+Auxiliary words that are almost never said: maynt, mightnt, mustnt, 
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="hadnt" | word=="hasnt" | word=="havent") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="didnt" | word=="doesnt" | word=="dont") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="cant" | word=="couldnt" | word=="shouldnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="isnt" | word=="arent") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="werent" | word=="wasnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="wont" | word=="wouldnt") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+### Adverbials
+
+Plot for adverbials below. It seems like "often" and "ususally" are not produced that often!
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(category=="adverb") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+Plot for "always" and "never" as positive and negative pairs:
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="never" | word=="sometimes" | word=="always") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line() +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+### Derivationals
+
+The corpus is not big enough to give us good estimates of the derivational ones. *un-* and *dis-* seem to be the most common ones.
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(category=="derivational", age>13) %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+### Quantifiers
+
+Most common quantifier words are "some" and "something".
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(category=="quantifier") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+Plotting "none", "some", and "all"
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="some" | word=="none") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="something" | word=="nothing" | word=="everything") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+some/no/every+body ones are too infrequent for this corpus to give us good estimates:
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="everybody" | word=="nobody" | word=="somebody") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+some/no/every+hwere ones are the same:
+
+```{r AuxWordPlotDo}
+word_table %>%
+  filter(word=="everywhere" | word=="nowhere" | word=="somewhere") %>%
+  ggplot(aes(age, ppt, fill=word, color=word, shape=word)) +
+  geom_point(stat="identity", aes(fill=word, color=word, shape=word)) +
+  geom_line(aes(fill = word)) +
+  facet_grid(.~speaker) +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic()
+```
+
+## Utterance Plots and Analyses
+
+```{r importProcessedUtterances}
+eng_utterances <- read_csv("../processed_data/english_utterances_processed.feather")
+```
+
+```{r negativePercent}
+negative_percent <-
+  eng_utterances %>%
+  group_by(speaker, age) %>%
+  summarize(total= sum(no)+sum(not)+sum(nt), no = sum(no)/total, not=sum(not)/total, nt=sum(nt)/total) %>%
+  gather("category", "percent", no:nt)
+```
+
+```{r NegativePercentPlot}
+negative_percent %>%
+  filter(percent!=0) %>%
+  ggplot(aes(age, percent)) +
+  geom_point(aes(color=category, shape=category)) + 
+  geom_line(aes(color=category)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+```
+
+```{r RelFreqs}
+all_utterance_relfreqs <-
+  eng_utterances %>%
+  group_by(speaker, age) %>%
+  summarize(no= sum(no)/sum(num_tokens)*1000, not=sum(not)/sum(num_tokens)*1000, nt=sum(nt)/sum(num_tokens)*1000) %>%
+  gather("category", "ppt", no:nt)
+
+saveRDS(all_utterance_relfreqs, "../processed_data/all_utterance_relfreqs")
+```
+
+```{r RelFreqPlot}
+all_utterance_relfreqs %>%
+  filter(ppt!=0) %>%
+  ggplot(aes(age, ppt)) +
+  geom_point(aes(color=category, shape=category)) + 
+  geom_line(aes(color=category)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+```
+
+```{r}
+negative_percent_multi <-
+  eng_utterances %>%
+  filter(num_tokens>1, part_of_speech!="co co co", part_of_speech!="co co", part_of_speech!="co") %>%
+  group_by(speaker, age) %>%
+  summarize(total= sum(no)+sum(not)+sum(nt), no = sum(no)/total, not=sum(not)/total, nt=sum(nt)/total) %>%
+  gather("category", "percent", no:nt)
+```
+
+```{r}
+negative_percent_multi %>%
+  filter(percent!=0) %>%
+  ggplot(aes(age, percent)) +
+  geom_point(aes(color=category, shape=category)) + 
+  geom_line(aes(color=category)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+
+negative_percent_multi %>%
+  filter(percent!=0) %>%
+  ggplot(aes(age,percent, color=category)) +
+  geom_point(aes(color=category, shape=category)) +
+#  geom_line(aes(color=category)) +
+  geom_smooth() +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+```
+
+```{r}
+multiword_relfreqs <-
+  eng_utterances %>%
+  filter(num_tokens>1, part_of_speech!="co co co", part_of_speech!="co co", part_of_speech!="co") %>%
+  group_by(speaker, age) %>%
+  summarize(no= sum(no)/sum(num_tokens)*1000, not=sum(not)/sum(num_tokens)*1000, nt=sum(nt)/sum(num_tokens)*1000) %>%
+  gather("category", "ppt", no:nt)
+
+saveRDS(multiword_relfreqs, "../processed_data/multiword_relfreqs")
+```
+
+```{r}
+multiword_relfreqs %>%
+  filter(ppt!=0) %>%
+  ggplot(aes(age, ppt)) +
+  geom_point(aes(color=category, shape=category)) + 
+  geom_line(aes(color=category)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+```
+
+
+# Percentage of Children Producing Negative Morphemes
+
+Here I tried to test if we can find out about the proportion of children producing negative forms in CHILDES. However, it seems like this is not good practice. The database seems to be too sparse per child so we end up severly underestimating if a child is actually producing it or not. In order to infer what proportion of children produce a given form from naturalistic productions, we need a database that has at least comparable contribution from each child. This is not at all the case for CHILDES. 
+
+```{r proportion_children}
+proportion_children <-
+  english_tokens %>%
+  filter(speaker=="child") %>% #remove data from parents
+  group_by(age) %>% #group by age and compute the total number of children in each age bin
+  mutate(total_children=length(unique(target_child_id))) %>%
+  group_by(negation_type, age, target_child_id, total_children) %>% #for each child, count their negation in each bin
+  summarize(count = n()) %>%
+  filter(count>2) %>% #remove children that had fewer than 5 tokens in the age bin
+  group_by(negation_type,age) %>%
+  mutate(producing_children=length(unique(target_child_id)), pc = producing_children/total_children)
+
+proportion_children %>%
+  filter(negation_type!="pos")%>%
+  ggplot(aes(age, pc)) +
+  geom_bar(stat="identity") +
+  facet_wrap(.~negation_type)
+```
+
+```{r negationRelativeFrequency, fig.env="figure", fig.width=7, fig.height=2.5, fig.cap="Relative frequency of the response particle *no*, verb phrase negation *not*, and its contracted form *n't*"}
+negation_relfreq <- readRDS("processed_data/category_table") 
+
+nonotnt <- negation_relfreq %>%
+  filter(category!="other", category!="quantifier", category!="adverb", category!="derivational", polarity=="negative")
+  
+nonotnt$category <- fct_recode(nonotnt$category, `aux-n't` = "auxiliary")
+nonotnt$category <- fct_relevel(nonotnt$category, "no", "not")
+
+  ggplot(nonotnt, aes(age,ppt, shape = speaker, color=speaker)) +
+  geom_point(stat="identity", aes(shape = speaker, color=speaker)) +
+  geom_line() +
+  facet_wrap(.~category, scale="free_y") +
+  scale_x_continuous(breaks=seq(0, 72, by = 6)) +
+  theme_classic() +
+  theme(text = element_text(size=10, family="Times"))
+```
+
+
+# Adult Production Permutation Model
+
+```{r}
+hist(filter(eng_utterances, speaker=="child", num_tokens<15)$num_tokens, breaks=15)
+hist(filter(eng_utterances, speaker=="parent", num_tokens<15)$num_tokens, breaks=15)
+
+nrow(filter(eng_utterances, speaker=="child"))
+nrow(filter(eng_utterances, speaker=="parent"))
+
+bottleneck <-
+  eng_utterances %>%
+  filter(speaker=="child") %>%
+  mutate(child_num_tokens = num_tokens) %>%
+  select(age, target_child_id, child_num_tokens)
+
+permuterance <-
+  eng_utterances %>%
+  filter(speaker=="parent") %>%
+  left_join(bottleneck, by=c("age", "target_child_id")
+
+permuterance_relfreqs <-
+  permuterance %>%
+  group_by(speaker, age) %>%
+  summarize(no= sum(no)/sum(num_tokens)*1000, not=sum(not)/sum(num_tokens)*1000, nt=sum(nt)/sum(num_tokens)*1000) %>%
+  gather("category", "ppt", no:nt)
+
+permuterance_relfreqs %>%
+  filter(ppt!=0) %>%
+  ggplot(aes(age, ppt)) +
+  geom_point(aes(color=category, shape=category)) + 
+  geom_line(aes(color=category)) +
+  facet_grid(.~speaker) +
+  theme_classic()
+```
+
+
+
