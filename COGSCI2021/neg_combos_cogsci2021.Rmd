@@ -58,16 +58,7 @@ There has been no proposal for negation originating in the child's understanding
 
 Caveat on production vs comprehension. 
 
-|Domain|Functions|Linguistic Composition|Examples|
-  |------|--------|--------------------|
-  |Emotion|Rejection| With *like* or *want* | "I not like it", "not want it" |
-  |Motor Control| Prohibition, Inability | with imperative subjectless *do* or modal *can* | "do not spill milk", "I cannot zip it"|
-  |Perception| non-existence | with a nominal, more-N, or locatives, event descriptions | no juice, no more milk, not in there, the dog not barking | 
-  |Language Learning| Labeling | modifying predicative nominals | that's not a crocodile |
-|Theory of Mind| Epistemic | know, think, remember  | I not know |
-|Unknown | Temporal | now, today, again | not today |
-|Unknown | Causal | why | why not? |
-|Unknown | Posession | 's or pronouns, or have | not mine |
+
 
 # Experiments
 
@@ -299,7 +290,7 @@ child_learning$Function <- rep('labeling', nrow(child_learning))
 child_learning$Ratio <- child_learning$Freq / sum(child_learning$Freq)
 
 parent_learning <- data.frame(table(parent_learning$Age))
-parent_learning$Role <- rep('parent', nrow(parent_learning))
+parent_learning$Role <- rep('Parent', nrow(parent_learning))
 parent_learning$Function <- rep('labeling', nrow(parent_learning))
 parent_learning$Ratio <- parent_learning$Freq / sum(parent_learning$Freq)
 
@@ -312,7 +303,7 @@ names(learning_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
 Comparing the three negative morphemes, the most frequently used is *not* in both child and parent speech. Based on results from Figure \@ref{fig:learning}, the developmental trajectory of using the negative morphemes in the domain of language learning is comparable to previous domains. Children started using the negative morphemes for the function of labeling nominal objects around the age of 7 months and their usage as such became more regular around the age of 10 months. However, the frequency of applying the negative morphemes in the language learning domain began to decrease around the age of 18 months.
 
 
-```{r learning, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2, set.cap.width=T, num.cols.cap=1, fig.cap = "Motor control" }
+```{r learning, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2, set.cap.width=T, num.cols.cap=1, fig.cap = "Language learning" }
 
 learning_data %>% 
   ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
@@ -329,6 +320,90 @@ learning_data %>%
   ylab("ratio")
 
 ```
+
+### Theory of mind
+
+With regards to the domain of theory of mind, we attended to cases that express epistemic position. Specifically, we focused on utterances that articulate the concept of unknowing (*I not know* or *I didn't remember*) or uncertainty (*I don't think so*). The cases that were subject to analyses here included either *know*, *remember* or *think* as the head verb, modified by the negative morphemes or the combination of the negative morphemes with auxiliaries. Additionally, we restricted to instances where the head verb is either subjectless or has the subject *I*. This led to a subset of 27,821 utterances in total (Child: 9,282; Parent: 18,539)
+
+
+```{r epistemicdata, include=FALSE}
+
+epistemic <-read.csv('data/neg_epistemic.txt', header = T, sep = '\t')
+epistemic$Role[which(epistemic$Role == "Father")] <- 'Parent'
+epistemic$Role[which(epistemic$Role == "Mother")] <- 'Parent'
+epistemic$Role[which(epistemic$Role == "Target_Child")] <- 'Child'
+
+child_epistemic <- subset(epistemic, Role %in% c('Child'))
+child_epistemic_know <- subset(child_epistemic, Head == 'know')
+child_epistemic_remember <- subset(child_epistemic, Head == 'remember')
+child_epistemic_think <- subset(child_epistemic, Head == 'think')
+ 
+parent_epistemic <- subset(epistemic, Role %in% c('Parent'))
+parent_epistemic_know <- subset(parent_epistemic, Head == 'know')
+parent_epistemic_remember <- subset(parent_epistemic, Head == 'remember')
+parent_epistemic_think <- subset(parent_epistemic, Head == 'think')
+
+child_epistemic_know <- data.frame(table(child_epistemic_know$Age))
+child_epistemic_know$Role <- rep('Child', nrow(child_epistemic_know))
+child_epistemic_know$Head <- rep('know', nrow(child_epistemic_know))
+child_epistemic_know$Ratio <- child_epistemic_know$Freq / sum(child_epistemic_know$Freq)
+
+child_epistemic_remember <- data.frame(table(child_epistemic_remember$Age))
+child_epistemic_remember$Role <- rep('Child', nrow(child_epistemic_remember))
+child_epistemic_remember$Head <- rep('remember', nrow(child_epistemic_remember))
+child_epistemic_remember$Ratio <- child_epistemic_remember$Freq / sum(child_epistemic_remember$Freq)
+
+child_epistemic_think <- data.frame(table(child_epistemic_think$Age))
+child_epistemic_think$Role <- rep('Child', nrow(child_epistemic_think))
+child_epistemic_think$Head <- rep('think', nrow(child_epistemic_think))
+child_epistemic_think$Ratio <- child_epistemic_think$Freq / sum(child_epistemic_think$Freq)
+
+parent_epistemic_know <- data.frame(table(parent_epistemic_know$Age))
+parent_epistemic_know$Role <- rep('Parent', nrow(parent_epistemic_know))
+parent_epistemic_know$Head <- rep('know', nrow(parent_epistemic_know))
+parent_epistemic_know$Ratio <- parent_epistemic_know$Freq / sum(parent_epistemic_know$Freq)
+
+parent_epistemic_remember <- data.frame(table(parent_epistemic_remember$Age))
+parent_epistemic_remember$Role <- rep('Parent', nrow(parent_epistemic_remember))
+parent_epistemic_remember$Head <- rep('remember', nrow(parent_epistemic_remember))
+parent_epistemic_remember$Ratio <- parent_epistemic_remember$Freq / sum(parent_epistemic_remember$Freq)
+
+parent_epistemic_think <- data.frame(table(parent_epistemic_think$Age))
+parent_epistemic_think$Role <- rep('Parent', nrow(parent_epistemic_think))
+parent_epistemic_think$Head <- rep('think', nrow(parent_epistemic_think))
+parent_epistemic_think$Ratio <- parent_epistemic_think$Freq / sum(parent_epistemic_think$Freq)
+
+epistemic_data <- rbind(child_epistemic_think, child_epistemic_remember, child_epistemic_know, parent_epistemic_think, parent_epistemic_remember, parent_epistemic_know)
+names(epistemic_data) <- c('Age', 'Freq', 'Role', 'Head', 'Ratio')
+
+```
+
+In both child and parent speech, the most frequently used negative morpheme in expressing epistemic position is *n't*, a pattern that is consistent across the three different head verbs. And the negative morphemes tend to co-occur more often in cases that describes the state of unknowing, which is indicated mainly by the verb *know*. Given results from Figure \@ref{fig:epistemic}, there does not seem to be a quite consistent developmental trajectory of child speech in the domain of theory of mind. While regardless of the head verb, children appeared to start applying the negative morphemes in this domain around the age of 4. Nevertheless, there seems to be more variability in expressing an epistemic position with *remember* and *think* as the children age. By contrast, the pattern for instances with *know* gradually decreases after the age of 16 months.
+
+
+```{r epistemic, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=5.5, set.cap.width=T, num.cols.cap=1, fig.cap = "Theory of mind" }
+
+epistemic_data %>% 
+  ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
+  geom_point(aes(color = Role, shape = Role)) +
+  scale_shape_manual(values = c(16, 3)) +
+  scale_color_manual(values = c("steelblue", "peru")) + 
+  geom_line(aes(color = Role, linetype = Role)) + 
+  facet_grid(vars(Head)) +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  theme_classic() + 
+  theme(text = element_text(size=10, family="Times")) + 
+  theme(legend.position="top") +
+  xlab("child age (months)") + 
+  ylab("ratio")
+
+```
+
+
+
+### An overall look at all domains
+
+
 
 # Study
 

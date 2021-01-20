@@ -459,10 +459,10 @@ def epistemic(file):
 									subj = d[1]
 									subj_stem = d[2]
 
-						if subj == 'I':
+						if subj == 'I' or subj == 'NONE':
 							saying = ' '.join(w[1] for w in sent)
 
-							data.append(['theory of mind', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
+							data.append(['theory of mind', function, tok[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
 
 			sent = conll_read_sentence(f)
 
