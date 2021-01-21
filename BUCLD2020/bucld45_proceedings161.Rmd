@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```{r packages}
 library(tidyverse)
 library(ggthemes)
+library(data.table)
 ```
 
 **1. Introduction** 
@@ -158,11 +159,211 @@ Study 1 looked at the overall profile of negative morphmes *no*, *not*, and *n't
 
 **4. Study 2**
 
+The aim of Study 2 was to use utterance-based analyses of children's and parents' speech to assess several hypotheses relating to Stages 1 and 2 of @klimaBellugi1966's proposed framework for negation acquisition. Specifically, the study sought to address the following questions: 1. Do children go through a stage during which their negative utterances consist of a negative morpheme (*no* or *not*) either before or after a complete sentence? 2. Do children initially treat the negative auxiliary *don't* as an unanalyzed whole negator? And 3. Do children undergo a shift from use of *not* to use of *n't* that would imply a shift from adverbial semantic negation to syntactic negation?
+
 **4.1 Methods**
+
+```{r exclusions2}
+child_exclusions2 <- read.csv("../processed_data/study2_child_exclusions.csv", stringsAsFactors=FALSE)
+parent_exclusions2 <- read.csv("../processed_data/study2_parent_exclusions.csv", stringsAsFactors=FALSE)
+```
+
+The initial dataset contained `r format(child_exclusions2$initial, big.mark=",")` utterances from `r format(child_exclusions2$n_chi_initial, big.mark=",")` children, as well as `r format(parent_exclusions2$initial, big.mark=",")` parent utterances. Untranscribed utterances and utterances missing part of speech tagging were excluded (N = `r format(child_exclusions2$not_transcribed, big.mark=",")` for children, `r format(parent_exclusions2$not_transcribed, big.mark=",")` for parents), and unintelligible words were removed. Additionally, due to a large number of coding irregularities, utterances whose number of words did not match the number of part of speech tokens were excluded (N = `r format(child_exclusions2$pos_incorrect, big.mark=",")` for children, `r format(parent_exclusions2$pos_incorrect, big.mark=",")` for parents). This was necessary in order to ensure that each word uttered was mapped onto the correct part of speech.  After processing and exclusions, the dataset contained `r format(child_exclusions2$final_pos, big.mark=",")` utterances from `r format(child_exclusions2$n_chi_pos, big.mark=",")` children, and `r format(parent_exclusions2$final_pos, big.mark=",")` utterances from their parents.
+
+Each utterance was binned by child age in months and tagged for number of tokens in the utterance, the speaker role (parent vs. child), and whether the utterance was negative or positive. Negative utterances were further coded for the presence of *no*, *not*, and *n’t*, as well as for syntactic position of the negator. There were `r format(child_exclusions2$negative, big.mark=",")` negative child utterances in the data, and `r format(parent_exclusions2$negative, big.mark=",")` negative parent utterances. Repeated instances of *no* (often coded with a single part of speech tag) were condensed to a single instance. Single-word negative utterances were removed, as well as utterances in which the negative was combined repetitively with extra-syntactic particles (eg. “ah no”, “no oh oh”) (N = `r format(child_exclusions2$one_word, big.mark=",")` for children, `r format(parent_exclusions2$one_word, big.mark=",")` for parents). After all processing, the dataset contained `r format(child_exclusions2$final_neg, big.mark=",")` negative utterances from `r format(child_exclusions2$n_chi_neg, big.mark=",")` children, and `r format(parent_exclusions2$final_neg, big.mark=",")` negative parent utterances.
 
 **4.2 Results**
 
+```{r load data}
+pre_no <- read.csv("../processed_data/pre_no.csv")
+p_pre_no <- read.csv("../processed_data/p_pre_no.csv")
+pre_not <- read.csv("../processed_data/pre_not.csv")
+third_sg_neg <- read.csv("../processed_data/thirdsg_neg.csv")
+other_pos_neg <- read.csv("../processed_data/other_pos_neg.csv")
+third_sg_pos <- read.csv("../processed_data/thirdsg_pos.csv")
+other_pos_pos <- read.csv("../processed_data/other_pos_pos.csv")
+neg_3sg <- read.csv("../processed_data/neg_3sg.csv")
+```
+
+The first question we examined was whether children go through a stage during which their negation is realized externally to their sentences, as proposed by @klimaBellugi1966. We used CHILDES part of speech tagging to divide the syntactic positions of children’s utterances into several categories. Cases where *no* or *not* combined externally with a full sentence (containing an NP and a VP) were marked as [NEG + S] and [S + NEG]. Utterances where *no* or *not* occurred either before or after an utterance not satisfying the definition of 'sentence' above were marked as [NEG + X] and [X + NEG]. Finally sentence-internal negatives were split into a simple [NP + NEG + VP] category and a category for all other internal negatives. Figure \@ref(fig:ChildNotSyntaxPlot) shows the syntactic distribution of children’s multi-word utterances of *not* across these categories between 18 and 36 months. There were very few to no multi-word negative utterances in any age bin younger than 18 months.
+
+```{r ChildNotSyntaxPlot, fig.env="figure", fig.height= 3, fig.cap="Syntactic analysis of children's *not* utterances between 1 and 3 years of age."}
+not_labels <- c("not + S", "S + not", "not + X", "X + not", "NP + not + VP", "other sentence internal")
+pre_not$no <- factor(pre_not$no, levels = not_labels)
+
+ggplot(pre_not %>% filter(target_child_age >= 18), aes(bin, fill = no))+
+  geom_bar(position = "fill")+
+  xlab("Child Age (months)")+
+  ylab("Proportion of Instances")+
+  theme(axis.title = element_text(size = 13))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(15,"point"), legend.text=element_text(size=10), legend.title = element_text(size = 13))+
+  ggtitle("Children's \'not\' Utterances")+
+  labs(fill = "Syntactic Position") +
+  scale_fill_manual(values = c("not + S" = "green4", 
+                               "S + not" = "limegreen",
+                               "not + X" = "deepskyblue", 
+                               "X + not" = "deepskyblue3", 
+                               "NP + not + VP" = "darkorchid1", 
+                               "other sentence internal" = "darkorchid"))
+
+```
+
+If we limit our criteria to strict sentence-external negation, defining a sentence exclusively as a noun phrase followed by a verb phrase, then the case of *not* utterances is clear-cut: children produce almost no instances of strict sentence-external *not* ([not + S] or [S + not]) at any age. If we expand our definition of ‘external’ to include utterances of the form [not + X] or [X + not], where X is some expression that does not fit our strict definition of a sentence, the story becomes slightly more nuanced. Instances of this utterance-external *not* occur quite frequently, and in fact account for more than half of all multi-word *not* utterances in several younger age bins. However, as discussed above, if a [not + X] utterance does not include an overt subject and predicate, it is impossible to determine from corpus data whether the *not* was external in the underlying form, or whether a production-related mishap (eg. dropped subject) simply caused the *not* to appear utterance-external. In addition, it is worth noting that many utterances of the form [X + not] are grammatical in adult speech (eg. “why not”, “no it’s not”). Furthermore, even if some of these apparent external utterances are indeed instances of sentence-external *not*, it is still the case that as soon as children begin to use ‘not’ in multi-word utterances, they are already also using it frequently internally to their utterances, making an initial stage of sentence-external *not* appear much less likely given the available corpus data.
+
+Turning now to children’s early uses of *no*, Figure \@ref(fig:ChildNoSyntaxPlot) illustrates the syntactic distribution of children’s multi-word *no* utterances between 18 and 36 months. Figure \@ref(fig:ParentNoSyntaxPlot) does the same for parents. Again, due to potential elisions, utterances where *no* combines with a full sentence [S] are the most convincing contenders for true sentence-external *no* utterances. We can see in Figures \@ref(fig:ChildNoSyntaxPlot) and \@ref(fig:ParentNoSyntaxPlot) that the number of [S + no] utterances is trivially small at all ages for children and adults. Utterances of the form [no + S] do occur with non-trivial frequency in child speech, but two considerations contribute to the conclusion that this is not strong evidence for a pre-sentential stage.
+
+```{r ChildNoSyntaxPlot, fig.env="figure", fig.height= 3, fig.cap="Syntactic analysis of children's *no* utterances between 1 and 3 years of age."}
+no_labels <- c("no + S_POS", "no + S_NEG", "S_POS + no", "S_NEG + no", "no + X", "X + no", "NP + no + VP", "other sentence internal")
+pre_no$no <- factor(pre_no$no, levels = no_labels)
+pre_no_simple <- pre_no
+pre_no_simple$no <- plyr::mapvalues(pre_no_simple$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
+
+ggplot(pre_no_simple %>% filter(target_child_age >= 18), aes(bin, fill = no))+
+  geom_bar(position = "fill")+
+  xlab("Child Age (months)")+
+  ylab("Proportion of Instances")+
+  theme(axis.title = element_text(size = 13))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(15,"point"), legend.text=element_text(size=10), legend.title = element_text(size = 13))+
+  ggtitle("Children's \'no\' Utterances")+
+  labs(fill = "Syntactic Position") +
+  scale_fill_manual(values = c("no + S" = "green4", 
+                               "S + no" = "limegreen",
+                               "no + X" = "deepskyblue", 
+                               "X + no" = "deepskyblue3", 
+                               "NP + no + VP" = "darkorchid1", 
+                               "other sentence internal" = "darkorchid"))
+```
+
+```{r ParentNoSyntaxPlot, fig.env="figure", fig.height= 3, fig.cap="Syntactic analysis of parents' *no* utterances to children between 1 and 3 years of age."}
+p_pre_no$no <- factor(p_pre_no$no, levels = no_labels)
+p_pre_no_simple <- p_pre_no
+p_pre_no_simple$no <- plyr::mapvalues(p_pre_no_simple$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
+
+ggplot(p_pre_no_simple %>% filter(target_child_age >= 18), aes(bin, fill = no))+
+  geom_bar(position = "fill")+
+  xlab("Child Age (months)")+
+  ylab("Proportion of Instances")+
+  theme(axis.title = element_text(size = 13))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(15,"point"), legend.text=element_text(size=10), legend.title = element_text(size = 13))+
+  ggtitle("Parents\' \'no\' Utterances")+
+  labs(fill = "Syntactic Position") +
+  scale_fill_manual(values = c("no + S" = "green4", 
+                               "S + no" = "limegreen",
+                               "no + X" = "deepskyblue", 
+                               "X + no" = "deepskyblue3", 
+                               "NP + no + VP" = "darkorchid1", 
+                               "other sentence internal" = "darkorchid"))
+```
+
+First, [no + S] utterances account for between a quarter and a half of all parental multi-word *no* utterances. Because these apparently *no*-external utterances appear so prominently in parental speech, which is assumed to be grammatical, the existence of them in child speech is not in and of itself evidence for an ungrammatical, pre-sentential stage. Furthermore, the pattern that reveals itself in children’s [no + S] utterances–– low initial levels, increasing gradually to adult levels around 36 months–– is more consistent with a simple increase in utterance length and complexity over time than with a stage that children eventually grow out of.
+
+Second, there is reason to believe that many of these [no + S] utterances in both parents and children are in fact anaphoric in nature–– that is, the initial *no* actually negates some previous utterance or event, not the following proposition [@bloom1970, @wode1977four, @drozd1995]. For example, in the hypothetical exchange: “You want milk?”; “No, I want juice!”, the utterance-initial *no* is clearly not negating the proposition “I want juice”, but instead rejecting the previous offer of milk. A more fine-grained analysis of utterances of the form [no + S] in our data provides further evidence for this claim. Figure \@ref(fig:NoPropPlot) shows the breakdown of these utterances by children and their parents into cases where the proposition being negated by the initial *no* is itself negative in polarity ( eg. no I didn’t), and cases where the proposition being negated is positive (eg. no I run).
+
+```{r NoPropPlot, fig.env= "figure", fig.height=3, fig.cap="Parents’ and Children’s [no + S] utterances."}
+pre_no_prop <- pre_no %>% filter(target_child_age >= 18)  %>% summarise(bin, no) %>% group_by(bin, no) %>% count() 
+pre_no_prop <- as.data.table(pre_no_prop)
+pre_no_prop[, `:=`(total_in_bin = sum(n)), by = bin]
+pre_no_prop[, perc := n/total_in_bin]
+pre_no_prop <- pre_no_prop %>% mutate(speaker = "children")
+
+p_pre_no_prop <- p_pre_no %>% filter(target_child_age >= 18) %>% summarise(bin, no) %>% group_by(bin, no) %>% count() 
+p_pre_no_prop <- as.data.table(p_pre_no_prop)
+p_pre_no_prop[, `:=`(total_in_bin = sum(n)), by = bin]
+p_pre_no_prop[, perc := n/total_in_bin]
+p_pre_no_prop <- p_pre_no_prop %>% mutate(speaker = "parents")
+
+merged = rbind(pre_no_prop, p_pre_no_prop)
+
+ggplot(merged %>% filter(no %in% c("no + S_NEG", "no + S_POS")), aes(bin, perc, color = no, shape = no, linetype = no, group = no)) +
+  geom_point(size = 2)+
+  geom_line()+
+  xlab("Child Age (months)")+
+  ylab("Proportion of All 'no' Utterances")+
+  ggtitle("Sentence-external 'no' Utterances")+
+  labs(color = "Syntactic Position", shape = "Syntactic Position", linetype = "Syntactic Position", group = "Syntactic Position")+
+  theme(axis.title = element_text(size = 13))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~speaker, ncol = 1)
+```
+
+A child uttering the word *no* followed by a negative sentence ([no + S_NEG]) is very unlikely to be using the initial *no* as a non-anaphoric pre-sentential negator. Such a use would require the child to compute double negation, a high-cost operation even for adults, in order to communicate a positive concept. There are, of course, pragmatic reasons that cause true double negatives to occur occasionally, but for children who are only just beginning to use negatives in multi-word utterances, this is a tall order. It is much more natural to conclude that a *no* preceding a negative utterance is instead an emphatic anaphoric negator. Furthermore, the strongest form of the pre-sentential hypothesis proposes that children go through a stage during which all of their negatives are utterance-external. An utterance of the form [no + S_NEG] is not compatible with this hypothesis, as the S_NEG itself exhibits already sentence-internal negation. To account for the many early [no + S_NEG] utterances under the pre-sentential hypothesis, we would need to posit a long period of co-existence between pre- and intra- sentential negation, which is not consistent with an initial pre-sentential stage.
+
+These observations do not allow us to unequivocally reject @klimaBellugi1966’s hypothesis of an initial sentence-external stage of negation, but they do make clear the insufficiency of the current evidence in support of the claim. It is, of course, possible that the entire sentence-external stage begins and ends before children acquire the combinatorial abilities to realize it overtly (ie. before they are producing sentences with a subject and a predicate). If this is the case, it will be impossible to differentiate between pre-sentential negation and constituent or intra-sentential negation using corpus production data, so the question is left to future laboratory work.
+
+The second question we sought to answer with Study 2 was whether or not children go through a stage during which they treat negative auxiliaries such as *don't* and *can't* as untensed, unanalyzed whole negators, akin to *no* and *not*, as proposed in @klimaBellugi1966’s Stage 2. One prediction generated by this proposal states that children’s uses of negative auxiliaries ought to be distributed without reference to person or number @schutze2010status. To test this prediction, we separated children’s utterances of *don't* and *doesn't* after a pronoun into third-singular contexts (where *doesn't* is correct), and non-third singular contexts (where *don't* is correct) (Figure \@ref(fig:Dont)). If negative auxiliaries were truly untensed, we would expect to see similar levels of *don't* and *doesn't* use respectively in both contexts. However, what we find instead is a clear asymmetry in the pattern of errors. Children’s uses of *don't* are distributed across both contexts, but *doesn't* appears almost exclusively in the third-singular context, where it is grammatically correct. This asymmetry indicates that at least *doesn't* is analyzed as an element that agrees for person and number from its earliest uses with pronouns. 
+
+```{r Dont, fig.env="figure", fig.height= 3, fig.cap="Children's utterances of *don't* and *doesn't* before 3 years of age."}
+third_sg_neg <- mutate(third_sg_neg, thirdsg = "Third-singular Utterances")
+other_pos_neg <- mutate(other_pos_neg, thirdsg = "Non-third-singular Utterances")
+
+all_pos_neg <- rbind(third_sg_neg, other_pos_neg)
+all_pos_neg$dont <- factor(all_pos_neg$dont, levels = c("don\'t", "doesn\'t"))
+all_pos_neg$thirdsg <- factor(all_pos_neg$thirdsg, levels = c("Third-singular Utterances", "Non-third-singular Utterances"))
+
+ggplot(all_pos_neg %>% filter(target_child_age>= 21), aes(bin, fill = dont))+
+  geom_bar(position = "fill")+
+  xlab("Child Age (months)")+
+  ylab("Proportion of Instances")+
+  #theme(axis.title = element_text(size = 13))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(20,"point"), legend.text=element_text(size=13), legend.title = element_text(size = 13))+
+  ggtitle("Distribution of Children's Negative 'don't' Uses")+
+  labs(fill = "\'don\'t\' form")+
+  scale_fill_brewer(palette = "Paired") +
+  facet_grid(~thirdsg) 
+```
+
+At first glance, the fact that children use *don't* in both correct non-third singular and incorrect third singular contexts might appear to support the claim that *don't* is not correctly analyzed at this stage. However, precisely the same pattern reveals itself in children’s positive utterances containing *do* and *does* –– children again produce *does* almost exclusively in correct third-singular contexts, but produce *do* in both correct and incorrect contexts (Figure \@ref(fig:Do)). Thus, the incorrect *don't* utterances that we observe in Figure X are in fact expected under the hypothesis that children are already at this age parsing *don't* as consisting of an auxiliary attached to the clitic *nt*, and their mistakes can be simply explained as mistakes in calculating agreement for the auxiliary *do*. These results converge with the findings of @schutze2010status.
+
+```{r Do, fig.env="figure", fig.height= 3, fig.cap="Children's utterances of *do* and *does* before 3 years of age."}
+third_sg_pos <- mutate(third_sg_pos, thirdsg = "Third-singular Utterances")
+other_pos_pos <- mutate(other_pos_pos, thirdsg = "Non-third-singular Utterances")
+
+all_pos_pos <- rbind(third_sg_pos, other_pos_pos)
+all_pos_pos$dont <- factor(all_pos_pos$dont, levels = c("don\'t", "doesn\'t"))
+all_pos_pos$thirdsg <- factor(all_pos_pos$thirdsg, levels = c("Third-singular Utterances", "Non-third-singular Utterances"))
+
+ggplot(all_pos_pos %>% filter(target_child_age>= 21), aes(bin, fill = do))+
+  geom_bar(position = "fill")+
+  xlab("Child Age (months)")+
+  ylab("Proportion of Instances")+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(15 ,"point"), legend.text=element_text(size=13), legend.title = element_text(size = 13))+
+  ggtitle("Distribution of Children's Positive 'do' Uses")+
+  labs(fill = "\'do\' form")+
+  scale_fill_brewer(palette = "Paired") +
+  facet_grid(~thirdsg)
+```
+
+Another pattern that has been cited as evidence for the theory that negative auxiliaries are initially unanalyzed in children’s lexicons is a sharp transition in children’s third person negative utterances from the use of *not* (eg. “It not fits”) to the use of *don't*/ *doesn't* (eg. “it don’t/doesn’t fit(s)”) [@thorntonTesan2013]. As an explanation for this pattern, @thorntonTesan2013 proposed that children learning English initially hypothesize that all negation is adverbial–– ie. the negative appears as an adverbial adjunct on the predicate. During this stage, children would be forced to coerce negative auxiliaries into an adverbial system as well. Adverbs in English do not vary under tense or person, so the use of words that adults analyze as negative auxiliaries within the adverbial system would result in failure to mark these words for tense and agreement. @thorntonTesan2013 hypothesized that children only later learn to add a negation head to their syntax. This addition would allow the negative morpheme *nt* to interact at least semi-productively with the auxiliary system, and thus would pave the way for children to correctly analyze and use negative auxiliaries.
+
+```{r Verb3sg, fig.cap="Breakdown of children's negative utterances after a third singular subject (and composed with a lexical verb) between 1 and 3 years of age.", fig.env="figure", fig.height=3}
+neg_3sg$neg <- factor(neg_3sg$neg, levels = c("not (eg. it not fit(s))", "nt (eg. it don\'t/doesn\'t fit(s))", "no (eg. it no fit(s))"))
+ggplot(neg_3sg, 
+       aes(bin, y = ..count../tapply(..count.., ..x.. ,sum)[..x..], color = neg, shape = neg, linetype = neg, group = neg))+
+  geom_point(stat = "count", size = 2)+
+  geom_line( stat = "count")+
+  xlab("Child Age (months)")+
+  ylab("Proportion of Instances")+
+  theme(axis.title = element_text(size = 13))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
+  theme(legend.key=element_blank(), legend.key.size=unit(20,"point"), legend.text = element_text(size = 13))+
+  labs(color = "Negative Morpheme", linetype = "Negative Morpheme", shape = "Negative Morpheme")+
+  scale_color_manual(values = c("not (eg. it not fit(s))" = "cyan3", "nt (eg. it don\'t/doesn\'t fit(s))" = "dark orchid", "no (eg. it no fit(s))" = "grey"))
+```
+
+The motivation that the authors provided for this theory was evidence that children transition sharply from using *not* to using *don't* and *doesn't* in third singular negative utterances. They hypothesized that this moment of transition was the moment that head negation was added to the lexicon. Our attempt to replicate this finding is presented in Figure \@ref(fig:Verb3sg). Instead of a transition, we found constant, relatively high levels of negative auxiliary use in third singular contexts, and constant, relatively low levels of *no* and *not*. These results, while not necessarily strictly inconsistent with a shift from adverbial to head negation, do provide a point against that account, as the distribution of children’s third person negators remains virtually constant throughout the acquisition period, and does not show any sudden transitions or changes that might be indicative of a paradigm shift.
+
+It is worth noting that the data cited in @thorntonTesan2013 were the result of a longitudinal elicitation study; it is possible that some task-specific element of that study led to the stark difference between our data and theirs, and further study will be required to determine the source of the difference. 
+
 **4.3 Conclusion**
+
+The first question we asked was whether children go through a stage during which their negations are realized externally to their utterances. We found that, while children do produce a number of apparently sentence-external negatives, as predicted by @klimaBellugi1966’s Stage 1, the vast majority of these utterances use *no* instead of *not*, and specifically are of the form [no + S]. Instances of this form do not swell early and then dissipate, as would be expected of an early stage of production, but rather are initially infrequent and slowly climb to adult levels. Furthermore, many of the propositions following these apparently pre-sentential *no*s are in fact negative themselves, making a true pre-sentential reading much less likely. We claim that these findings are not consistent with a sentence-external stage of negation development, and join @bloom1970, @wode1977four, and others in proposing that our observations are more consistent with an analysis of [no + S] utterances as largely anaphoric, with the negator negating some previous event or statement. 
+
+The second question we examined was the claim that children initially treat negative auxiliaries as irreducible units [@klimaBellugi1966]. We found that children discriminate their uses of the words *don't* and *doesn't* by the person and number of the subject from their earliest multi-word uses of the words, and in fact that the distribution of children’s *don't* and *doesn't* utterances is remarkably similar to the distribution of their positive *do* and *does* utterances. Furthermore, we failed to replicate the findings by @thorntonTesan2013 that children shift from using *not* to using negative auxiliaries in their third person utterances. Instead, we found relatively constant proportions of each negator throughout the age period below 36 months, making a sudden paradigm shift in children’s understanding of negation, such as a shift from adverbial to head negation, appear much less likely. Both of these findings add to the evidence against an initial stage during which negative auxiliaries are treated as unanalyzed whole negators. Children do attend to person and number when deciding which form of “don’t” to use, and they do not exhibit a sudden transition in negator use that might be indicative of shift away from unanalyzed negative auxiliaries.
 
 **5. Discussion** -- Results supported early productions of *no* (stage 1) before *not* and *n't*, but no evidence that *not* is produced before *n't*. We did not find support for robust non-anaphoric pre-sentential negation (stage 3) or contracted forms like *don't* and *can't* as unanalyzed wholes (stage 4). The results suggest a great degree of variability in children's productive development (de Villiers \& de Villiers 1979). Our findings are compatible with simultaneous development of frequent negative forms with a production bottleneck that favors shorter utterances like *no* to appear earlier.
 
