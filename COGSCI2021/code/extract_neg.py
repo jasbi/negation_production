@@ -13,6 +13,7 @@ def conll_read_sentence(file_handle):
 				return sent 
 			if len(toks) == 10 and '-' not in toks[0] and '.' not in toks[0]:
 				sent.append(toks)	
+
 	return None
 
 
