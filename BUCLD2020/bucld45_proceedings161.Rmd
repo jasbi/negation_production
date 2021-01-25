@@ -342,7 +342,7 @@ Another pattern that has been cited as evidence for the theory that negative aux
 
 ```{r Verb3sg, fig.cap="Breakdown of children's negative utterances after a third singular subject (and composed with a lexical verb) between 1 and 3 years of age.", fig.env="figure", fig.height=3}
 neg_3sg$neg <- factor(neg_3sg$neg, levels = c("not (eg. it not fit(s))", "nt (eg. it don\'t/doesn\'t fit(s))", "no (eg. it no fit(s))"))
-ggplot(neg_3sg, 
+ggplot(neg_3sg,
        aes(bin, y = ..count../tapply(..count.., ..x.. ,sum)[..x..], color = neg, shape = neg, linetype = neg, group = neg))+
   geom_point(stat = "count", size = 2)+
   geom_line( stat = "count")+
@@ -357,7 +357,7 @@ ggplot(neg_3sg,
 
 The motivation that the authors provided for this theory was evidence that children transition sharply from using *not* to using *don't* and *doesn't* in third singular negative utterances. They hypothesized that this moment of transition was the moment that head negation was added to the lexicon. Our attempt to replicate this finding is presented in Figure \@ref(fig:Verb3sg). Instead of a transition, we found constant, relatively high levels of negative auxiliary use in third singular contexts, and constant, relatively low levels of *no* and *not*. These results, while not necessarily strictly inconsistent with a shift from adverbial to head negation, do provide a point against that account, as the distribution of children’s third person negators remains virtually constant throughout the acquisition period, and does not show any sudden transitions or changes that might be indicative of a paradigm shift.
 
-It is worth noting that the data cited in @thorntonTesan2013 were the result of a longitudinal elicitation study; it is possible that some task-specific element of that study led to the stark difference between our data and theirs, and further study will be required to determine the source of the difference. 
+It is worth noting that the data cited in @thorntonTesan2013 were the result of a longitudinal elicitation study; it is possible that some task-specific element of that study led to the stark difference between our data and theirs, and further study will be required to determine the source of the difference.
 
 **4.3 Conclusion**
 
