@@ -220,43 +220,32 @@ pre_no$no <- factor(pre_no$no, levels = no_labels)
 pre_no_simple <- pre_no
 pre_no_simple$no <- plyr::mapvalues(pre_no_simple$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
 
-ggplot(pre_no_simple %>% filter(target_child_age >= 18), aes(bin, fill = no))+
-  geom_bar(position = "fill")+
-  xlab("Child Age (months)")+
-  ylab("Proportion of Instances")+
-  theme(axis.title = element_text(size = 13))+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
-  theme(legend.key=element_blank(), legend.key.size=unit(15,"point"), legend.text=element_text(size=10), legend.title = element_text(size = 13))+
-  ggtitle("Children's \'no\' Utterances")+
-  labs(fill = "Syntactic Position") +
-  scale_fill_manual(values = c("no + S" = "green4", 
-                               "S + no" = "limegreen",
-                               "no + X" = "deepskyblue", 
-                               "X + no" = "deepskyblue3", 
-                               "NP + no + VP" = "darkorchid1", 
-                               "other sentence internal" = "darkorchid"))
-```
-
-```{r ParentNoSyntaxPlot, fig.env="figure", fig.height= 3, fig.cap="Syntactic analysis of parents' *no* utterances to children between 1 and 3 years of age."}
 p_pre_no$no <- factor(p_pre_no$no, levels = no_labels)
 p_pre_no_simple <- p_pre_no
 p_pre_no_simple$no <- plyr::mapvalues(p_pre_no_simple$no, from = no_labels, to = c("no + S", "no + S", "S + no", "S + no", "no + X", "X + no", "NP + no + VP", "other sentence internal"))
 
-ggplot(p_pre_no_simple %>% filter(target_child_age >= 18), aes(bin, fill = no))+
+pre_no_simple <- pre_no_simple %>% mutate(speaker = "Children") %>% select(target_child_age, bin, no, speaker) 
+p_pre_no_simple <- p_pre_no_simple %>% mutate(speaker = "Parents") %>% select(target_child_age, bin, no, speaker)
+
+pre_no_combined <- rbind(pre_no_simple, p_pre_no_simple)
+
+ggplot(pre_no_combined %>% filter(target_child_age >= 18), aes(bin, fill = no))+
   geom_bar(position = "fill")+
   xlab("Child Age (months)")+
   ylab("Proportion of Instances")+
   theme(axis.title = element_text(size = 13))+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
+  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 8), plot.title = element_text(hjust = 0.5))+
   theme(legend.key=element_blank(), legend.key.size=unit(15,"point"), legend.text=element_text(size=10), legend.title = element_text(size = 13))+
-  ggtitle("Parents\' \'no\' Utterances")+
+  ggtitle("Children's and Parents' \'no\' Utterances")+
   labs(fill = "Syntactic Position") +
   scale_fill_manual(values = c("no + S" = "green4", 
                                "S + no" = "limegreen",
                                "no + X" = "deepskyblue", 
                                "X + no" = "deepskyblue3", 
                                "NP + no + VP" = "darkorchid1", 
-                               "other sentence internal" = "darkorchid"))
+                               "other sentence internal" = "darkorchid")) +
+  facet_grid(.~speaker)
+
 ```
 
 First, [no + S] utterances account for between a quarter and a half of all parental multi-word *no* utterances as well. Since parents do not produce ungrammatical *no*-external utterances, we can expect this rate in parental speech to reflect grammatical anaphoric cases of *no*. As Figure  \@ref(fig:ChildNoSyntaxPlot) shows (top green bars), children start with low proportions of [no+S] utterances and the proportions increase gradually until they reach the adult level. This pattern is the opposite of what a non-adult-like pre-sentential stage predicts, namely initial prevalence of non-adult-like pre-sentential utterances and their gradual decrease. The observed pattern is more consistent with children learning to follow anaphoric negation with longer and more complex utterances until they reach adult level production. Second, Figure \@ref(fig:NoPropPlot) shows the breakdown of presentential utterances by children and their parents into cases where the sentence itself is negative in polarity (eg. no I didn’t), and cases where the sentence is positive (eg. no I run). An utterance of the form [no + S_NEG] is not compatible with the pre-sentential negation hypothesis, as the S_NEG itself exhibits already sentence-internal negation. Ultimately, the only way to know for sure whether cases of [no + S_POS] are anaphoric or not is through careful examination of the context and annotation of instances. As discussed in Section 2, @drozd1995 looked at a subset of such cases and found less than 7% of these cases plausibly pre-sentential and non-anaphoric.
@@ -336,32 +325,28 @@ ggplot(all_pos_pos %>% filter(target_child_age>= 21), aes(bin, fill = do))+
   facet_grid(~thirdsg)
 ```
 
-Another pattern that has been cited as evidence for the theory that negative auxiliaries are initially unanalyzed in children’s lexicons is a sharp transition in children’s third person negative utterances from the use of *not* (eg. “It not fits”) to the use of *don't*/ *doesn't* (eg. “it don’t/doesn’t fit(s)”) [@thorntonTesan2013]. As an explanation for this pattern, @thorntonTesan2013 proposed that children learning English initially hypothesize that all negation is adverbial–– ie. the negative appears as an adverbial adjunct on the predicate. During this stage, children would be forced to coerce negative auxiliaries into an adverbial system as well. Adverbs in English do not vary under tense or person, so the use of words that adults analyze as negative auxiliaries within the adverbial system would result in failure to mark these words for tense and agreement. @thorntonTesan2013 hypothesized that children only later learn to add a negation head to their syntax. This addition would allow the negative morpheme *nt* to interact at least semi-productively with the auxiliary system, and thus would pave the way for children to correctly analyze and use negative auxiliaries.
+<!-- Another pattern that has been cited as evidence for the theory that negative auxiliaries are initially unanalyzed in children’s lexicons is a sharp transition in children’s third person negative utterances from the use of *not* (eg. “It not fits”) to the use of *don't*/ *doesn't* (eg. “it don’t/doesn’t fit(s)”) [@thorntonTesan2013]. As an explanation for this pattern, @thorntonTesan2013 proposed that children learning English initially hypothesize that all negation is adverbial–– ie. the negative appears as an adverbial adjunct on the predicate. During this stage, children would be forced to coerce negative auxiliaries into an adverbial system as well. Adverbs in English do not vary under tense or person, so the use of words that adults analyze as negative auxiliaries within the adverbial system would result in failure to mark these words for tense and agreement. @thorntonTesan2013 hypothesized that children only later learn to add a negation head to their syntax. This addition would allow the negative morpheme *nt* to interact at least semi-productively with the auxiliary system, and thus would pave the way for children to correctly analyze and use negative auxiliaries. -->
 
-```{r Verb3sg, fig.cap="Breakdown of children's negative utterances after a third singular subject (and composed with a lexical verb) between 1 and 3 years of age.", fig.env="figure", fig.height=3}
-neg_3sg$neg <- factor(neg_3sg$neg, levels = c("not (eg. it not fit(s))", "nt (eg. it don\'t/doesn\'t fit(s))", "no (eg. it no fit(s))"))
-ggplot(neg_3sg,
-       aes(bin, y = ..count../tapply(..count.., ..x.. ,sum)[..x..], color = neg, shape = neg, linetype = neg, group = neg))+
-  geom_point(stat = "count", size = 2)+
-  geom_line( stat = "count")+
-  xlab("Child Age (months)")+
-  ylab("Proportion of Instances")+
-  theme(axis.title = element_text(size = 13))+
-  theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+
-  theme(legend.key=element_blank(), legend.key.size=unit(20,"point"), legend.text = element_text(size = 13))+
-  labs(color = "Negative Morpheme", linetype = "Negative Morpheme", shape = "Negative Morpheme")+
-  scale_color_manual(values = c("not (eg. it not fit(s))" = "cyan3", "nt (eg. it don\'t/doesn\'t fit(s))" = "dark orchid", "no (eg. it no fit(s))" = "grey"))
-```
+<!-- ```{r Verb3sg, fig.cap="Breakdown of children's negative utterances after a third singular subject (and composed with a lexical verb) between 1 and 3 years of age.", fig.env="figure", fig.height=3} -->
+<!-- neg_3sg$neg <- factor(neg_3sg$neg, levels = c("not (eg. it not fit(s))", "nt (eg. it don\'t/doesn\'t fit(s))", "no (eg. it no fit(s))")) -->
+<!-- ggplot(neg_3sg, -->
+<!--        aes(bin, y = ..count../tapply(..count.., ..x.. ,sum)[..x..], color = neg, shape = neg, linetype = neg, group = neg))+ -->
+<!--   geom_point(stat = "count", size = 2)+ -->
+<!--   geom_line( stat = "count")+ -->
+<!--   xlab("Child Age (months)")+ -->
+<!--   ylab("Proportion of Instances")+ -->
+<!--   theme(axis.title = element_text(size = 13))+ -->
+<!--   theme(axis.text.x = element_text(angle = 70, vjust = 1, hjust=1, size = 11), plot.title = element_text(hjust = 0.5))+ -->
+<!--   theme(legend.key=element_blank(), legend.key.size=unit(20,"point"), legend.text = element_text(size = 13))+ -->
+<!--   labs(color = "Negative Morpheme", linetype = "Negative Morpheme", shape = "Negative Morpheme")+ -->
+<!--   scale_color_manual(values = c("not (eg. it not fit(s))" = "cyan3", "nt (eg. it don\'t/doesn\'t fit(s))" = "dark orchid", "no (eg. it no fit(s))" = "grey")) -->
+<!-- ``` -->
 
-The motivation that the authors provided for this theory was evidence that children transition sharply from using *not* to using *don't* and *doesn't* in third singular negative utterances. They hypothesized that this moment of transition was the moment that head negation was added to the lexicon. Our findings are presented in Figure \@ref(fig:Verb3sg). Instead of a transition, we found constant, relatively high levels of negative auxiliary use in third singular contexts, and constant, relatively low levels of *no* and *not*. These results, while not necessarily strictly inconsistent with a shift from adverbial to head negation, do provide a point against that account, as the distribution of children’s third person negators remains virtually constant throughout the acquisition period, and does not show any sudden transitions or changes that might be indicative of a paradigm shift.
+<!-- The motivation that the authors provided for this theory was evidence that children transition sharply from using *not* to using *don't* and *doesn't* in third singular negative utterances. They hypothesized that this moment of transition was the moment that head negation was added to the lexicon. Our findings are presented in Figure \@ref(fig:Verb3sg). Instead of a transition, we found constant, relatively high levels of negative auxiliary use in third singular contexts, and constant, relatively low levels of *no* and *not*. These results, while not necessarily strictly inconsistent with a shift from adverbial to head negation, do provide a point against that account, as the distribution of children’s third person negators remains virtually constant throughout the acquisition period, and does not show any sudden transitions or changes that might be indicative of a paradigm shift. -->
 
-<<<<<<< HEAD
-It is worth noting that the data cited in @thorntonTesan2013 were the result of a longitudinal elicitation study; it is possible that some task-specific element of that study led to the stark difference between our data and theirs, and further study will be required to determine the source of the difference.
-=======
 <!--
 It is worth noting that the data cited in @thorntonTesan2013 were the result of a longitudinal elicitation study of specific children; it is possible that some task-specific element of that study led to the stark difference between our data and theirs, and further study will be required to determine the source of the difference. 
 -->
->>>>>>> 60b02b20a2dbafec42ce88fe9f4acf6c8c84b4fa
 
 **4.3 Conclusion**
 
