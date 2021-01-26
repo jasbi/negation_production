@@ -376,15 +376,15 @@ child_neg_no_imperatives <- filter(child_negation, !grepl('imperative', type)) %
   filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances))
 
 dont_mistakes <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 dont_correct <- filter(child_neg_no_imperatives, grepl('pro:\\w* don\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 doesnt_correct <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 doesnt_mistakes <- filter(child_neg_no_imperatives, grepl('pro:\\w* doesn\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 
 thirdsg_neg <- rbind(doesnt_correct,dont_mistakes)
 other_pos_neg <- rbind(dont_correct, doesnt_mistakes)
@@ -420,15 +420,15 @@ p_neg_no_imperatives <- filter(parent_negation, !grepl('imperative', type)) %>%
   filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances))
 
 p_dont_mistakes <- filter(p_neg_no_imperatives, grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 p_dont_correct <- filter(p_neg_no_imperatives, grepl('pro:\\w* don\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 p_doesnt_correct <- filter(p_neg_no_imperatives, grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 p_doesnt_mistakes <- filter(p_neg_no_imperatives, grepl('pro:\\w* doesn\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 
 p_thirdsg_neg <- rbind(p_doesnt_correct,p_dont_mistakes)
 p_other_pos_neg <- rbind(p_dont_correct, p_doesnt_mistakes)
