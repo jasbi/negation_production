@@ -157,77 +157,77 @@ find_plurals <- function(gloss, pos)
 ```
 
 ```{r get child data}
-# child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
-# 
-# 
-# ## REMOVE IN FINAL VERSION ##########
-# # write.csv(child_utterances, "raw_data/unfiltered_eng_child_utterances.csv", row.names = FALSE)
-# child_utterances <- read.csv("raw_data/unfiltered_eng_child_utterances.csv", stringsAsFactors = FALSE)
-# ############
-# 
-# 
-# child_n_original_utterances <- nrow(child_utterances)
-# n_chi_orr <- child_utterances$speaker_id %>% unique() %>% length()
-# 
-# child_utterances <- child_utterances %>%
-#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?")))
-# 
-# child_n_not_transcribed <- child_utterances %>%
-#   filter(grepl('not yet transcribed need to fix', gloss)
-#          |grepl('^ ?$', part_of_speech)
-#          |grepl('^ ?$',clean_utterances)) %>%
-#   nrow()
-# 
-# child_utterances <- child_utterances %>%
-#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-#  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  filter(!grepl('^ ?$',clean_utterances))
-# 
-# child_utterances <- child_utterances %>%
-#   #remove repeated 'no'
-#   mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
-#   # Remove utterances that don't line up with their pos
-#   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
-#   # Bin child age by month
-#   mutate(bin = bin_age(target_child_age)) #%>%
-#   # Tag utterance for negation type/existence
-#   #mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
-# 
-# child_n_incorrect_pos <- child_n_original_utterances - child_n_not_transcribed - nrow(child_utterances)
-# 
-# child_utterances <- child_utterances %>%
-#   mutate(dont_pos = mapply(do_tag, clean_utterances, part_of_speech))
-# 
-# child_n_final_utterances <- nrow(child_utterances)
-# n_chi_pos <- child_utterances$speaker_id %>% unique() %>% length()
-# 
-# child_negation <-
-#  child_utterances %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances))
-# 
-# child_n_neg <- nrow(child_negation)
-# 
-# child_negation <- child_negation %>%
-#   # Add condensed part of speech column to reflect simplifications
-#   mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
-#   mutate(v_utterances = mapply(v_tag, clean_utterances, part_of_speech))
-# 
-# child_negation <- child_negation %>%
-#   # remove 'no co' and 'co no' etc.-- essentially single word negations
-#   filter(!grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*mod( co)*$',condensed_pos))
-# 
-# child_n_one_word <- child_n_neg - nrow(child_negation)
-# 
-# child_n_final_negatives <- nrow(child_negation)
-# n_chi_neg <- child_negation$speaker_id %>% unique() %>% length()
-# 
-# #child_utterances <- child_utterances %>% unnest(neg)
-# child_negation <- child_negation %>% unnest(neg)
-# 
-# 
-# #### REMOVE IN FINAL VERSION ############
-# write.csv(child_utterances, "raw_data/eng_child_utterances.csv", row.names = FALSE)
-# write.csv(child_negation, "raw_data/eng_child_negation.csv", row.names = FALSE)
+#child_utterances <- get_utterances(language = "eng", age = age_limits, role = "Target_Child")
+
+
+## REMOVE IN FINAL VERSION ##########
+#write.csv(child_utterances, "raw_data/unfiltered_eng_child_utterances.csv", row.names = FALSE)
+child_utterances <- read.csv("raw_data/unfiltered_eng_child_utterances.csv", stringsAsFactors = FALSE)
+############
+
+
+child_n_original_utterances <- nrow(child_utterances)
+n_chi_orr <- child_utterances$speaker_id %>% unique() %>% length()
+
+child_utterances <- child_utterances %>%
+ mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?")))
+
+child_n_not_transcribed <- child_utterances %>%
+  filter(grepl('not yet transcribed need to fix', gloss)
+         |grepl('^ ?$', part_of_speech)
+         |grepl('^ ?$',clean_utterances)) %>%
+  nrow()
+
+child_utterances <- child_utterances %>%
+ filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+ filter(!grepl('^ ?$', part_of_speech)) %>%
+ filter(!grepl('^ ?$',clean_utterances))
+
+child_utterances <- child_utterances %>%
+  #remove repeated 'no'
+  mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
+  # Remove utterances that don't line up with their pos
+  filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
+  # Bin child age by month
+  mutate(bin = bin_age(target_child_age)) #%>%
+  # Tag utterance for negation type/existence
+  #mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
+
+child_n_incorrect_pos <- child_n_original_utterances - child_n_not_transcribed - nrow(child_utterances)
+
+child_utterances <- child_utterances %>%
+  mutate(dont_pos = mapply(do_tag, clean_utterances, part_of_speech))
+
+child_n_final_utterances <- nrow(child_utterances)
+n_chi_pos <- child_utterances$speaker_id %>% unique() %>% length()
+
+child_negation <-
+ child_utterances %>%
+ filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances))
+
+child_n_neg <- nrow(child_negation)
+
+child_negation <- child_negation %>%
+  # Add condensed part of speech column to reflect simplifications
+  mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech)) %>%
+  mutate(v_utterances = mapply(v_tag, clean_utterances, part_of_speech))
+
+child_negation <- child_negation %>%
+  # remove 'no co' and 'co no' etc.-- essentially single word negations
+  filter(!grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*mod( co)*$',condensed_pos))
+
+child_n_one_word <- child_n_neg - nrow(child_negation)
+
+child_n_final_negatives <- nrow(child_negation)
+n_chi_neg <- child_negation$speaker_id %>% unique() %>% length()
+
+#child_utterances <- child_utterances %>% unnest(neg)
+#child_negation <- child_negation %>% unnest(neg)
+
+
+#### REMOVE IN FINAL VERSION ############
+write.csv(child_utterances, "raw_data/eng_child_utterances.csv", row.names = FALSE)
+write.csv(child_negation, "raw_data/eng_child_negation.csv", row.names = FALSE)
 
 child_utterances <- read.csv("raw_data/eng_child_utterances.csv", stringsAsFactors=FALSE)
 child_negation <- read.csv("raw_data/eng_child_negation.csv", stringsAsFactors=FALSE)
@@ -238,68 +238,66 @@ child_negation <- read.csv("raw_data/eng_child_negation.csv", stringsAsFactors=F
 ```{r get parent data}
 #parent_utterances <- get_utterances(language = "eng", age = age_limits, role = c("Mother", "Father"))
 
-########### REMOVE IN FINAL VERSION ####################
-# write.csv(parent_utterances, "raw_data/unfiltered_eng_parent_utterances.csv", row.names = FALSE)
-#  parent_utterances <- read.csv("raw_data/unfiltered_eng_parent_utterances.csv", stringsAsFactors=FALSE)
-# #################################
-# 
-# parent_n_original_utterances <- nrow(parent_utterances)
-# 
-# parent_utterances <- parent_utterances %>%
-#  mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?")))
-# 
-# parent_n_not_transcribed <- parent_utterances %>%
-#   filter(grepl('not yet transcribed need to fix', gloss)
-#          |grepl('^ ?$', part_of_speech)
-#          |grepl('^ ?$',clean_utterances)) %>%
-#   length()
-# 
-# parent_utterances <- parent_utterances %>%
-#  filter(!grepl('not yet transcribed need to fix', gloss)) %>%
-#  filter(!grepl('^ ?$', part_of_speech)) %>%
-#  filter(!grepl('^ ?$',clean_utterances))
-# 
-# parent_utterances <- parent_utterances %>%
-#   #remove repeated 'no'
-#   mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
-#   # Remove utterances that don't line up with their pos
-#   filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
-#   # Bin child age by month
-#    mutate(bin = bin_age(target_child_age)) #%>%
-#   # Tag utterance for negation type/existence
-#   # mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
-# 
-# parent_n_incorrect_pos <- parent_n_original_utterances - parent_n_not_transcribed - nrow(parent_utterances)
-# 
-# parent_utterances <- parent_utterances %>%
-#   mutate(dont_pos = mapply(do_tag, clean_utterances, part_of_speech))
-# 
-# parent_n_final_utterances <- nrow(parent_utterances)
-# 
-# parent_negation <-
-#  parent_utterances %>%
-#  filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances))
-# 
-# parent_n_neg <- nrow(parent_negation)
-# 
-# parent_negation <- parent_negation %>%
-#   # Add condensed part of speech column to reflect simplifications
-#   mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech))
-# 
-# parent_negation <- parent_negation %>%
-#   # remove 'no co' and 'co no' etc.-- essentially single word negations
-#   filter(!grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*[a-z]+n\'t( co)*$',condensed_pos))
-# 
-# parent_n_one_word <- parent_n_neg - nrow(parent_negation)
-# 
-# parent_n_final_negatives <- nrow(parent_negation)
-# 
-# #parent_utterances <- parent_utterances %>% unnest(neg)
-# #parent_negation <- parent_negation %>% unnest(neg)
-# 
-# #### REMOVE IN FINAL VERSION ############
-# write.csv(parent_utterances, "raw_data/eng_parent_utterances.csv", row.names = FALSE)
-# write.csv(parent_negation, "raw_data/eng_parent_negation.csv", row.names = FALSE)
+########## REMOVE IN FINAL VERSION ####################
+#write.csv(parent_utterances, "raw_data/unfiltered_eng_parent_utterances.csv", row.names = FALSE)
+parent_utterances <- read.csv("raw_data/unfiltered_eng_parent_utterances.csv", stringsAsFactors=FALSE)
+#################################
+
+parent_n_original_utterances <- nrow(parent_utterances)
+
+parent_utterances <- parent_utterances %>%
+ mutate(clean_utterances = removeWords(gloss, c("xxx ?", "yyy ?", "um ?", "uh ?", "ah ?")))
+
+l1 <- nrow(parent_utterances)
+
+parent_utterances <- parent_utterances %>%
+ filter(!grepl('not yet transcribed need to fix', gloss)) %>%
+ filter(!grepl('^ ?$', part_of_speech)) %>%
+ filter(!grepl('^ ?$',clean_utterances))
+
+parent_n_not_transcribed <- l1 - nrow(parent_utterances)
+
+parent_utterances <- parent_utterances %>%
+  #remove repeated 'no'
+  mutate(clean_utterances = lapply(clean_utterances, fix_nos) %>% unlist()) %>%
+  # Remove utterances that don't line up with their pos
+  filter(mapply(check_lengths, part_of_speech, clean_utterances)) %>%
+  # Bin child age by month
+   mutate(bin = bin_age(target_child_age)) #%>%
+  # Tag utterance for negation type/existence
+  # mutate(neg = mapply(neg_tag, clean_utterances, part_of_speech))
+
+parent_n_incorrect_pos <- parent_n_original_utterances - parent_n_not_transcribed - nrow(parent_utterances)
+
+parent_utterances <- parent_utterances %>%
+  mutate(dont_pos = mapply(do_tag, clean_utterances, part_of_speech))
+
+parent_n_final_utterances <- nrow(parent_utterances)
+
+parent_negation <-
+ parent_utterances %>%
+ filter(grepl('( |^)no( |$)|( |^)not( |$)|( |^)[a-z]+n\'t( |$)', clean_utterances))
+
+parent_n_neg <- nrow(parent_negation)
+
+parent_negation <- parent_negation %>%
+  # Add condensed part of speech column to reflect simplifications
+  mutate(condensed_pos = mapply(condense_pos, clean_utterances, part_of_speech))
+
+parent_negation <- parent_negation %>%
+  # remove 'no co' and 'co no' etc.-- essentially single word negations
+  filter(!grepl('^(co )*no:\\w{2}( co)*$|^(co )*not( co)*$|^(co )*[a-z]+n\'t( co)*$',condensed_pos))
+
+parent_n_one_word <- parent_n_neg - nrow(parent_negation)
+
+parent_n_final_negatives <- nrow(parent_negation)
+
+#parent_utterances <- parent_utterances %>% unnest(neg)
+#parent_negation <- parent_negation %>% unnest(neg)
+
+#### REMOVE IN FINAL VERSION ############
+write.csv(parent_utterances, "raw_data/eng_parent_utterances.csv", row.names = FALSE)
+write.csv(parent_negation, "raw_data/eng_parent_negation.csv", row.names = FALSE)
 
 parent_utterances <- read.csv("raw_data/eng_parent_utterances.csv", stringsAsFactors=FALSE)
 parent_negation <- read.csv("raw_data/eng_parent_negation.csv", stringsAsFactors=FALSE)
@@ -307,31 +305,31 @@ parent_negation <- read.csv("raw_data/eng_parent_negation.csv", stringsAsFactors
 ```
 
 ```{r exclusions}
-# child_exclusions <- data.frame(
-#   initial = child_n_original_utterances,
-#   n_chi_initial = n_chi_orr,
-#   not_transcribed = child_n_not_transcribed,
-#   pos_incorrect = child_n_incorrect_pos,
-#   negative = child_n_neg,
-#   one_word = child_n_one_word,
-#   n_chi_pos = n_chi_pos,
-#   n_chi_neg = n_chi_neg,
-#   final_pos = child_n_final_utterances,
-#   final_neg = child_n_final_negatives
-#   )
-# 
-# parent_exclusions <- data.frame(
-#   initial = parent_n_original_utterances,
-#   not_transcribed = parent_n_not_transcribed,
-#   pos_incorrect = parent_n_incorrect_pos,
-#   negative = parent_n_neg,
-#   one_word = parent_n_one_word,
-#   final_pos = parent_n_final_utterances,
-#   final_neg = parent_n_final_negatives
-#   )
-# 
-# write.csv(child_exclusions, "processed_data/study2_child_exclusions.csv", row.names = FALSE)
-# write.csv(parent_exclusions, "processed_data/study2_parent_exclusions.csv", row.names = FALSE)
+child_exclusions <- data.frame(
+  initial = child_n_original_utterances,
+  n_chi_initial = n_chi_orr,
+  not_transcribed = child_n_not_transcribed,
+  pos_incorrect = child_n_incorrect_pos,
+  negative = child_n_neg,
+  one_word = child_n_one_word,
+  n_chi_pos = n_chi_pos,
+  n_chi_neg = n_chi_neg,
+  final_pos = child_n_final_utterances,
+  final_neg = child_n_final_negatives
+  )
+
+parent_exclusions <- data.frame(
+  initial = parent_n_original_utterances,
+  not_transcribed = parent_n_not_transcribed,
+  pos_incorrect = parent_n_incorrect_pos,
+  negative = parent_n_neg,
+  one_word = parent_n_one_word,
+  final_pos = parent_n_final_utterances,
+  final_neg = parent_n_final_negatives
+  )
+
+write.csv(child_exclusions, "processed_data/study2_child_exclusions.csv", row.names = FALSE)
+write.csv(parent_exclusions, "processed_data/study2_parent_exclusions.csv", row.names = FALSE)
 
 child_exclusions <- read.csv("processed_data/study2_child_exclusions.csv", stringsAsFactors=FALSE)
 parent_exclusions <- read.csv("processed_data/study2_parent_exclusions.csv", stringsAsFactors=FALSE)
@@ -378,15 +376,15 @@ child_neg_no_imperatives <- filter(child_negation, !grepl('imperative', type)) %
   filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances))
 
 dont_mistakes <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 dont_correct <- filter(child_neg_no_imperatives, grepl('pro:\\w* don\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 doesnt_correct <- filter(child_neg_no_imperatives, grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 doesnt_mistakes <- filter(child_neg_no_imperatives, grepl('pro:\\w* doesn\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 
 thirdsg_neg <- rbind(doesnt_correct,dont_mistakes)
 other_pos_neg <- rbind(dont_correct, doesnt_mistakes)
@@ -422,15 +420,15 @@ p_neg_no_imperatives <- filter(parent_negation, !grepl('imperative', type)) %>%
   filter(!grepl('(who|what|when|where|why) doesn\'t', clean_utterances))
 
 p_dont_mistakes <- filter(p_neg_no_imperatives, grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 p_dont_correct <- filter(p_neg_no_imperatives, grepl('pro:\\w* don\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'don\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "don\'t")
+  mutate(do = "don\'t")
 p_doesnt_correct <- filter(p_neg_no_imperatives, grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 p_doesnt_mistakes <- filter(p_neg_no_imperatives, grepl('pro:\\w* doesn\'t', dont_pos)) %>%
   filter(!grepl(paste(pronouns3sg, 'doesn\'t', sep = " "), clean_utterances)) %>%
-  mutate(dont = "doesn\'t")
+  mutate(do = "doesn\'t")
 
 p_thirdsg_neg <- rbind(p_doesnt_correct,p_dont_mistakes)
 p_other_pos_neg <- rbind(p_dont_correct, p_doesnt_mistakes)
