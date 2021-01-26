@@ -143,6 +143,8 @@ prevalence and emergence of such cases.
 
 Caveat on production vs comprehension.
 
+Focusing on the utterance level in this study
+
 \hypertarget{experiments}{%
 \section{Experiments}\label{experiments}}
 
@@ -151,15 +153,16 @@ Caveat on production vs comprehension.
 
 For developmental data of child language in English, we turned to the
 CHILDES database (MacWhinney, 2000), which provides child-parent
-conversational interactions. We focused on utterances produced by
-children with typical development within the age range of 12 - 72
-months, then extracted cases with any of the three negation markers that
-are of interest in this study: \emph{no}, \emph{not} and \emph{n't}.
-Utterances with only one lexical token (e.g.~\emph{no !}) were not
-considered as here we aim to address particularly the question of what
-negation markers could \emph{combine} with. Preprocessing led to a data
-set of 365,260 utterances with negation structures from a total of 811
-children across 56 corpora.
+conversational
+interactions.\footnote{Code and data for our study are in quarantine at https://somewhereonearth.}.
+We focused on utterances produced by children with typical development
+within the age range of 12 - 72 months, then extracted cases with any of
+the three negation markers that are of interest in this study:
+\emph{no}, \emph{not} and \emph{n't}. Utterances with only one lexical
+token (e.g.~\emph{no !}) were not considered as here we aim to address
+particularly the question of what negation markers could \emph{combine}
+with. Preprocessing led to a data set of 365,260 utterances with
+negation structures from a total of 811 children across 56 corpora.
 
 Figure @ref(fig:speaker\_stats)
 
@@ -174,21 +177,23 @@ Figure @ref(fig:speaker\_stats)
 \end{figure}
 \end{CodeChunk}
 
-\hypertarget{negation-concepts}{%
-\subsection{Negation concepts}\label{negation-concepts}}
+\hypertarget{negation-domains}{%
+\subsection{Negation domains}\label{negation-domains}}
 
 In this section, we describe in details our automatic extraction of
 syntactic structures that express different types of negation concepts.
 The current English data from CHILDES contains morphosyntactic
 information (Sagae, Davis, Lavie, MacWhinney, \& Wintner, 2010) such as
 part-of-speech (POS) information as well as grammatical or syntactic
-dependency relations. We take advantage of information as such when
-automatically identifying our constructions of interest. An utterance
-with negative morpheme(s) was only considered when the negative
-morphemes has either a POS of \emph{neg} or \emph{qn}, the latter of
-which was mainly for cases with \emph{no} as a quantifier. Furthermore,
-the syntactic functions and relations of the negative morphemes should
-not be enumeration (\emph{no no no}), communicators or discourse markers
+dependency
+relations.\footnote{Besides using the provided POS and syntactic dependency information in CHILDES, we also experimented with the state-of-the art parser from Stanza [@qi-etal-2020-stanza]. There were no worth noting differences in the analyses for the negation constructions.}
+We take advantage of information as such when automatically identifying
+our constructions of interest. An utterance with negative morpheme(s)
+was only considered when the negative morphemes has either a POS of
+\emph{neg} or \emph{qn}, the latter of which was mainly for cases with
+\emph{no} as a quantifier. Furthermore, the syntactic functions and
+relations of the negative morphemes should not be enumeration (\emph{no
+no no}), communicators or discourse markers
 
 After extracting all instances with negative morphemes, the
 developmental trajectory of each construction type as described in the
@@ -202,21 +207,25 @@ whole
 \subsubsection{Emotion}\label{emotion}}
 
 In order to investigate utterances that express emotions, particularly
-the concept of rejections, we focused on specific cases where the head
-verb of the phrase is either \emph{like} or \emph{want} (including
-different forms of the verbs such as \emph{liked} or \emph{wanna} ), and
-the head verb is immediately preceded by one of the three negative
-morphemes. In particular, to not confuse with cases such as rhetorical
-questions (\emph{don't you like it}) or declaratives (\emph{you don't
-wanna do that}), which are more common in parent speech, our analyses
-were restricted to utterances where the head verb \emph{like} or
-\emph{want} takes either a subject \emph{I} or has no subject. The
-existence of a subject was determined via searching for a word in the
-utterance that has the \emph{SUBJ} dependency relation with the head
-verb. Overall our data extraction resulted in a total of 12,329
-utterances (Child: 8,223; Parent: 4,106). ~ (1) \emph{like}: \emph{I no
-like sea} (2) \emph{want}: \emph{no want one now} / \emph{don't wanna
-go} ~
+the concept of rejections, we focused on specific cases where the lemma
+form of the head verb of the phrase is either \emph{like} or
+\emph{want}, and the head verb is modified by one of the three negative
+morphemes. Each of the utterances either takes a subject or has no
+subject at all. And the existence of a subject was determined via
+searching for a word in the utterance that has the \emph{SUBJ}
+dependency relation with the head verb.
+
+Additionally, other than expressions that the speaker used to describe
+their own emotions (e.g.~(1)) or their (in)ability to do so, we also
+included cases that express rhetorical inquiries of emotions from one
+interlocutor addressed to another (e.g.~(3)) as well as instances where
+the speaker is describing the emotions of somebody else (e.g.~(4)).
+Overall our data extraction resulted in a total of 21,034 utterances
+(Child: 9,608; Parent: 11,426).
+
+~ (1) \emph{I no like sea} / \emph{don't wanna go} ~ (2) \emph{I can't
+like that} ~ (3) \emph{don't you wanna try it} ~ (4) \emph{Sarah doesn't
+like that either} ~
 
 To compare the patterns between child and parent speech, for each
 domain, we calculated the relative ratio of (i) each of the three
@@ -248,25 +257,78 @@ concept of rejection is the most frequent during the age range of 13 -
 \end{figure}
 \end{CodeChunk}
 
+\hypertarget{theory-of-mind}{%
+\subsubsection{Theory of mind}\label{theory-of-mind}}
+
+With regards to the domain of theory of mind, we attended to cases that
+express epistemic position. Specifically, we focused on utterances that
+articulate the concept of unknowing (e.g.~(5)) or uncertainty
+(e.g.~(6)). The cases that were subject to analyses here included either
+\emph{know}, \emph{remember} or \emph{think} as the head verb, modified
+by the negative morphemes or the combination of the negative morphemes
+with auxiliaries. By these search criteria, instances where the speaker
+inquires about or describes the epistemic position of another speaker
+(e.g.~(7)) were also selected. This led to a subset of 32,793 utterances
+in total (Child: 10,389; Parent: 22,404).
+
+~ (5) \emph{I not know} / \emph{I didn't remember} (6) \emph{I don't
+think so} (7) \emph{don't you remember} / \emph{She doesn't know this} ~
+
+In both child and parent speech, the most frequently used negative
+morpheme in expressing epistemic position is \emph{n't}, a pattern that
+is consistent across the three different head verbs. And the negative
+morphemes tend to co-occur more often in cases that describes the state
+of unknowing, which is indicated mainly by the verb \emph{know}. Given
+results from Figure @ref\{fig:epistemic\}, there does not seem to be a
+quite consistent developmental trajectory of child speech in the domain
+of theory of mind. While regardless of the head verb, children appeared
+to start applying the negative morphemes in this domain around the age
+of 4. Nevertheless, there seems to be more variability in expressing an
+epistemic position with \emph{remember} and \emph{think} as the children
+age. By contrast, the pattern for instances with \emph{know} gradually
+decreases after the age of 16 months.
+
+\begin{CodeChunk}
+\begin{figure}[H]
+
+{\centering \includegraphics{figs/epistemic-1} 
+
+}
+
+\caption[Theory of mind]{Theory of mind}\label{fig:epistemic}
+\end{figure}
+\end{CodeChunk}
+
 \hypertarget{motor-control}{%
 \subsubsection{Motor control}\label{motor-control}}
 
 For utterances that articulate the concept of motor control, we focused
 on two individual aspects with different communicative functions. The
-first one includes cases that indicate prohibition (\emph{e.g.} (3)),
-and the second one contain cases that articulate inability (\emph{e.g.}
-(4)). For the former, we analyzed cases where the negative morphemes are
-combined with the auxiliary verb \emph{do} (\emph{do}, \emph{does},
-\emph{did}) and the auxiliary does not take any subject; whereas for the
-latter, we analyzed cases where the negative morphemes co-occur with the
-auxiliary \emph{can} (\emph{can} and \emph{could}). For inability in
-particular, similarly to the extraction of utterances that express
-rejection, in order to not accidentally include utterances such as
-rhetorical questions or imperatives (\emph{you can't do that}), we
-excluded instances where the subject is not \emph{I}. This led to a
-subset of 64,801 utterances (Child: 20,129; Parent: 44,672). ~ (3)
-\emph{do}: \emph{don't blame Charlotte} (4) \emph{can}: \emph{I can't
-see} ~
+first one includes cases that indicate prohibition (e.g.~(8)), and the
+second one contain cases that articulate inability (e.g.~(9)). For the
+former, we analyzed cases where the negative morphemes are combined with
+the auxiliary verb \emph{do} (\emph{do}, \emph{does}, \emph{did}) and
+the auxiliary does not take any subject; whereas for the latter, we
+analyzed cases where the negative morphemes co-occur with the auxiliary
+\emph{can} (\emph{can} and \emph{could}). For both functions, the
+negative morphemes and the auxiliary together modifies a head verb. In
+order to not overlap with the domain of Emotion, Theory of Mind and
+Perception (see below), our search excluded cases where the head verb
+has any of the following lemma forms: \emph{like}, \emph{want},
+\emph{know}, \emph{think}, \emph{remember}, \emph{have}.
+
+For inability in particular, cases that do not have a subject
+(\emph{can't play}) or contain a subject other than I (\emph{you can't
+do that}) could yield ambiguous readings without taking a larger
+discourse context into account; they could be a rhetorical question or
+also express the concept of prohibition. Therefore to avoid potential
+ambiguity, we excluded instances as such. In other words, when searching
+for utterances that articulate inability, we restricted our analyses
+only to cases with a subject \emph{I}. This led to a subset of 235
+utterances (Child: 113; Parent: 122).
+
+~ (8) \emph{do}: \emph{don't blame Charlotte} ~ (9) \emph{can}: \emph{I
+can't see} ~
 
 Again for comparison of child and parent speech, we calculated the
 relative ratio of (i) each of the three negative morphemes overall; (ii)
@@ -300,18 +362,21 @@ increases until the age of 22 months.
 \subsubsection{Language learning}\label{language-learning}}
 
 Within the domain of language learning, we concentrated on cases where
-negative morphemes are adopted to for labeing in the identity
-(\emph{e.g.} (5) \& (6)) or existence (\emph{e.g.} (7)) of the nominal
-object that is being described. To do this, we extracted utterances that
-fit the following criteria: first, the negative morpheme has to be
-modifying a copula verb; secondly, the copula verb has to have a
-predicative nominal, which was identified with the help of POS
-information and dependency relation. The POS of the predicate has to be
-noun (\emph{n}) and its dependency relation with the copula has to be
-\emph{PRED}. This resulted in a total of 12,739 utterances (Child: 3,350
-utterances; Parent: 9,389 utterances). ~ (5) \emph{that's not a farmer}
-(6) \emph{I'm not a heavy baby Mum} (7) \emph{can}: \emph{there are no
-trees} ~
+negative morphemes are adopted to label the identity (e.g.~(10)), and/or
+characteristics (e.g.~(11)) of a predicative nominal. In addition, we
+also included instances where the negators are used to modify a
+predicative adjective (e.g.~(12)). Following these criteria, utterances
+where the negative morpheme is modifying a nominal or adjectival
+predicate of a copula verb were extracted. None of the utterances
+contain expletives (\emph{there is no book}). The existence of a
+predicate was identified with the help of POS information and dependency
+relation. The POS of the predicate has to be either noun (\emph{n}) or
+adjective (\emph{adj}), and its dependency relation with the copula has
+to be \emph{PRED}. This resulted in a total of 27,689 utterances (Child:
+55 utterances; Parent: 61 utterances).
+
+~ (10) \emph{that's not a farmer} (11) \emph{I'm not a heavy baby Mum}
+(12) \emph{It's no good} ~
 
 Again for comparison of child and parent speech, we calculated the
 relative ratio of (i) each of the three negative morphemes overall; (ii)
@@ -344,42 +409,57 @@ domain began to decrease around the age of 18 months.
 \end{figure}
 \end{CodeChunk}
 
-\hypertarget{theory-of-mind}{%
-\subsubsection{Theory of mind}\label{theory-of-mind}}
+\hypertarget{perception}{%
+\subsubsection{Perception}\label{perception}}
 
-With regards to the domain of theory of mind, we attended to cases that
-express epistemic position. Specifically, we focused on utterances that
-articulate the concept of unknowing (\emph{I not know} or \emph{I didn't
-remember}) or uncertainty (\emph{I don't think so}). The cases that were
-subject to analyses here included either \emph{know}, \emph{remember} or
-\emph{think} as the head verb, modified by the negative morphemes or the
-combination of the negative morphemes with auxiliaries. Additionally, we
-restricted to instances where the head verb is either subjectless or has
-the subject \emph{I}. This led to a subset of 27,821 utterances in total
-(Child: 9,282; Parent: 18,539)
+The last domain to be analyzed here is Perception, with two particular
+functions. First one is indication of non-existence, while the second
+one denotes possession. For expressions of non-existence, we extracted
+utterances that either have expletives marked by \emph{there}
+(e.g.~(13)), or cases where the negative morphemes are modifying a
+nominal (i.e.~its syntactic head based on the CHILDES annotation is a
+nominal; e.g.~(14)). For expressions of possession, we selected
+utterances where the negative morphemes are modifying a possessive
+pronoun, as well as instances where the negative morphemes are combined
+with auxiliary verbs to modify a head verb with the lemma form
+\emph{have} (e.g.~(15)). With utterances such (14) and (15), in order to
+not confuse with the domain of Language Learning, we did not include any
+cases where the syntactic head of the negative morphemes is a predicate
+of a copula verb. As a result, our search did not find any utterances
+that express the function of possession in this case, and the total of
+utterances that were subjected to analysis in this domain is 23,408
+(Child: 55; Parent: 61). (13) \emph{there's no water} (14) \emph{no
+(more) candy} / \emph{not in your mouth} (15) \emph{not mine} / \emph{I
+don't have it}
 
-In both child and parent speech, the most frequently used negative
-morpheme in expressing epistemic position is \emph{n't}, a pattern that
-is consistent across the three different head verbs. And the negative
-morphemes tend to co-occur more often in cases that describes the state
-of unknowing, which is indicated mainly by the verb \emph{know}. Given
-results from Figure @ref\{fig:epistemic\}, there does not seem to be a
-quite consistent developmental trajectory of child speech in the domain
-of theory of mind. While regardless of the head verb, children appeared
-to start applying the negative morphemes in this domain around the age
-of 4. Nevertheless, there seems to be more variability in expressing an
-epistemic position with \emph{remember} and \emph{think} as the children
-age. By contrast, the pattern for instances with \emph{know} gradually
-decreases after the age of 16 months.
+In both child and parent speech, the most frequently occurred negative
+morphemes in the domain of Perception is \emph{no}. Again for comparison
+of child and parent speech, we calculated the relative ratio of (i) each
+of the three negative morphemes overall; (ii) usage of negative
+morphemes with the two different communicative functions; (iii)
+utterances expression motor control with the three negative morphemes at
+different ages of the child. Overall the most frequently used negative
+morpheme is \emph{n't} when applied in the domain of motor control.
+Comparing the two communicative functions, the negative morphemes tend
+to co-occur more often when expressing inability.
+
+As shown in Figure @ref\{fig:perception\}, the developmental trajectory
+of using the negative morphemes in the domain of Perception is also
+comparable to previous domains. Children began applying the negative
+morphemes to this domain around the age of 8 months and their usage
+gradually increased after the age of 11 months. Similarly to the domain
+of Language Learning, the frequency of using the negative morphemes in
+indicating non-existence started to decrease around the age of 19
+months.
 
 \begin{CodeChunk}
 \begin{figure}[H]
 
-{\centering \includegraphics{figs/epistemic-1} 
+{\centering \includegraphics{figs/perception-1} 
 
 }
 
-\caption[Theory of mind]{Theory of mind}\label{fig:epistemic}
+\caption[Perception]{Perception}\label{fig:perception}
 \end{figure}
 \end{CodeChunk}
 
@@ -387,155 +467,8 @@ decreases after the age of 16 months.
 \subsubsection{An overall look at all
 domains}\label{an-overall-look-at-all-domains}}
 
-\hypertarget{study}{%
-\section{Study}\label{study}}
-
-First level headings should be in 12 point , initial caps, bold and
-centered. Leave one line space above the heading and
-1/4\textasciitilde line space below the heading.
-
-\hypertarget{method}{%
-\subsection{Method}\label{method}}
-
-Second level headings should be 11 point , initial caps, bold, and flush
-left. Leave one line space above the heading and 1/4\textasciitilde{}
-line space below the heading.
-
-\hypertarget{third-level-headings}{%
-\subsubsection{Third-Level Headings}\label{third-level-headings}}
-
-Third-level headings should be 10 point , initial caps, bold, and flush
-left. Leave one line space above the heading, but no space after the
-heading.
-
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
-
-Use standard APA citation format. Citations within the text should
-include the author's last name and year. If the authors' names are
-included in the sentence, place only the year in parentheses, as in
-(1972), but otherwise place the entire reference in parentheses with the
-authors and year separated by a comma (Newell \& Simon, 1972). List
-multiple references alphabetically and separate them by semicolons
-(Chalnick \& Billman, 1988; Newell \& Simon, 1972). Use the et.
-al.~construction only after listing all the authors to a publication in
-an earlier reference and for citations with four or more authors.
-
-For more information on citations in RMarkdown, see
-\textbf{\href{http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html\#citations}{here}.}
-
-\hypertarget{footnotes}{%
-\subsection{Footnotes}\label{footnotes}}
-
-Indicate footnotes with a number\footnote{Sample of the first
-footnote.} in the text. Place the footnotes in 9 point type at the
-bottom of the page on which they appear. Precede the footnote with a
-horizontal rule.\footnote{Sample of the second footnote.} You can also
-use markdown formatting to include footnotes using this
-syntax.\footnote{Sample of a markdown footnote.}
-
-\hypertarget{figures}{%
-\subsection{Figures}\label{figures}}
-
-All artwork must be very dark for purposes of reproduction and should
-not be hand drawn. Number figures sequentially, placing the figure
-number and caption, in 10 point, after the figure with one line space
-above the caption and one line space below it. If necessary, leave extra
-white space at the bottom of the page to avoid splitting the figure and
-figure caption. You may float figures to the top or bottom of a column,
-or set wide figures across both columns.
-
-\hypertarget{two-column-images}{%
-\subsection{Two-column images}\label{two-column-images}}
-
-You can read local images using png package for example and plot it like
-a regular plot using grid.raster from the grid package. With this method
-you have full control of the size of your image. \textbf{Note: Image
-must be in .png file format for the readPNG function to work.}
-
-You might want to display a wide figure across both columns. To do this,
-you change the \texttt{fig.env} chunk option to \texttt{figure*}. To
-align the image in the center of the page, set \texttt{fig.align} option
-to \texttt{center}. To format the width of your caption text, you set
-the \texttt{num.cols.cap} option to \texttt{2}.
-
-\begin{CodeChunk}
-\begin{figure*}[h]
-
-{\centering \includegraphics{figs/2-col-image-1} 
-
-}
-
-\caption[This image spans both columns]{This image spans both columns. And the caption text is limited to 0.8 of the width of the document.}\label{fig:2-col-image}
-\end{figure*}
-\end{CodeChunk}
-
-\hypertarget{one-column-images}{%
-\subsection{One-column images}\label{one-column-images}}
-
-Single column is the default option, but if you want set it explicitly,
-set \texttt{fig.env} to \texttt{figure}. Notice that the
-\texttt{num.cols} option for the caption width is set to \texttt{1}.
-
-\begin{CodeChunk}
-\begin{figure}[H]
-
-{\centering \includegraphics{figs/image-1} 
-
-}
-
-\caption[One column image]{One column image.}\label{fig:image}
-\end{figure}
-\end{CodeChunk}
-
-\hypertarget{r-plots}{%
-\subsection{R Plots}\label{r-plots}}
-
-You can use R chunks directly to plot graphs. And you can use latex
-floats in the fig.pos chunk option to have more control over the
-location of your plot on the page. For more information on latex
-placement specifiers see
-\textbf{\href{https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}{here}}
-
-\begin{CodeChunk}
-\begin{figure}[H]
-
-{\centering \includegraphics{figs/plot-1} 
-
-}
-
-\caption[R plot]{R plot}\label{fig:plot}
-\end{figure}
-\end{CodeChunk}
-
-\hypertarget{tables}{%
-\subsection{Tables}\label{tables}}
-
-Number tables consecutively; place the table number and title (in 10
-point) above the table with one line space above the caption and one
-line space below it, as in Table 1. You may float tables to the top or
-bottom of a column, set wide tables across both columns.
-
-You can use the xtable function in the xtable package.
-
-\begin{table}[H]
-\centering
-\begin{tabular}{rrrrr}
-  \hline
- & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
-  \hline
-(Intercept) & -0.14 & 0.10 & -1.4 & 0.15 \\ 
-  x & 2.10 & 0.10 & 21.7 & 0.00 \\ 
-   \hline
-\end{tabular}
-\caption{This table prints across one column.} 
-\end{table}
-
-\hypertarget{acknowledgements}{%
-\section{Acknowledgements}\label{acknowledgements}}
-
-Place acknowledgments (including funding information) in a section at
-the end of the paper.
 
 \hypertarget{references}{%
 \section{References}\label{references}}
@@ -550,12 +483,6 @@ the end of the paper.
 Bloom, L. M. (1970). \emph{Language development: Form and function in
 emerging grammars} (PhD thesis). Columbia University.
 
-\leavevmode\hypertarget{ref-ChalnickBillman1988a}{}%
-Chalnick, A., \& Billman, D. (1988). Unsupervised learning of
-correlational structure. In \emph{Proceedings of the tenth annual
-conference of the cognitive science society} (pp. 510--516). Hillsdale,
-NJ: Lawrence Erlbaum Associates.
-
 \leavevmode\hypertarget{ref-choi1988semantic}{}%
 Choi, S. (1988). The semantic development of negation: A
 cross-linguistic longitudinal study. \emph{Journal of Child Language},
@@ -568,10 +495,6 @@ animals}. John Murray.
 \leavevmode\hypertarget{ref-macwhinney2000childes}{}%
 MacWhinney, B. (2000). \emph{The childes project: Tools for analyzing
 talk. Transcription format and programs} (Vol. 1). Psychology Press.
-
-\leavevmode\hypertarget{ref-NewellSimon1972a}{}%
-Newell, A., \& Simon, H. A. (1972). \emph{Human problem solving}.
-Englewood Cliffs, NJ: Prentice-Hall.
 
 \leavevmode\hypertarget{ref-pea1978}{}%
 Pea, R. (1978). \emph{The development of negation in early child

@@ -5,7 +5,7 @@
 |Theory of Mind| Epistemic | know, think, remember  | I not know |
 |Motor Control| Prohibition, Inability | with imperative subjectless *do* or modal *can* | "do not spill milk", "I cannot zip it"|
 |Language Learning| Labeling | modifying nominal or adjectival predicatives | "that's not a crocodile"; "it's no interesting"|
-|Perception| non-existence; posession | expletives; with a nominal, more-N; have | no juice, no more milk, not in there, the dog not barking | 
+|Perception| non-existence; possession | expletives; with a nominal, more-N; have | no juice, no more milk, not in there, the dog not barking | 
   
 |Unknown | Temporal | now, today, again | not today |
 |Unknown | Causal | why | why not? |

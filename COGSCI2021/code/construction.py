@@ -383,7 +383,7 @@ def learning(file):
 						pred_pos = ''
 
 						for d in tok_d:
-							if d[7] == 'PRED' and (d[3] in ['n', 'n:pt'] or d[3].startswith('adj')):
+							if d[7] == 'PRED' and (d[3] in ['n', 'n:pt'] or d[3].startswith('adj') or d[3].startswith('pro')):
 								pred = d[1]
 								pred_stem = d[2]
 								pred_pos = d[3]
@@ -433,6 +433,124 @@ def learning(file):
 							saying = ' '.join(w[1] for w in sent)
 
 							data.append(['learning', function, head[2], neg[1], pred_pos, pred_stem, subj, subj_stem, speaker_role, saying, age])
+
+			sent = conll_read_sentence(f)
+
+	return data
+
+
+### Perception ###
+
+def perception(file):
+
+	data = []
+
+	with io.open(file, encoding = 'utf-8') as f:
+		sent = conll_read_sentence(f)
+
+		while sent is not None:
+		
+			speaker_role = sent[0][-2].split()[-1]
+			age = sent[0][-1].split()[1]
+
+			for tok in sent:
+
+				if tok[2] in ['no', "not", "n't"] and int(tok[0]) < len(sent):
+
+					h = sent[int(tok[6]) - 1]
+
+					if int(h[0]) > int(tok[0]) and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you']:
+
+						existence = ''
+						copula = ''
+
+						try:
+							copula = sent[int(h[6]) - 1]
+
+							if copula[2] in ['be']:
+								try:
+									temp = sent[int(copula[0]) - 2]
+
+									if temp[2] in ['there', 'There']:
+										existence = 'YES'
+								except:
+									existence = 'NO'
+							else:
+								existence = ''
+						except:
+							existence = ''
+
+					
+						function = ''
+
+						try:
+							if existence in ['YES']:
+								function = 'existence'
+						except:
+							if existence == '' and (sent[int(tok[0])][2] in ['have', 'Have'] or sent[int(tok[0])][2] in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its'] or "'s" in sent[int(tok[0])][3]):
+								function = 'possession'
+							if existence == '' and (h[3] in ['n', 'n:pt'] or sent[int(tok[0])] not in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its']):
+								function = 'existence'
+
+						if int(tok[0]) == 1 and function != 'possession':							
+							function = 'existence'
+
+						saying = ' '.join(w[1] for w in sent)
+
+						if function != '':
+							data.append(['perception', function, h[2], tok[2], '_', '_', '_', '_', speaker_role, saying, age])
+					
+				### no more ###
+
+					if sent[int(tok[0])][2] == 'more':
+
+						h = ''
+
+						try:
+							h = sent[int(tok[0]) + 1]
+						except:
+							h = ''
+
+						if h != '' and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you']:
+
+							existence = ''
+							copula = ''
+
+							try:
+								copula = sent[int(h[6]) - 1]
+
+								if copula[2] in ['be']:
+									try:
+										temp = sent[int(copula[0]) - 2]
+
+										if temp[2] in ['there', 'There']:
+											existence = 'YES'
+									except:
+										existence = 'NO'
+								else:
+									existence = ''
+							except:
+								existence = ''
+
+							function = ''
+
+
+							try:
+								if existence in ['YES']:
+									function = 'existence'
+							except:
+								if existence == '' and (sent[int(tok[0])][2] in ['have', 'Have'] or sent[int(tok[0])][2] in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its'] or "'s" in sent[int(tok[0])][3]):
+									function = 'possession'
+								if existence == '' and (h[3] in ['n', 'n:pt'] or sent[int(tok[0])] not in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its']):
+									function = 'existence'
+
+							if int(tok[0]) == 1 and function != 'possession':							
+								function = 'existence'
+
+							saying = ' '.join(w[1] for w in sent)
+
+							if function != '':
+								data.append(['perception', function, h[2], tok[2], '_', '_', '_', '_', speaker_role, saying, age])
 
 			sent = conll_read_sentence(f)
 
@@ -681,7 +799,7 @@ if __name__ == '__main__':
 
 	path = args.input
 
-	all_domain = {'emotion': emotion, 'motor': motor, 'learning': learning, 'epistemic': epistemic}
+	all_domain = {'emotion': emotion, 'motor': motor, 'learning': learning, 'epistemic': epistemic, 'perception': perception}
 
 	with io.open(args.output, 'w', encoding = 'utf-8') as f:
 		f.write('Domain' + '\t' + 'Function' + '\t' + 'Head' + '\t' + 'Negator' + '\t' + 'Aux' + '\t' 'Aux_stem' + '\t' + 'Subj' + '\t' + 'Subj_stem' + '\t' + 'Role' + '\t' + 'Utterance' + '\t' + 'Age' + '\n')

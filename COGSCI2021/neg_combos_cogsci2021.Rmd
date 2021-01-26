@@ -64,8 +64,7 @@ Focusing on the utterance level in this study
 
 ## Data and preprocessing 
 
-For developmental data of child language in English, we turned to the CHILDES database [@macwhinney2000childes], which provides child-parent conversational interactions. We focused on utterances produced by children with typical development within the age range of 12 - 72 months, then extracted cases with any of the three negation markers that are of interest in this study: *no*, *not* and *n't*. Utterances with only one lexical token (e.g. *no !*) were not considered as here we aim to address particularly the question of what negation markers could *combine* with.
-Preprocessing led to a data set of 365,260 utterances with negation structures from a total of 811 children across 56 corpora.
+For developmental data of child language in English, we turned to the CHILDES database [@macwhinney2000childes], which provides child-parent conversational interactions.\footnote{Code and data for our study are in quarantine at https://somewhereonearth.}. We focused on utterances produced by children with typical development within the age range of 12 - 72 months, then extracted cases with any of the three negation markers that are of interest in this study: *no*, *not* and *n't*. Utterances with only one lexical token (e.g. *no !*) were not considered as here we aim to address particularly the question of what negation markers could *combine* with. Preprocessing led to a data set of 365,260 utterances with negation structures from a total of 811 children across 56 corpora.
 
 Figure \@ref(fig:speaker_stats)
 
@@ -110,7 +109,7 @@ stats_data %>%
 ## Negation domains
 
 In this section, we describe in details our automatic extraction of syntactic structures that express 
-different types of negation concepts. The current English data from CHILDES contains morphosyntactic information [@sagae2010morphosyntactic] such as part-of-speech (POS) information as well as grammatical or syntactic dependency relations. We take advantage of information as such when automatically identifying our constructions of interest. An utterance with negative morpheme(s) was only considered when the negative morphemes has either a POS of *neg* or *qn*, the latter of which was mainly for cases with *no* as a quantifier. Furthermore, the syntactic functions and relations of the negative morphemes should not be enumeration (*no no no*), communicators or discourse markers
+different types of negation concepts. The current English data from CHILDES contains morphosyntactic information [@sagae2010morphosyntactic] such as part-of-speech (POS) information as well as grammatical or syntactic dependency relations.\footnote{Besides using the provided POS and syntactic dependency information in CHILDES, we also experimented with the state-of-the art parser from Stanza [@qi-etal-2020-stanza]. There were no worth noting differences in the analyses for the negation constructions.} We take advantage of information as such when automatically identifying our constructions of interest. An utterance with negative morpheme(s) was only considered when the negative morphemes has either a POS of *neg* or *qn*, the latter of which was mainly for cases with *no* as a quantifier. Furthermore, the syntactic functions and relations of the negative morphemes should not be enumeration (*no no no*), communicators or discourse markers
 
 After extracting all instances with negative morphemes, the developmental trajectory of each construction type as described in the previous section was analyzed. While the matter of interest here is child speech, we also compared patterns in child production to those in parent speech as references at the corresponding age of the child. Then we combined the development of all construction types for analysis as a whole
 
@@ -163,10 +162,14 @@ names(emotion_data) <- c('Age', 'Freq', 'Role', 'Head', 'Ratio')
 
 Additionally, other than expressions that the speaker used to describe their own emotions (e.g. (1)) or their (in)ability to do so, we also included cases that express rhetorical inquiries of emotions from one interlocutor addressed to another (e.g. (3)) as well as instances where the speaker is describing the emotions of somebody else (e.g. (4)).
 Overall our data extraction resulted in a total of `r format(nrow(emotion), big.mark=",")` utterances (Child: `r format(nrow(child_emotion), big.mark=",")`; Parent: `r format(nrow(parent_emotion), big.mark=",")`).
+
 &nbsp;
 (1) *I no like sea* / *don't wanna go*
+&nbsp;
 (2) *I can't like that*
+&nbsp;
 (3) *don't you wanna try it*
+&nbsp;
 (4) *Sarah doesn't like that either*
 &nbsp;
 
@@ -249,7 +252,8 @@ names(epistemic_data) <- c('Age', 'Freq', 'Role', 'Head', 'Ratio')
 
 ```
 
-With regards to the domain of theory of mind, we attended to cases that express epistemic position. Specifically, we focused on utterances that articulate the concept of unknowing (e.g. (5)) or uncertainty (e.g. (6)). The cases that were subject to analyses here included either *know*, *remember* or *think* as the head verb, modified by the negative morphemes or the combination of the negative morphemes with auxiliaries. By these search criteria, instances where the speaker inquires about or describes the epistemic position of another speaker (e.g. (7)) were also selected. This led to a subset of 27,821 utterances in total (Child: 9,282; Parent: 18,539)
+With regards to the domain of theory of mind, we attended to cases that express epistemic position. Specifically, we focused on utterances that articulate the concept of unknowing (e.g. (5)) or uncertainty (e.g. (6)). The cases that were subject to analyses here included either *know*, *remember* or *think* as the head verb, modified by the negative morphemes or the combination of the negative morphemes with auxiliaries. By these search criteria, instances where the speaker inquires about or describes the epistemic position of another speaker (e.g. (7)) were also selected. This led to a subset of `r format(nrow(epistemic), big.mark=",")` utterances in total (Child: `r format(nrow(child_epistemic), big.mark=",")`; Parent: `r format(nrow(parent_epistemic), big.mark=",")`).
+
 &nbsp;
 (5) *I not know* / *I didn't remember*
 (6) *I don't think so*
@@ -259,7 +263,7 @@ With regards to the domain of theory of mind, we attended to cases that express 
 In both child and parent speech, the most frequently used negative morpheme in expressing epistemic position is *n't*, a pattern that is consistent across the three different head verbs. And the negative morphemes tend to co-occur more often in cases that describes the state of unknowing, which is indicated mainly by the verb *know*. Given results from Figure \@ref{fig:epistemic}, there does not seem to be a quite consistent developmental trajectory of child speech in the domain of theory of mind. While regardless of the head verb, children appeared to start applying the negative morphemes in this domain around the age of 4. Nevertheless, there seems to be more variability in expressing an epistemic position with *remember* and *think* as the children age. By contrast, the pattern for instances with *know* gradually decreases after the age of 16 months.
 
 
-```{r epistemic, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=5.5, set.cap.width=T, num.cols.cap=1, fig.cap = "Theory of mind" }
+```{r epistemic, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=5.2, set.cap.width=T, num.cols.cap=1, fig.cap = "Theory of mind" }
 
 epistemic_data %>% 
   ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
@@ -322,15 +326,15 @@ names(motor_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
 
 ```
 
-For utterances that articulate the concept of motor control, we focused on two individual aspects with different communicative functions. The first one includes cases that indicate prohibition (e.g. (8)), and the second one contain cases that articulate inability (e.g. (9)). For the former, we analyzed cases where the negative morphemes are combined with the auxiliary verb *do* (*do*, *does*, *did*) and the auxiliary does not take any subject; whereas for the latter, we analyzed cases where the negative morphemes co-occur with the auxiliary *can* (*can* and *could*). In order to not overlap with the domain of Emotion, Theory of Mind and Perception (see below), our search excluded cases where the head verb has any of the following lemma forms: *like*, *want*, *know*, *think*, *remember*, *have*.
+For utterances that articulate the concept of motor control, we focused on two individual aspects with different communicative functions. The first one includes cases that indicate prohibition (e.g. (8)), and the second one contain cases that articulate inability (e.g. (9)). For the former, we analyzed cases where the negative morphemes are combined with the auxiliary verb *do* (*do*, *does*, *did*) and the auxiliary does not take any subject; whereas for the latter, we analyzed cases where the negative morphemes co-occur with the auxiliary *can* (*can* and *could*). For both functions, the negative morphemes and the auxiliary together modifies a head verb. In order to not overlap with the domain of Emotion, Theory of Mind and Perception (see below), our search excluded cases where the head verb has any of the following lemma forms: *like*, *want*, *know*, *think*, *remember*, *have*.
 
-For inability in particular, cases that do not have a subject (*can't play*) or contain a subject other than I (*you can't do that*) could yield ambiguous readings without taking a larger discourse context into account; they could be a rhetorical question or also express the concept of prohibition. Therefore to avoid potential ambiguity, we excluded instances as such. In other words, when searching for utterances that articulate inability, we restricted our analyses only to cases with a subject *I*. 
+For inability in particular, cases that do not have a subject (*can't play*) or contain a subject other than I (*you can't do that*) could yield ambiguous readings without taking a larger discourse context into account; they could be a rhetorical question or also express the concept of prohibition. Therefore to avoid potential ambiguity, we excluded instances as such. In other words, when searching for utterances that articulate inability, we restricted our analyses only to cases with a subject *I*. This led to a subset of `r format(nrow(child_prohibition) + nrow(child_inability) + nrow(parent_prohibition) + nrow(parent_inability), big.mark=",")` utterances (Child: `r format(nrow(child_prohibition) + nrow(child_inability), big.mark=",")`; Parent: `r format(nrow(parent_prohibition) + nrow(parent_inability), big.mark=",")`).
 
-This led to a subset of 64,801 utterances (Child: 20,129; Parent: 44,672).
 &nbsp;
 (8) *do*: *don't blame Charlotte* 
-(9) *can*: *I can't see* 
+
 &nbsp;
+(9) *can*: *I can't see* 
 
 Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
 
@@ -355,19 +359,8 @@ motor_data %>%
 
 ```
 
-
 ### Language learning
 
-Within the domain of language learning, we concentrated on cases where negative morphemes are adopted to label the identity (e.g. (10)), and/or characteristics (e.g. (11)) of a predicative nominal. In addition, we also included intances where the negators are used to modify a predicative adjective (e.g. (12))
-
-for labeling in the identity (*e.g.* (5) & (6)) or existence (*e.g.* (7)) of the nominal object that is being described. To do this, we extracted utterances that fit the following criteria: first, the negative morpheme has to be modifying a copula verb; secondly, the copula verb has to have a predicative nominal, which was identified with the help of POS information and dependency relation. The POS of the predicate has to be noun (*n*) and its dependency relation with the copula has to be *PRED*. This resulted in a total of 12,739 utterances (Child: 3,350 utterances; Parent: 9,389 utterances).
-&nbsp;
-(10) *that's not a farmer* 
-(11) *I'm not a heavy baby Mum* 
-(12) *It's no good*
-&nbsp;
-
-Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
 
 ```{r learningdata, include=FALSE}
 
@@ -395,6 +388,17 @@ names(learning_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
 ```
 
 
+Within the domain of language learning, we concentrated on cases where negative morphemes are adopted to label the identity (e.g. (10)), and/or characteristics (e.g. (11)) of a predicative nominal. In addition, we also included instances where the negators are used to modify a predicative adjective (e.g. (12)). Following these criteria, utterances where the negative morpheme is modifying a nominal or adjectival predicate of a copula verb were extracted. None of the utterances contain expletives (*there is no book*). The existence of a predicate was identified with the help of POS information and dependency relation. The POS of the predicate has to be either noun (*n*) or adjective (*adj*), and its dependency relation with the copula has to be *PRED*. This resulted in a total of `r format(nrow(learning), big.mark=",")` utterances (Child: `r format(nrow(child_learning), big.mark=",")` utterances; Parent: `r format(nrow(parent_learning), big.mark=",")` utterances).
+
+&nbsp;
+(10) *that's not a farmer* 
+(11) *I'm not a heavy baby Mum* 
+(12) *It's no good*
+&nbsp;
+
+Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
+
+
 Comparing the three negative morphemes, the most frequently used is *not* in both child and parent speech. Based on results from Figure \@ref{fig:learning}, the developmental trajectory of using the negative morphemes in the domain of language learning is comparable to previous domains. Children started using the negative morphemes for the function of labeling nominal objects around the age of 7 months and their usage as such became more regular around the age of 10 months. However, the frequency of applying the negative morphemes in the language learning domain began to decrease around the age of 18 months.
 
 
@@ -417,129 +421,95 @@ learning_data %>%
 ```
 
 
+### Perception
+
+
+```{r perceptiondata, include=FALSE}
+
+perception <-read.csv('data/neg_perception.txt', header = T, sep = '\t')
+perception$Role[which(perception$Role == "Father")] <- 'Parent'
+perception$Role[which(perception$Role == "Mother")] <- 'Parent'
+perception$Role[which(perception$Role == "Target_Child")] <- 'Child'
+
+child_perception <- subset(perception, Role %in% c('Child'))
+parent_perception <- subset(perception, Role %in% c('Parent'))
+
+child_perception <- data.frame(table(child_perception$Age))
+child_perception$Role <- rep('Child', nrow(child_perception))
+child_perception$Function <- rep('existence', nrow(child_perception))
+child_perception$Ratio <- child_perception$Freq / sum(child_perception$Freq)
+
+parent_perception <- data.frame(table(parent_perception$Age))
+parent_perception$Role <- rep('Parent', nrow(parent_perception))
+parent_perception$Function <- rep('existence', nrow(parent_perception))
+parent_perception$Ratio <- parent_perception$Freq / sum(parent_perception$Freq)
+
+perception_data <- rbind(child_perception,  parent_perception)
+names(perception_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
+
+```
+
+
+The last domain to be analyzed here is Perception, with two particular functions. First one is indication of non-existence, while the second one denotes possession. For expressions of non-existence, we extracted utterances that either have expletives marked by *there* (e.g. (13)), or cases where the negative morphemes are modifying a nominal (i.e. its syntactic head based on the CHILDES annotation is a nominal; e.g. (14)). For expressions of possession, we selected utterances where the negative morphemes are modifying a possessive pronoun, as well as instances where the negative morphemes are combined with auxiliary verbs to modify a head verb with the lemma form *have* (e.g. (15)). With utterances such (14) and (15), in order to not confuse with the domain of Language Learning, we did not include any cases where the syntactic head of the negative morphemes is a predicate of a copula verb. As a result, our search did not find any utterances that express the function of possession in this case, and the total of utterances that were subjected to analysis in this domain is `r format(nrow(perception), big.mark=",")`  (Child: `r format(nrow(child_learning), big.mark=",")`; Parent: `r format(nrow(parent_learning), big.mark=",")`).
+(13) *there's no water*
+(14) *no (more) candy* / *not in your mouth*
+(15) *not mine* / *I don't have it*
+
+In both child and parent speech, the most frequently occurred negative morphemes in the domain of Perception is *no*. Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
+
+As shown in Figure \@ref{fig:perception}, the developmental trajectory of using the negative morphemes in the domain of Perception is also comparable to previous domains. Children began applying the negative morphemes to this domain around the age of 8 months and their usage gradually increased after the age of 11 months. Similarly to the domain of Language Learning, the frequency of using the negative morphemes in indicating non-existence started to decrease around the age of 19 months. 
+
+
+```{r perception, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2, set.cap.width=T, num.cols.cap=1, fig.cap = "Perception" }
+
+perception_data %>% 
+  ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
+  geom_point(aes(color = Role, shape = Role)) +
+  scale_shape_manual(values = c(16, 3)) +
+  scale_color_manual(values = c("steelblue", "peru")) + 
+  geom_line(aes(color = Role, linetype = Role)) + 
+  facet_grid(vars(Function)) +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  theme_classic() + 
+  theme(text = element_text(size=10, family="Times")) + 
+  theme(legend.position="top") +
+  xlab("child age (months)") + 
+  ylab("ratio")
+
+```
+
 
 ### An overall look at all domains
 
 
+```{r alldata, include=FALSE}
 
-# Study
+names(emotion_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
+emotion_data$Domain <- rep('Emotion', nrow(emotion_data))
+names(epistemic_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
+epistemic_data$Domain <- rep('Theory of Mind', nrow(epistemic_data))
+motor_data$Domain <- rep('Motor Control', nrow(motor_data))
+learning_data$Domain <- rep('Language Learning', nrow(learning_data))
+perception_data$Domain <- rep('Perception', nrow(perception_data))
 
-First level headings should be in 12 point , initial caps, bold and
-centered. Leave one line space above the heading and 1/4~line space
-below the heading.
+all <- rbind(emotion_data, epistemic_data, motor_data, learning_data, perception_data)
+child_all <- subset(all, Role %in% c('Target_Child', 'Child'))
+parent_all <- subset(all, Role %in% c('Parent'))
 
-## Method
+child_together <- aggregate(Freq ~ Age + Domain, data = child_all, sum)
+parent_together <- aggregate(Freq ~ Age + Domain, data = parent_all, sum)
 
-Second level headings should be 11 point , initial caps, bold, and
-flush left. Leave one line space above the heading and 1/4~ line
-space below the heading.
+ggplot(child_together, aes(fill=Domain, y=Freq, x=Age)) + 
+    geom_bar(position="stack", stat="identity") +
+    scale_y_continuous(labels = scales::percent_format()) +
+    scale_fill_brewer(palette = "Pastel2") +
+    theme_classic() +
+    xlab("")
 
-### Third-Level Headings
-
-Third-level headings should be 10 point , initial caps, bold, and flush
-left. Leave one line space above the heading, but no space after the
-heading.
+```
 
 # Discussion
 
-Use standard APA citation format. Citations within the text should
-include the author's last name and year. If the authors' names are
-included in the sentence, place only the year in parentheses, as in
-[-@NewellSimon1972a], but otherwise place the entire reference in
-parentheses with the authors and year separated by a comma
-[@NewellSimon1972a]. List multiple references alphabetically and
-separate them by semicolons [@ChalnickBillman1988a; @NewellSimon1972a]. 
-Use the et. al. construction only after listing all the authors to a
-publication in an earlier reference and for citations with four or
-more authors.
-
-For more information on citations in RMarkdown, see **[here](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html#citations).**
-
-## Footnotes
-
-Indicate footnotes with a number\footnote{Sample of the first
-footnote.} in the text. Place the footnotes in 9 point type at the
-bottom of the page on which they appear. Precede the footnote with a
-horizontal rule.\footnote{Sample of the second footnote.} You can also use 
-markdown formatting to include footnotes using this syntax [^1].
-
-[^1]: Sample of a markdown footnote.
-
-## Figures
-
-All artwork must be very dark for purposes of reproduction and should
-not be hand drawn. Number figures sequentially, placing the figure
-number and caption, in 10 point, after the figure with one line space
-above the caption and one line space below it. If necessary, leave extra white space at
-the bottom of the page to avoid splitting the figure and figure
-caption. You may float figures to the top or bottom of a column, or
-set wide figures across both columns.
-
-## Two-column images
-
-You can read local images using png package for example and plot 
-it like a regular plot using grid.raster from the grid package. 
-With this method you have full control of the size of your image. **Note: Image must be in .png file format for the readPNG function to work.**
-
-You might want to display a wide figure across both columns. To do this, you change the `fig.env` chunk option to `figure*`. To align the image in the center of the page, set `fig.align` option to `center`. To format the width of your caption text, you set the `num.cols.cap` option to `2`.
-
-```{r 2-col-image, fig.env = "figure*", fig.pos = "h", fig.width=4, fig.height=2, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "This image spans both columns. And the caption text is limited to 0.8 of the width of the document."}
-img <- png::readPNG("figs/walrus.png")
-grid::grid.raster(img)
-```
-
-## One-column images
-
-Single column is the default option, but if you want set it explicitly, set `fig.env` to `figure`. Notice that the `num.cols` option for the caption width is set to `1`.
-
-```{r image, fig.env = "figure", fig.pos = "H", fig.align='center', fig.width=2, fig.height=2, set.cap.width=T, num.cols.cap=1, fig.cap = "One column image."}
-img <- png::readPNG("figs/lab_logo_stanford.png")
-grid::grid.raster(img)
-```
-
-
-## R Plots
-
-You can use R chunks directly to plot graphs. And you can use latex floats in the
-fig.pos chunk option to have more control over the location of your plot on the page. For more information on latex placement specifiers see **[here](https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions)**
-
-```{r plot, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=2, fig.height=2, fig.cap = "R plot" }
-x <- 0:100
-y <- 2 * (x + rnorm(length(x), sd = 3) + 3)
-
-ggplot2::ggplot(data = data.frame(x, y), 
-                aes(x = x, y = y)) + 
-  geom_point() + 
-  geom_smooth(method = "lm")
-```
-
-
-## Tables
-
-Number tables consecutively; place the table number and title (in
-10 point) above the table with one line space above the caption and
-one line space below it, as in Table 1. You may float
-tables to the top or bottom of a column, set wide tables across both
-columns.
-
-You can use the xtable function in the xtable package.
-
-```{r xtable, results="asis"}
-n <- 100
-x <- rnorm(n)
-y <- 2*x + rnorm(n)
-out <- lm(y ~ x)
-
-tab1 <- xtable::xtable(summary(out)$coef, digits=c(0, 2, 2, 1, 2), 
-                       caption = "This table prints across one column.")
-
-print(tab1, type="latex", comment = F, table.placement = "H")
-```
-
-# Acknowledgements
-
-Place acknowledgments (including funding information) in a section at
-the end of the paper.
 
 # References 
 
