@@ -58,7 +58,7 @@ There has been no proposal for negation originating in the child's understanding
 
 Caveat on production vs comprehension. 
 
-
+Focusing on the utterance level in this study
 
 # Experiments
 
@@ -107,7 +107,7 @@ stats_data %>%
 
 ```
 
-## Negation concepts
+## Negation domains
 
 In this section, we describe in details our automatic extraction of syntactic structures that express 
 different types of negation concepts. The current English data from CHILDES contains morphosyntactic information [@sagae2010morphosyntactic] such as part-of-speech (POS) information as well as grammatical or syntactic dependency relations. We take advantage of information as such when automatically identifying our constructions of interest. An utterance with negative morpheme(s) was only considered when the negative morphemes has either a POS of *neg* or *qn*, the latter of which was mainly for cases with *no* as a quantifier. Furthermore, the syntactic functions and relations of the negative morphemes should not be enumeration (*no no no*), communicators or discourse markers
@@ -117,18 +117,13 @@ After extracting all instances with negative morphemes, the developmental trajec
 
 ### Emotion
 
-In order to investigate utterances that express emotions, particularly the concept of rejections, we focused on specific cases where the head verb of the phrase is either *like* or *want* (including different forms of the verbs such as *liked* or *wanna* ), and the head verb is immediately preceded by one of the three negative morphemes. In particular, to not confuse with cases such as rhetorical questions (*don't you like it*) or declaratives (*you don't wanna do that*), which are more common in parent speech, our analyses were restricted to utterances where the head verb *like* or *want* takes either a subject *I* or has no subject. The existence of a subject was determined via searching for a word in the utterance that has the *SUBJ* dependency relation with the head verb. Overall our data extraction resulted in a total of 12,329 utterances (Child: 8,223; Parent: 4,106).
-&nbsp;
-(1) *like*: *I no like sea* 
-(2) *want*: *no want one now* / *don't wanna go* 
-&nbsp;
+In order to investigate utterances that express emotions, particularly the concept of rejections, we focused on specific cases where the lemma form of the head verb of the phrase is either *like* or *want*, and the head verb is modified by one of the three negative morphemes. Each of the utterances either takes a subject or has no subject at all. And the existence of a subject was determined via searching for a word in the utterance that has the *SUBJ* dependency relation with the head verb.
 
-To compare the patterns between child and parent speech, for each domain, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different head verbs; (iii) utterances expression emotion with the three negative morphemes at different ages of the child. In both child and parent speech, when expressing emotion with either of the two head verbs *like* and *want*, the most frequently used negative morpheme is *n't* combined with an auxiliary verb. Comparing the two different head verbs, overall the negative morphemes are co-occur with *want* more frequently. 
 
 ```{r emotiondata, include=FALSE}
 
 emotion <-read.csv('data/neg_emotion.txt', header = T, sep = '\t')
-emotion <- subset(emotion, Subj == 'I' | Subj == 'NONE')
+# emotion <- subset(emotion, Subj == 'I' | Subj == 'NONE')
 emotion$Role[which(emotion$Role == "Father")] <- 'Parent'
 emotion$Role[which(emotion$Role == "Mother")] <- 'Parent'
 emotion$Role[which(emotion$Role == "Target_Child")] <- 'Child'
@@ -166,6 +161,17 @@ names(emotion_data) <- c('Age', 'Freq', 'Role', 'Head', 'Ratio')
 
 ```
 
+Additionally, other than expressions that the speaker used to describe their own emotions (e.g. (1)) or their (in)ability to do so, we also included cases that express rhetorical inquiries of emotions from one interlocutor addressed to another (e.g. (3)) as well as instances where the speaker is describing the emotions of somebody else (e.g. (4)).
+Overall our data extraction resulted in a total of `r format(nrow(emotion), big.mark=",")` utterances (Child: `r format(nrow(child_emotion), big.mark=",")`; Parent: `r format(nrow(parent_emotion), big.mark=",")`).
+&nbsp;
+(1) *I no like sea* / *don't wanna go*
+(2) *I can't like that*
+(3) *don't you wanna try it*
+(4) *Sarah doesn't like that either*
+&nbsp;
+
+To compare the patterns between child and parent speech, for each domain, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different head verbs; (iii) utterances expression emotion with the three negative morphemes at different ages of the child. In both child and parent speech, when expressing emotion with either of the two head verbs *like* and *want*, the most frequently used negative morpheme is *n't* combined with an auxiliary verb. Comparing the two different head verbs, overall the negative morphemes are co-occur with *want* more frequently. 
+
 On the other hand, when looking at the developmental trajectory, as presented in Figure \@ref{fig:emotion}, children's usage of negative morphemes is comparable regardless of the particular head verb. In general, children did not start using negative morphemes in this domain until the age of 7 months; their usage of these morphemes for the concept of rejection is the most frequent during the age range of 13 - 21 months, then gradualy decreases as they age.
 
 
@@ -188,142 +194,7 @@ emotion_data %>%
 
 ```
 
-
-### Motor control
-
-For utterances that articulate the concept of motor control, we focused on two individual aspects with different communicative functions. The first one includes cases that indicate prohibition (*e.g.* (3)), and the second one contain cases that articulate inability (*e.g.* (4)). For the former, we analyzed cases where the negative morphemes are combined with the auxiliary verb *do* (*do*, *does*, *did*) and the auxiliary does not take any subject; whereas for the latter, we analyzed cases where the negative morphemes co-occur with the auxiliary *can* (*can* and *could*). For inability in particular, similarly to the extraction of utterances that express rejection, in order to not accidentally include utterances such as rhetorical questions or imperatives (*you can't do that*), we excluded instances where the subject is not *I*. This led to a subset of 64,801 utterances (Child: 20,129; Parent: 44,672).
-&nbsp;
-(3) *do*: *don't blame Charlotte* 
-(4) *can*: *I can't see* 
-&nbsp;
-
-Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
-
-```{r motordata, include=FALSE}
-
-motor <-read.csv('data/neg_motor.txt', header = T, sep = '\t')
-motor <- subset(motor, Subj == 'I' | Subj == 'NONE')
-motor$Role[which(motor$Role == "Father")] <- 'Parent'
-motor$Role[which(motor$Role == "Mother")] <- 'Parent'
-motor$Role[which(motor$Role == "Target_Child")] <- 'Child'
-
-child_motor <- subset(motor, Role %in% c('Child'))
-parent_motor <- subset(motor, Role %in% c('Parent'))
-
-child_prohibition <- subset(child_motor, Function %in% c('prohibition') & Subj == 'NONE')
-child_inability <- subset(child_motor, Function %in% c('inability'))
-parent_prohibition <- subset(parent_motor, Function %in% c('prohibition') & Subj == 'NONE')
-parent_inability <- subset(parent_motor, Function %in% c('inability'))
-
-child_prohibition <- data.frame(table(child_prohibition$Age))
-child_prohibition$Role <- rep('Child', nrow(child_prohibition))
-child_prohibition$Function <- rep('prohibition', nrow(child_prohibition))
-child_prohibition$Ratio <- child_prohibition$Freq / sum(child_prohibition$Freq)
-
-child_inability <- data.frame(table(child_inability$Age))
-child_inability$Role <- rep('Child', nrow(child_inability))
-child_inability$Function <- rep('inability', nrow(child_inability))
-child_inability$Ratio <- child_inability$Freq / sum(child_inability$Freq)
-
-parent_prohibition <- data.frame(table(parent_prohibition$Age))
-parent_prohibition$Role <- rep('Parent', nrow(parent_prohibition))
-parent_prohibition$Function <- rep('prohibition', nrow(parent_prohibition))
-parent_prohibition$Ratio <- parent_prohibition$Freq / sum(parent_prohibition$Freq)
-
-parent_inability <- data.frame(table(parent_inability$Age))
-parent_inability$Role <- rep('Parent', nrow(parent_inability))
-parent_inability$Function <- rep('inability', nrow(parent_inability))
-parent_inability$Ratio <- parent_inability$Freq / sum(parent_inability$Freq)
-
-motor_data <- rbind(child_prohibition, child_inability, parent_prohibition, parent_inability)
-names(motor_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
-
-```
-
-
-As shown in Figure \@ref{fig:motor_control}, the developmental trajectory of using the negative morphemes in the domain of motor control is similar to that in the domain of emotion. Children started combining negative morphemes in syntactic structures that epxress prohibiiton and inability around the age of 6 months, then gradually increases until the age of 22 months.
-
-
-```{r motor_control, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=3.5, set.cap.width=T, num.cols.cap=1, fig.cap = "Motor control" }
-
-motor_data %>% 
-  ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
-  geom_point(aes(color = Role, shape = Role)) +
-  scale_shape_manual(values = c(16, 3)) +
-  scale_color_manual(values = c("steelblue", "peru")) + 
-  geom_line(aes(color = Role, linetype = Role)) + 
-  facet_grid(vars(Function)) +
-  scale_x_continuous(breaks=seq(0, 72, 6)) +
-  theme_classic() + 
-  theme(text = element_text(size=10, family="Times")) + 
-  theme(legend.position="top") +
-  xlab("child age (months)") + 
-  ylab("ratio")
-
-```
-
-
-### Language learning
-
-Within the domain of language learning, we concentrated on cases where negative morphemes are adopted to for labeing in the identity (*e.g.* (5) & (6)) or existence (*e.g.* (7)) of the nominal object that is being described. To do this, we extracted utterances that fit the following criteria: first, the negative morpheme has to be modifying a copula verb; secondly, the copula verb has to have a predicative nominal, which was identified with the help of POS information and dependency relation. The POS of the predicate has to be noun (*n*) and its dependency relation with the copula has to be *PRED*. This resulted in a total of 12,739 utterances (Child: 3,350 utterances; Parent: 9,389 utterances).
-&nbsp;
-(5) *that's not a farmer* 
-(6) *I'm not a heavy baby Mum* 
-(7) *can*: *there are no trees* 
-&nbsp;
-
-Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
-
-```{r learningdata, include=FALSE}
-
-learning <-read.csv('data/neg_learning.txt', header = T, sep = '\t')
-learning$Role[which(learning$Role == "Father")] <- 'Parent'
-learning$Role[which(learning$Role == "Mother")] <- 'Parent'
-learning$Role[which(learning$Role == "Target_Child")] <- 'Child'
-
-child_learning <- subset(learning, Role %in% c('Child'))
-parent_learning <- subset(learning, Role %in% c('Parent'))
-
-child_learning <- data.frame(table(child_learning$Age))
-child_learning$Role <- rep('Child', nrow(child_learning))
-child_learning$Function <- rep('labeling', nrow(child_learning))
-child_learning$Ratio <- child_learning$Freq / sum(child_learning$Freq)
-
-parent_learning <- data.frame(table(parent_learning$Age))
-parent_learning$Role <- rep('Parent', nrow(parent_learning))
-parent_learning$Function <- rep('labeling', nrow(parent_learning))
-parent_learning$Ratio <- parent_learning$Freq / sum(parent_learning$Freq)
-
-learning_data <- rbind(child_learning,  parent_learning)
-names(learning_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
-
-```
-
-
-Comparing the three negative morphemes, the most frequently used is *not* in both child and parent speech. Based on results from Figure \@ref{fig:learning}, the developmental trajectory of using the negative morphemes in the domain of language learning is comparable to previous domains. Children started using the negative morphemes for the function of labeling nominal objects around the age of 7 months and their usage as such became more regular around the age of 10 months. However, the frequency of applying the negative morphemes in the language learning domain began to decrease around the age of 18 months.
-
-
-```{r learning, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2, set.cap.width=T, num.cols.cap=1, fig.cap = "Language learning" }
-
-learning_data %>% 
-  ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
-  geom_point(aes(color = Role, shape = Role)) +
-  scale_shape_manual(values = c(16, 3)) +
-  scale_color_manual(values = c("steelblue", "peru")) + 
-  geom_line(aes(color = Role, linetype = Role)) + 
-  facet_grid(vars(Function)) +
-  scale_x_continuous(breaks=seq(0, 72, 6)) +
-  theme_classic() + 
-  theme(text = element_text(size=10, family="Times")) + 
-  theme(legend.position="top") +
-  xlab("child age (months)") + 
-  ylab("ratio")
-
-```
-
 ### Theory of mind
-
-With regards to the domain of theory of mind, we attended to cases that express epistemic position. Specifically, we focused on utterances that articulate the concept of unknowing (*I not know* or *I didn't remember*) or uncertainty (*I don't think so*). The cases that were subject to analyses here included either *know*, *remember* or *think* as the head verb, modified by the negative morphemes or the combination of the negative morphemes with auxiliaries. Additionally, we restricted to instances where the head verb is either subjectless or has the subject *I*. This led to a subset of 27,821 utterances in total (Child: 9,282; Parent: 18,539)
 
 
 ```{r epistemicdata, include=FALSE}
@@ -378,6 +249,13 @@ names(epistemic_data) <- c('Age', 'Freq', 'Role', 'Head', 'Ratio')
 
 ```
 
+With regards to the domain of theory of mind, we attended to cases that express epistemic position. Specifically, we focused on utterances that articulate the concept of unknowing (e.g. (5)) or uncertainty (e.g. (6)). The cases that were subject to analyses here included either *know*, *remember* or *think* as the head verb, modified by the negative morphemes or the combination of the negative morphemes with auxiliaries. By these search criteria, instances where the speaker inquires about or describes the epistemic position of another speaker (e.g. (7)) were also selected. This led to a subset of 27,821 utterances in total (Child: 9,282; Parent: 18,539)
+&nbsp;
+(5) *I not know* / *I didn't remember*
+(6) *I don't think so*
+(7) *don't you remember* / *She doesn't know this*
+&nbsp;
+
 In both child and parent speech, the most frequently used negative morpheme in expressing epistemic position is *n't*, a pattern that is consistent across the three different head verbs. And the negative morphemes tend to co-occur more often in cases that describes the state of unknowing, which is indicated mainly by the verb *know*. Given results from Figure \@ref{fig:epistemic}, there does not seem to be a quite consistent developmental trajectory of child speech in the domain of theory of mind. While regardless of the head verb, children appeared to start applying the negative morphemes in this domain around the age of 4. Nevertheless, there seems to be more variability in expressing an epistemic position with *remember* and *think* as the children age. By contrast, the pattern for instances with *know* gradually decreases after the age of 16 months.
 
 
@@ -390,6 +268,145 @@ epistemic_data %>%
   scale_color_manual(values = c("steelblue", "peru")) + 
   geom_line(aes(color = Role, linetype = Role)) + 
   facet_grid(vars(Head)) +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  theme_classic() + 
+  theme(text = element_text(size=10, family="Times")) + 
+  theme(legend.position="top") +
+  xlab("child age (months)") + 
+  ylab("ratio")
+
+```
+
+
+### Motor control
+
+
+```{r motordata, include=FALSE}
+
+motor <-read.csv('data/neg_motor.txt', header = T, sep = '\t')
+motor <- subset(motor, Subj == 'I' | Subj == 'NONE')
+motor$Role[which(motor$Role == "Father")] <- 'Parent'
+motor$Role[which(motor$Role == "Mother")] <- 'Parent'
+motor$Role[which(motor$Role == "Target_Child")] <- 'Child'
+
+child_motor <- subset(motor, Role %in% c('Child'))
+parent_motor <- subset(motor, Role %in% c('Parent'))
+
+child_prohibition <- subset(child_motor, Function %in% c('prohibition') & Subj == 'NONE')
+child_inability <- subset(child_motor, Function %in% c('inability'))
+parent_prohibition <- subset(parent_motor, Function %in% c('prohibition') & Subj == 'NONE')
+parent_inability <- subset(parent_motor, Function %in% c('inability'))
+
+child_prohibition <- data.frame(table(child_prohibition$Age))
+child_prohibition$Role <- rep('Child', nrow(child_prohibition))
+child_prohibition$Function <- rep('prohibition', nrow(child_prohibition))
+child_prohibition$Ratio <- child_prohibition$Freq / sum(child_prohibition$Freq)
+
+child_inability <- data.frame(table(child_inability$Age))
+child_inability$Role <- rep('Child', nrow(child_inability))
+child_inability$Function <- rep('inability', nrow(child_inability))
+child_inability$Ratio <- child_inability$Freq / sum(child_inability$Freq)
+
+parent_prohibition <- data.frame(table(parent_prohibition$Age))
+parent_prohibition$Role <- rep('Parent', nrow(parent_prohibition))
+parent_prohibition$Function <- rep('prohibition', nrow(parent_prohibition))
+parent_prohibition$Ratio <- parent_prohibition$Freq / sum(parent_prohibition$Freq)
+
+parent_inability <- data.frame(table(parent_inability$Age))
+parent_inability$Role <- rep('Parent', nrow(parent_inability))
+parent_inability$Function <- rep('inability', nrow(parent_inability))
+parent_inability$Ratio <- parent_inability$Freq / sum(parent_inability$Freq)
+
+motor_data <- rbind(child_prohibition, child_inability, parent_prohibition, parent_inability)
+names(motor_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
+
+```
+
+For utterances that articulate the concept of motor control, we focused on two individual aspects with different communicative functions. The first one includes cases that indicate prohibition (e.g. (8)), and the second one contain cases that articulate inability (e.g. (9)). For the former, we analyzed cases where the negative morphemes are combined with the auxiliary verb *do* (*do*, *does*, *did*) and the auxiliary does not take any subject; whereas for the latter, we analyzed cases where the negative morphemes co-occur with the auxiliary *can* (*can* and *could*). In order to not overlap with the domain of Emotion, Theory of Mind and Perception (see below), our search excluded cases where the head verb has any of the following lemma forms: *like*, *want*, *know*, *think*, *remember*, *have*.
+
+For inability in particular, cases that do not have a subject (*can't play*) or contain a subject other than I (*you can't do that*) could yield ambiguous readings without taking a larger discourse context into account; they could be a rhetorical question or also express the concept of prohibition. Therefore to avoid potential ambiguity, we excluded instances as such. In other words, when searching for utterances that articulate inability, we restricted our analyses only to cases with a subject *I*. 
+
+This led to a subset of 64,801 utterances (Child: 20,129; Parent: 44,672).
+&nbsp;
+(8) *do*: *don't blame Charlotte* 
+(9) *can*: *I can't see* 
+&nbsp;
+
+Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
+
+As shown in Figure \@ref{fig:motor_control}, the developmental trajectory of using the negative morphemes in the domain of motor control is similar to that in the domain of emotion. Children started combining negative morphemes in syntactic structures that epxress prohibiiton and inability around the age of 6 months, then gradually increases until the age of 22 months.
+
+
+```{r motor_control, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=3.5, set.cap.width=T, num.cols.cap=1, fig.cap = "Motor control" }
+
+motor_data %>% 
+  ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
+  geom_point(aes(color = Role, shape = Role)) +
+  scale_shape_manual(values = c(16, 3)) +
+  scale_color_manual(values = c("steelblue", "peru")) + 
+  geom_line(aes(color = Role, linetype = Role)) + 
+  facet_grid(vars(Function)) +
+  scale_x_continuous(breaks=seq(0, 72, 6)) +
+  theme_classic() + 
+  theme(text = element_text(size=10, family="Times")) + 
+  theme(legend.position="top") +
+  xlab("child age (months)") + 
+  ylab("ratio")
+
+```
+
+
+### Language learning
+
+Within the domain of language learning, we concentrated on cases where negative morphemes are adopted to label the identity (e.g. (10)), and/or characteristics (e.g. (11)) of a predicative nominal. In addition, we also included intances where the negators are used to modify a predicative adjective (e.g. (12))
+
+for labeling in the identity (*e.g.* (5) & (6)) or existence (*e.g.* (7)) of the nominal object that is being described. To do this, we extracted utterances that fit the following criteria: first, the negative morpheme has to be modifying a copula verb; secondly, the copula verb has to have a predicative nominal, which was identified with the help of POS information and dependency relation. The POS of the predicate has to be noun (*n*) and its dependency relation with the copula has to be *PRED*. This resulted in a total of 12,739 utterances (Child: 3,350 utterances; Parent: 9,389 utterances).
+&nbsp;
+(10) *that's not a farmer* 
+(11) *I'm not a heavy baby Mum* 
+(12) *It's no good*
+&nbsp;
+
+Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
+
+```{r learningdata, include=FALSE}
+
+learning <-read.csv('data/neg_learning.txt', header = T, sep = '\t')
+learning$Role[which(learning$Role == "Father")] <- 'Parent'
+learning$Role[which(learning$Role == "Mother")] <- 'Parent'
+learning$Role[which(learning$Role == "Target_Child")] <- 'Child'
+
+child_learning <- subset(learning, Role %in% c('Child'))
+parent_learning <- subset(learning, Role %in% c('Parent'))
+
+child_learning <- data.frame(table(child_learning$Age))
+child_learning$Role <- rep('Child', nrow(child_learning))
+child_learning$Function <- rep('labeling', nrow(child_learning))
+child_learning$Ratio <- child_learning$Freq / sum(child_learning$Freq)
+
+parent_learning <- data.frame(table(parent_learning$Age))
+parent_learning$Role <- rep('Parent', nrow(parent_learning))
+parent_learning$Function <- rep('labeling', nrow(parent_learning))
+parent_learning$Ratio <- parent_learning$Freq / sum(parent_learning$Freq)
+
+learning_data <- rbind(child_learning,  parent_learning)
+names(learning_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
+
+```
+
+
+Comparing the three negative morphemes, the most frequently used is *not* in both child and parent speech. Based on results from Figure \@ref{fig:learning}, the developmental trajectory of using the negative morphemes in the domain of language learning is comparable to previous domains. Children started using the negative morphemes for the function of labeling nominal objects around the age of 7 months and their usage as such became more regular around the age of 10 months. However, the frequency of applying the negative morphemes in the language learning domain began to decrease around the age of 18 months.
+
+
+```{r learning, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2, set.cap.width=T, num.cols.cap=1, fig.cap = "Language learning" }
+
+learning_data %>% 
+  ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
+  geom_point(aes(color = Role, shape = Role)) +
+  scale_shape_manual(values = c(16, 3)) +
+  scale_color_manual(values = c("steelblue", "peru")) + 
+  geom_line(aes(color = Role, linetype = Role)) + 
+  facet_grid(vars(Function)) +
   scale_x_continuous(breaks=seq(0, 72, 6)) +
   theme_classic() + 
   theme(text = element_text(size=10, family="Times")) + 
@@ -534,3 +551,4 @@ the end of the paper.
 \setlength{\parindent}{-0.1in} 
 \setlength{\leftskip}{0.125in}
 \noindent
+

@@ -65,14 +65,27 @@ def emotion(file):
 		
 			speaker_role = sent[0][-2].split()[-1]
 			age = sent[0][-1].split()[1]
-		
-			for tok in sent:
-				if tok[2] in ['like', 'want', 'wan']:
 
-					idx = int(tok[0]) - 2
+			for tok in sent:
+
+				if tok[2] in ['like', 'want', 'wan']: 
+
+					neg = ''
 				
-					if sent[idx][1] in ['not', 'no', "n't"]:
-						neg = sent[idx]
+					try:
+						potential = sent[int(tok[0]) - 2]
+						if potential[1] in ['not', 'no', "n't"]:
+							neg = potential
+
+					except:
+						try:
+							far = sent[int(tok[0]) - 3] 
+							if far[1] in ['not', 'no', "n't"]:
+								neg = far
+						except:
+							neg = ''
+
+					if neg != '':
 
 						aux = 'NONE'
 						aux_stem = 'NONE'
@@ -88,236 +101,8 @@ def emotion(file):
 						except:
 							aux = 'NONE'
 							aux_stem = 'NONE'
-			
-						subj = 'NONE'
-						subj_stem = 'NONE'
-						subj_idx = ''
 
-						d_list = dependents(tok[0], sent)
-
-						for d in d_list:
-
-							if d[7] == 'SUBJ':
-								subj_idx = d[0]
-								subj = d[1]
-								subj_stem = d[2]
-
-						head = ''
-					
-						if tok[2] == 'like':
-							head = 'like'
-						else:
-							head = 'want'
-
-						saying = ' '.join(w[1] for w in sent)
-
-						data.append(['emotion', 'rejection', head, neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
-
-			sent = conll_read_sentence(f)
-
-	return data
-
-
-### motor control: rejection ###
-
-def motor(file):
-
-	data = []
-
-	with io.open(file, encoding = 'utf-8') as f:
-		sent = conll_read_sentence(f)
-
-		while sent is not None:
-		
-			speaker_role = sent[0][-2].split()[-1]
-			age = sent[0][-1].split()[1]
-
-			for tok in sent:
-				if tok[2] in ['do', 'can']:
-
-					idx = int(tok[0])
-				
-					if idx < len(sent) and sent[idx][1] in ['not', 'no', "n't"]:
-						neg = sent[idx]
-
-						aux = tok[1]
-						aux_stem = tok[2]
-
-						function = ''
-						if aux_stem == 'do':
-							function = 'prohibition'
-						if aux_stem == 'can':
-							function = 'inability'
-			
-						subj = 'NONE'
-						subj_stem = 'NONE'
-						subj_idx = ''
-
-						d_list = dependents(tok[0], sent)
-
-						for d in d_list:
-
-							if d[7] == 'SUBJ':
-								subj_idx = d[0]
-								subj = d[1]
-								subj_stem = d[2]
-
-						neg_d = dependents(neg[0], sent)
-
-						for d in neg_d:
-
-							if d[7] == 'SUBJ':
-								subj_idx = d[0]
-								subj = d[1]
-								subj_stem = d[2]
-
-
-						head = ''
-					
-						if tok[6] == '0':
-							head = 'root'
-						else:
-							head = sent[int(tok[6]) - 1]
-
-						if head != 'root':
-							head_d = dependents(head[0], sent)
-
-							for d in head_d:
-
-								if d[7] == 'SUBJ':
-									subj_idx = d[0]
-									subj = d[1]
-									subj_stem = d[2]
-
-						saying = ' '.join(w[1] for w in sent)
-
-						data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
-
-			sent = conll_read_sentence(f)
-
-	return data
-
-
-### motor control: rejection ###
-
-def motor(file):
-
-	data = []
-
-	with io.open(file, encoding = 'utf-8') as f:
-		sent = conll_read_sentence(f)
-
-		while sent is not None:
-		
-			speaker_role = sent[0][-2].split()[-1]
-			age = sent[0][-1].split()[1]
-
-			for tok in sent:
-				if tok[2] in ['do', 'can']:
-
-					idx = int(tok[0])
-				
-					if idx < len(sent) and sent[idx][1] in ['not', 'no', "n't"]:
-						neg = sent[idx]
-
-						aux = tok[1]
-						aux_stem = tok[2]
-
-						function = ''
-						if aux_stem == 'do':
-							function = 'prohibition'
-						if aux_stem == 'can':
-							function = 'inability'
-			
-						subj = 'NONE'
-						subj_stem = 'NONE'
-						subj_idx = ''
-
-						d_list = dependents(tok[0], sent)
-
-						for d in d_list:
-
-							if d[7] == 'SUBJ':
-								subj_idx = d[0]
-								subj = d[1]
-								subj_stem = d[2]
-
-						neg_d = dependents(neg[0], sent)
-
-						for d in neg_d:
-
-							if d[7] == 'SUBJ':
-								subj_idx = d[0]
-								subj = d[1]
-								subj_stem = d[2]
-
-
-						head = ''
-					
-						if tok[6] == '0':
-							head = 'root'
-						else:
-							head = sent[int(tok[6]) - 1]
-
-						if head != 'root':
-							head_d = dependents(head[0], sent)
-
-							for d in head_d:
-
-								if d[7] == 'SUBJ':
-									subj_idx = d[0]
-									subj = d[1]
-									subj_stem = d[2]
-
-						saying = ' '.join(w[1] for w in sent)
-
-						data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
-
-			sent = conll_read_sentence(f)
-
-	return data
-
-
-### language learning: labeling ###
-
-def learning(file):
-
-	data = []
-
-	with io.open(file, encoding = 'utf-8') as f:
-		sent = conll_read_sentence(f)
-
-		while sent is not None:
-		
-			speaker_role = sent[0][-2].split()[-1]
-			age = sent[0][-1].split()[1]
-
-			for tok in sent:
-
-				if tok[2] in ['be']: # and tok[1] in ['am', 'was', 'is', 'are', 'were']:
-
-					neg = ''
-				
-					try:
-						potential = sent[int(tok[0])]
-						if potential[1] in ['not', 'no', "n't"]:
-							neg = potential
-					except:
-						neg = ''
-
-					if neg != '':
-
-						tok_d = dependents(tok[0], sent)
-
-						pred = ''
-						pred_stem = ''
-
-						for d in tok_d:
-							if d[7] == 'PRED' and d[3] in ['n', 'n:pt']:
-								pred = d[1]
-								pred_stem = d[2]
-
-						function = 'labeling'
+						function = 'rejection'
 			
 						subj = 'NONE'
 						subj_stem = 'NONE'
@@ -358,10 +143,10 @@ def learning(file):
 									subj = d[1]
 									subj_stem = d[2]
 
-						if pred != '':
-							saying = ' '.join(w[1] for w in sent)
+					#	if subj == 'I' or subj == 'NONE':
+						saying = ' '.join(w[1] for w in sent)
 
-							data.append(['learning', function, head[2], neg[1], pred, pred_stem, subj, subj_stem, speaker_role, saying, age])
+						data.append(['emotion', function, tok[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
 
 			sent = conll_read_sentence(f)
 
@@ -395,7 +180,7 @@ def epistemic(file):
 
 					except:
 						try:
-							far = sent[int(tok[0]) - 2] 
+							far = sent[int(tok[0]) - 3] 
 							if far[1] in ['not', 'no', "n't"]:
 								neg = far
 						except:
@@ -459,10 +244,426 @@ def epistemic(file):
 									subj = d[1]
 									subj_stem = d[2]
 
-						if subj == 'I' or subj == 'NONE':
+					#	if subj == 'I' or subj == 'NONE':
+						saying = ' '.join(w[1] for w in sent)
+
+						data.append(['theory of mind', function, tok[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
+
+			sent = conll_read_sentence(f)
+
+	return data
+
+
+### motor control: rejection ###
+
+def motor(file):
+
+	data = []
+
+	with io.open(file, encoding = 'utf-8') as f:
+		sent = conll_read_sentence(f)
+
+		while sent is not None:
+		
+			speaker_role = sent[0][-2].split()[-1]
+			age = sent[0][-1].split()[1]
+
+			for tok in sent:
+				if tok[2] in ['do', 'can']:
+
+					idx = int(tok[0])
+				
+					if idx < len(sent) and sent[idx][1] in ['not', 'no', "n't"]:
+						neg = sent[idx]
+
+						aux = tok[1]
+						aux_stem = tok[2]
+
+						function = ''
+						if aux_stem == 'do':
+							function = 'prohibition'
+						if aux_stem == 'can':
+							function = 'inability'
+			
+						subj = 'NONE'
+						subj_stem = 'NONE'
+						subj_idx = ''
+
+						d_list = dependents(tok[0], sent)
+
+						for d in d_list:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						neg_d = dependents(neg[0], sent)
+
+						for d in neg_d:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+
+						head = ''
+						head_lemma = ''
+					
+						if tok[6] == '0':
+							head = 'root'
+						else:
+							head = sent[int(tok[6]) - 1]
+							head_lemma = head[2]
+
+						if head != 'root':
+							head_d = dependents(head[0], sent)
+
+							for d in head_d:
+
+								if d[7] == 'SUBJ':
+									subj_idx = d[0]
+									subj = d[1]
+									subj_stem = d[2]
+
+						saying = ' '.join(w[1] for w in sent)
+
+						if int(neg[0]) == len(sent): 
+
+							data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
+
+						if int(neg[0]) < len(sent):
+
+							### exclude emotion ###
+
+							if sent[int(neg[0])][2] not in ['like', 'want', 'know', 'think', 'remember', 'have']:
+								if head_lemma not in ['like', 'want', 'know', 'think', 'remember', 'have']:
+									data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
+
+			sent = conll_read_sentence(f)
+
+	return data
+
+
+
+### language learning: labeling ###
+
+def learning(file):
+
+	data = []
+
+	with io.open(file, encoding = 'utf-8') as f:
+		sent = conll_read_sentence(f)
+
+		while sent is not None:
+		
+			speaker_role = sent[0][-2].split()[-1]
+			age = sent[0][-1].split()[1]
+
+			for tok in sent:
+
+				if tok[2] in ['be']: # and tok[1] in ['am', 'was', 'is', 'are', 'were']:
+
+					neg = ''
+				
+					try:
+						potential = sent[int(tok[0])]
+						if potential[1] in ['not', 'no', "n't"]:
+							neg = potential
+					except:
+						neg = ''
+
+					if neg != '':
+
+						tok_d = dependents(tok[0], sent)
+
+						pred = ''
+						pred_stem = ''
+						pred_pos = ''
+
+						for d in tok_d:
+							if d[7] == 'PRED' and (d[3] in ['n', 'n:pt'] or d[3].startswith('adj')):
+								pred = d[1]
+								pred_stem = d[2]
+								pred_pos = d[3]
+
+						function = 'labeling'
+			
+						subj = 'NONE'
+						subj_stem = 'NONE'
+						subj_idx = ''
+
+						d_list = dependents(tok[0], sent)
+
+						for d in d_list:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						neg_d = dependents(neg[0], sent)
+
+						for d in neg_d:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						head = ''
+					
+						if tok[6] == '0':
+							head = 'root'
+						else:
+							head = sent[int(tok[6]) - 1]
+
+						if head != 'root':
+							head_d = dependents(head[0], sent)
+
+							for d in head_d:
+
+								if d[7] == 'SUBJ':
+									subj_idx = d[0]
+									subj = d[1]
+									subj_stem = d[2]
+
+						if pred != '' and subj_stem not in ['there', 'There']:
 							saying = ' '.join(w[1] for w in sent)
 
-							data.append(['theory of mind', function, tok[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
+							data.append(['learning', function, head[2], neg[1], pred_pos, pred_stem, subj, subj_stem, speaker_role, saying, age])
+
+			sent = conll_read_sentence(f)
+
+	return data
+
+### causal###
+
+def causal(file):
+
+	data = []
+
+	with io.open(file, encoding = 'utf-8') as f:
+		sent = conll_read_sentence(f)
+
+		while sent is not None:
+		
+			speaker_role = sent[0][-2].split()[-1]
+			age = sent[0][-1].split()[1]
+
+			for tok in sent:
+
+				if tok[2] in ['why', 'Why']: 
+
+					neg = ''
+					follow = ''
+				
+					try:
+						potential = sent[int(tok[0])]
+						if potential[1] in ['not', 'no', "n't"]:
+							neg = potential
+
+							try:
+								follow = sent[int(tok[0]) + 1]
+								if follow[2] in ['like', 'want', 'know', 'think', 'remember', 'have']:
+									follow = 'EXCLUDE'
+							except:
+								follow = 'INCLUDE'
+
+					except:
+						try:
+							far = sent[int(tok[0]) + 1] 
+							if far[1] in ['not', 'no', "n't"]:
+								neg = far
+
+								try:
+									follow = sent[int(tok[0]) + 2]
+									if follow[2] in ['like', 'want', 'know', 'think', 'remember', 'have']:
+										follow = 'EXCLUDE'
+								except:
+									follow = 'INCLUDE'
+
+						except:
+							neg = ''
+
+					if neg != '' and follow == 'INCLUDE':
+
+						aux = 'NONE'
+						aux_stem = 'NONE'
+						aux_idx = ''
+				
+						try:
+							idx = int(neg[0]) - 2
+							potential = sent[idx]
+							if potential[1] in AUX:
+								aux_idx = idx
+								aux = potential[1]
+								aux_stem = potential[2]
+						except:
+							aux = 'NONE'
+							aux_stem = 'NONE'
+
+						function = 'causal'
+			
+						subj = 'NONE'
+						subj_stem = 'NONE'
+						subj_idx = ''
+
+						d_list = dependents(tok[0], sent)
+
+						for d in d_list:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						neg_d = dependents(neg[0], sent)
+
+						for d in neg_d:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						head = ''
+					
+						if tok[6] == '0':
+							head = 'root'
+						else:
+							head = sent[int(tok[6]) - 1]
+
+						if head != 'root':
+							head_d = dependents(head[0], sent)
+
+							for d in head_d:
+
+								if d[7] == 'SUBJ':
+									subj_idx = d[0]
+									subj = d[1]
+									subj_stem = d[2]
+
+					#	if subj == 'I' or subj == 'NONE':
+						saying = ' '.join(w[1] for w in sent)
+
+						data.append(['unknown', function, tok[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
+
+			sent = conll_read_sentence(f)
+
+	return data
+
+
+### Event description ###
+
+def event(file):
+
+	data = []
+
+	with io.open(file, encoding = 'utf-8') as f:
+		sent = conll_read_sentence(f)
+
+		while sent is not None:
+		
+			speaker_role = sent[0][-2].split()[-1]
+			age = sent[0][-1].split()[1]
+
+			for tok in sent:
+
+				if tok[3].startswith('v') and tok[2] not in ['like', 'want', 'know', 'think', 'remember', 'have']: 
+
+					neg = ''
+					pre = ''
+				
+					try:
+						potential = sent[int(tok[0]) - 2]
+						if potential[1] in ['not', 'no', "n't"]:
+							neg = potential
+							try:
+								pre = sent[int(tok[0]) - 3]
+								if pre[2] in ['why', 'Why']:
+									pre = 'EXCLUDE'
+							except:
+								pre = 'INCLUDE'
+
+					except:
+						try:
+							far = sent[int(tok[0]) - 3] 
+							if far[1] in ['not', 'no', "n't"]:
+								neg = far
+								try:
+									pre = sent[int(tok[0]) - 3]
+									if pre[2] in ['why', 'Why']:
+										pre = 'EXCLUDE'
+								except:
+									pre = 'INCLUDE'
+						except:
+							neg = ''
+
+
+					if neg != '':
+
+						aux = 'NONE'
+						aux_stem = 'NONE'
+						aux_idx = ''
+				
+						try:
+							idx = int(neg[0]) - 2
+							potential = sent[idx]
+							if potential[1] in AUX:
+								aux_idx = idx
+								aux = potential[1]
+								aux_stem = potential[2]
+						except:
+							aux = 'NONE'
+							aux_stem = 'NONE'
+
+						function = 'event'
+			
+						subj = 'NONE'
+						subj_stem = 'NONE'
+						subj_idx = ''
+
+						d_list = dependents(tok[0], sent)
+
+						for d in d_list:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						neg_d = dependents(neg[0], sent)
+
+						for d in neg_d:
+
+							if d[7] == 'SUBJ':
+								subj_idx = d[0]
+								subj = d[1]
+								subj_stem = d[2]
+
+						head = ''
+					
+						if tok[6] == '0':
+							head = 'root'
+						else:
+							head = sent[int(tok[6]) - 1]
+
+						if head != 'root':
+							head_d = dependents(head[0], sent)
+
+							for d in head_d:
+
+								if d[7] == 'SUBJ':
+									subj_idx = d[0]
+									subj = d[1]
+									subj_stem = d[2]
+
+					#	if subj == 'I' or subj == 'NONE':
+						saying = ' '.join(w[1] for w in sent)
+
+						data.append(['perception', function, tok[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
 
 			sent = conll_read_sentence(f)
 
