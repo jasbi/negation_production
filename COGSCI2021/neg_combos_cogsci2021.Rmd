@@ -498,43 +498,47 @@ parent_all <- subset(all, Role %in% c('Parent'))
 
 child_together <- aggregate(Freq ~ Age + Domain, data = child_all, sum)
 child_together$Role <- rep('Child', nrow(child_together))
+child_together$Prob <- rep(0, nrow(child_together))
+
+for (i in 1:nrow(child_together)){
+  
+  child_together$Prob[i] = child_together$Freq[i] / sum(subset(child_together, Age == child_together$Age[i])$Freq)
+
+  }
+
 parent_together <- aggregate(Freq ~ Age + Domain, data = parent_all, sum)
 parent_together$Role <- rep('Parent', nrow(parent_together))
+parent_together$Prob <- rep(0, nrow(parent_together))
+
+for (i in 1:nrow(parent_together)){
+  
+  parent_together$Prob[i] = parent_together$Freq[i] / sum(subset(parent_together, Age == parent_together$Age[i])$Freq)
+
+  }
+
 
 together <- rbind(child_together, parent_together)
 
 ```
 
 \begin{figure*}[h]
-```{r all, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=8, fig.height=4, set.cap.width=T, num.cols.cap=1, fig.cap = "All domains" }
+```{r all, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=7, fig.height=3, set.cap.width=T, num.cols.cap=1}
 
-p1 <- ggplot(child_together, aes(color=Domain, y=Freq / sum(subset(child_together, Age = Age)$Freq),x=as.numeric(Age))) + 
+together %>%
+  ggplot(aes(color=Domain, x=as.numeric(Age), y=Prob)) + 
     geom_point(aes(color = Domain, shape = Domain)) +
     geom_line(aes(color = Domain, linetype = Domain)) + 
     scale_color_brewer(palette = "Dark2") +
     scale_x_continuous(breaks=seq(0, 72, 6)) +
+    facet_grid(.~Role) +
     theme_classic() +
+    theme(text = element_text(size=10, family="Times")) + 
     theme(legend.position="top") +
     xlab("child age (months)") + 
-    ylab("ratio") + 
-    ggtitle('Child')
-
-p2 <- ggplot(parent_together, aes(color=Domain, y=Freq / sum(subset(child_together, Age = Age)$Freq), x=as.numeric(Age))) + 
-    geom_point(aes(color = Domain, shape = Domain)) +
-    geom_line(aes(color = Domain, linetype = Domain)) + 
-    scale_color_brewer(palette = "Dark2") +
-    scale_x_continuous(breaks=seq(0, 72, 6)) +
-    theme_classic() +
-    xlab("child age (months)") + 
-    theme(legend.position="") +
-    ylab("ratio") +
-    ggtitle('Parent')
-
-p3 <- grid.arrange(p1, p2, nrow = 1, ncol = 2)
-
-#ggsave(p3, 'together.pdf', width = )
+    ylab("ratio") 
 
 ```
+\caption[This image spans both columns]{ALl domains.}\label{fig:all}
 \end{figure*}
 
 # Discussion
