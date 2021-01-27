@@ -89,7 +89,7 @@ stats_data <- rbind(child_stats, parent_stats)
 
 ```
 
-```{r speaker_stats, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=3.5, fig.cap = "Distribution of the number of utterances with negative morphemes in child and parent speech." }
+```{r speaker_stats, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2.5, fig.cap = "Distribution of the number of utterances with negative morphemes in child and parent speech." }
 
 stats_data %>% 
   ggplot(aes(as.numeric(Age), round(Ratio, 2), group = Role, color = Role)) +
