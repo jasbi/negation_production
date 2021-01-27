@@ -165,13 +165,15 @@ Overall our data extraction resulted in a total of `r format(nrow(emotion), big.
 
 &nbsp;
 (1) *I no like sea* / *don't wanna go*
+
 &nbsp;
 (2) *I can't like that*
+
 &nbsp;
 (3) *don't you wanna try it*
+
 &nbsp;
 (4) *Sarah doesn't like that either*
-&nbsp;
 
 To compare the patterns between child and parent speech, for each domain, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different head verbs; (iii) utterances expression emotion with the three negative morphemes at different ages of the child. In both child and parent speech, when expressing emotion with either of the two head verbs *like* and *want*, the most frequently used negative morpheme is *n't* combined with an auxiliary verb. Comparing the two different head verbs, overall the negative morphemes are co-occur with *want* more frequently. 
 
@@ -256,9 +258,13 @@ With regards to the domain of theory of mind, we attended to cases that express 
 
 &nbsp;
 (5) *I not know* / *I didn't remember*
-(6) *I don't think so*
-(7) *don't you remember* / *She doesn't know this*
+
 &nbsp;
+(6) *I don't think so*
+
+&nbsp;
+(7) *don't you remember* / *She doesn't know this*
+
 
 In both child and parent speech, the most frequently used negative morpheme in expressing epistemic position is *n't*, a pattern that is consistent across the three different head verbs. And the negative morphemes tend to co-occur more often in cases that describes the state of unknowing, which is indicated mainly by the verb *know*. Given results from Figure \@ref{fig:epistemic}, there does not seem to be a quite consistent developmental trajectory of child speech in the domain of theory of mind. While regardless of the head verb, children appeared to start applying the negative morphemes in this domain around the age of 4. Nevertheless, there seems to be more variability in expressing an epistemic position with *remember* and *think* as the children age. By contrast, the pattern for instances with *know* gradually decreases after the age of 16 months.
 
@@ -392,9 +398,13 @@ Within the domain of language learning, we concentrated on cases where negative 
 
 &nbsp;
 (10) *that's not a farmer* 
-(11) *I'm not a heavy baby Mum* 
-(12) *It's no good*
+
 &nbsp;
+(11) *I'm not a heavy baby Mum* 
+
+&nbsp;
+(12) *It's no good*
+
 
 Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
 
@@ -451,8 +461,14 @@ names(perception_data) <- c('Age', 'Freq', 'Role', 'Function', 'Ratio')
 
 
 The last domain to be analyzed here is Perception, with two particular functions. First one is indication of non-existence, while the second one denotes possession. For expressions of non-existence, we extracted utterances that either have expletives marked by *there* (e.g. (13)), or cases where the negative morphemes are modifying a nominal (i.e. its syntactic head based on the CHILDES annotation is a nominal; e.g. (14)). For expressions of possession, we selected utterances where the negative morphemes are modifying a possessive pronoun, as well as instances where the negative morphemes are combined with auxiliary verbs to modify a head verb with the lemma form *have* (e.g. (15)). With utterances such (14) and (15), in order to not confuse with the domain of Language Learning, we did not include any cases where the syntactic head of the negative morphemes is a predicate of a copula verb. As a result, our search did not find any utterances that express the function of possession in this case, and the total of utterances that were subjected to analysis in this domain is `r format(nrow(perception), big.mark=",")`  (Child: `r format(nrow(child_learning), big.mark=",")`; Parent: `r format(nrow(parent_learning), big.mark=",")`).
+
+&nbsp;
 (13) *there's no water*
+
+&nbsp;
 (14) *no (more) candy* / *not in your mouth*
+
+&nbsp;
 (15) *not mine* / *I don't have it*
 
 In both child and parent speech, the most frequently occurred negative morphemes in the domain of Perception is *no*. Again for comparison of child and parent speech, we calculated the relative ratio of (i) each of the three negative morphemes overall; (ii) usage of negative morphemes with the two different communicative functions; (iii) utterances expression motor control with the three negative morphemes at different ages of the child. Overall the most frequently used negative morpheme is *n't* when applied in the domain of motor control. Comparing the two communicative functions, the negative morphemes tend to co-occur more often when expressing inability.
