@@ -259,6 +259,7 @@ def epistemic(file):
 def motor(file):
 
 	data = []
+	check = 0
 
 	with io.open(file, encoding = 'utf-8') as f:
 		sent = conll_read_sentence(f)
@@ -329,6 +330,8 @@ def motor(file):
 
 						saying = ' '.join(w[1] for w in sent)
 
+						check += 1
+
 						if int(neg[0]) == len(sent): 
 
 							data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
@@ -342,7 +345,7 @@ def motor(file):
 									data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
 
 			sent = conll_read_sentence(f)
-
+	print(check)
 	return data
 
 
@@ -459,7 +462,8 @@ def perception(file):
 
 					h = sent[int(tok[6]) - 1]
 
-					if int(h[0]) > int(tok[0]) and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you']:
+				#	if int(h[0]) > int(tok[0]) and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you']:
+					if (h[3] in ['n', 'n:pt'] or h[3].startswith('pro') or h[2] in AUX) and h[2] not in ['not', 'thank_you']:
 
 						existence = ''
 						copula = ''
@@ -483,17 +487,15 @@ def perception(file):
 					
 						function = ''
 
-						try:
-							if existence in ['YES']:
-								function = 'existence'
-						except:
-							if existence == '' and (sent[int(tok[0])][2] in ['have', 'Have'] or sent[int(tok[0])][2] in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its'] or "'s" in sent[int(tok[0])][3]):
-								function = 'possession'
-							if existence == '' and (h[3] in ['n', 'n:pt'] or sent[int(tok[0])] not in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its']):
-								function = 'existence'
-
-						if int(tok[0]) == 1 and function != 'possession':							
+						if existence in ['YES']:
 							function = 'existence'
+
+						else:
+							if existence not in ['YES', 'NO'] and (sent[int(tok[0])][2] in ['have', 'Have'] or sent[int(tok[0])][2] in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its'] or "'s" in sent[int(tok[0])][3]):
+								function = 'possession'
+							else:
+								if existence not in ['YES', 'NO'] and (h[3] in ['n', 'n:pt'] or sent[int(tok[0])] not in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its']):
+									function = 'existence'
 
 						saying = ' '.join(w[1] for w in sent)
 
@@ -511,7 +513,7 @@ def perception(file):
 						except:
 							h = ''
 
-						if h != '' and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you']:
+						if h != '' and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro') or h[2] in AUX) and h[2] not in ['not', 'thank_you']:
 
 							existence = ''
 							copula = ''
@@ -534,15 +536,15 @@ def perception(file):
 
 							function = ''
 
+							if existence in ['YES']:
+								function = 'existence'
 
-							try:
-								if existence in ['YES']:
-									function = 'existence'
-							except:
-								if existence == '' and (sent[int(tok[0])][2] in ['have', 'Have'] or sent[int(tok[0])][2] in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its'] or "'s" in sent[int(tok[0])][3]):
+							else:
+								if existence not in ['YES', 'NO'] and (sent[int(tok[0])][2] in ['have', 'Have'] or sent[int(tok[0])][2] in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its'] or "'s" in sent[int(tok[0])][3]):
 									function = 'possession'
-								if existence == '' and (h[3] in ['n', 'n:pt'] or sent[int(tok[0])] not in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its']):
-									function = 'existence'
+								else:
+									if existence not in ['YES', 'NO'] and (h[3] in ['n', 'n:pt'] or sent[int(tok[0])] not in ['mine', 'yours', 'hers', 'his', 'theirs', 'ours', 'its']):
+										function = 'existence'
 
 							if int(tok[0]) == 1 and function != 'possession':							
 								function = 'existence'
