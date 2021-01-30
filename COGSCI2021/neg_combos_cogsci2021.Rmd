@@ -64,6 +64,15 @@ Quantitative validations of previous work
 
 New grouping
 
+|FUNCTION|Linguistic Composition|Examples|
+|------|--------|--------------------|--------------------|
+|Rejection| With *like* or *want* | "I not like it", "not want it" |
+|Epistemic | know, think, remember  | "I not know" |
+|Prohibition | with imperative subjectless *do* | "do not spill milk"|
+|Inability | with modal *can* | "I cannot zip it"|
+|Labeling | modifying nominal or adjectival predicatives | "that's not a crocodile"; "it's no interesting"|
+|Non-existence | expletives; with a nominal; *no more* | "there is no soup"; "no juice"; "no more milk" | 
+|Possession | have; with possesive pronouns| "not have the toy"; "not mine" | 
   
 # Experiments
 
