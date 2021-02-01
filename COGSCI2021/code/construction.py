@@ -2,6 +2,7 @@ import io, os, argparse
 
 AUX = ['can', 'could', 'ca', 'dare', 'do', 'did', 'does', 'have', 'had', 'has', 'may', 'might', 'must', 'need', 'ought', 'shall', 'should', 'will', 'would']
 COP = ['be', 'is', 'was', 'am', 'are', 'were']
+SUBJ = ['I', 'you', 'she', 'he', 'they', 'it', 'we']
 
 ### reading in sentences in CoNLL format ###
 
@@ -254,7 +255,7 @@ def epistemic(file):
 	return data
 
 
-### motor control: rejection ###
+### motor control ###
 
 def motor(file):
 
@@ -273,8 +274,20 @@ def motor(file):
 				if tok[2] in ['do', 'can']:
 
 					idx = int(tok[0])
+
+					pre = ''
+					try:
+						pre = sent[int(tok[0]) - 2][2]
+					except:
+						pre = ''
+
+					post = ''
+					try:
+						post = sent[idx + 1][2]
+					except:
+						post = ''
 				
-					if idx < len(sent) and sent[idx][1] in ['not', 'no', "n't"]:
+					if idx < len(sent) and sent[idx][1] in ['not', 'no', "n't"] and post not in SUBJ:
 						neg = sent[idx]
 
 						aux = tok[1]
@@ -308,7 +321,10 @@ def motor(file):
 								subj = d[1]
 								subj_stem = d[2]
 
-
+						if pre in SUBJ and subj == 'NONE':
+							subj = pre 
+							subj_stem = pre
+					
 						head = ''
 						head_lemma = ''
 					
@@ -330,8 +346,6 @@ def motor(file):
 
 						saying = ' '.join(w[1] for w in sent)
 
-						check += 1
-
 						if int(neg[0]) == len(sent): 
 
 							data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
@@ -345,7 +359,7 @@ def motor(file):
 									data.append(['motor_control', function, head[2], neg[1], aux, aux_stem, subj, subj_stem, speaker_role, saying, age])
 
 			sent = conll_read_sentence(f)
-	print(check)
+
 	return data
 
 
@@ -378,6 +392,12 @@ def learning(file):
 						neg = ''
 
 					if neg != '':
+
+						post = ''
+						try:
+							post = sent[int(tok[0]) + 1][2]
+						except:
+							post = ''
 
 						tok_d = dependents(tok[0], sent)
 
@@ -432,7 +452,7 @@ def learning(file):
 									subj = d[1]
 									subj_stem = d[2]
 
-						if pred != '' and subj_stem not in ['there', 'There']:
+						if pred != '' and subj_stem not in ['there', 'There'] and post not in SUBJ:
 							saying = ' '.join(w[1] for w in sent)
 
 							data.append(['learning', function, head[2], neg[1], pred_pos, pred_stem, subj, subj_stem, speaker_role, saying, age])
@@ -461,10 +481,14 @@ def perception(file):
 				if tok[2] in ['no', "not", "n't"] and int(tok[0]) < len(sent):
 
 					h = sent[int(tok[6]) - 1]
+					pre = ''
 
-				#	if int(h[0]) > int(tok[0]) and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you']:
-					if (h[3] in ['n', 'n:pt'] or h[3].startswith('pro') or h[2] in AUX) and h[2] not in ['not', 'thank_you']:
-
+					try:
+						pre = sent[int(tok[0]) - 2][2]
+					except:
+						pre = ''
+					
+					if (sent[int(tok[0])][2] in ['have', 'HAVE']) or (pre not in AUX and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you'] and sent[int(tok[0])][3].startswith('v') is False and sent[int(tok[0])][2] not in ['Mom', 'mom', 'mum', 'Mum', 'Mummy', 'mummy', 'mommy', 'Mommy', 'dad', 'Daddy', 'daddy', 'Dad']):
 						existence = ''
 						copula = ''
 
@@ -513,8 +537,15 @@ def perception(file):
 						except:
 							h = ''
 
-						if h != '' and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro') or h[2] in AUX) and h[2] not in ['not', 'thank_you']:
+						pre = ''
 
+						try:
+							pre = sent[int(tok[0]) - 2][2]
+						except:
+							pre = ''
+
+						if h != '' and ((sent[int(tok[0])][2] in ['have', 'HAVE']) or (pre not in AUX and (h[3] in ['n', 'n:pt'] or h[3].startswith('pro')) and h[2] not in ['not', 'thank_you'] and sent[int(tok[0])][3].startswith('v') is False and sent[int(tok[0])][2] not in ['Mom', 'mom', 'mum', 'Mum', 'Mummy', 'mummy', 'mommy', 'Mommy', 'dad', 'Daddy', 'daddy', 'Dad'])):
+				
 							existence = ''
 							copula = ''
 

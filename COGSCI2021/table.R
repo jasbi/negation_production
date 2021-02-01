@@ -9,7 +9,6 @@
 |Non-existence | expletives; with a nominal; *no more* | "there is no soup"; "no juice"; "no more milk" | 
 |Possession | have; with possesive pronouns| "not have the toy"; "not mine" | 
   
-  
 |Domain|Functions|Linguistic Composition|Examples|
 |------|--------|--------------------|--------------------|
 |Emotion|Rejection| With *like* or *want* | "I not like it", "not want it" |
