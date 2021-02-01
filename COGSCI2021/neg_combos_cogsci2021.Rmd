@@ -80,7 +80,6 @@ For developmental data of child language in English, we turned to the CHILDES da
 Figure \@ref(fig:speaker_stats)
 
 ```{r speakerdata, include=FALSE}
-
 stats <-read.csv('data/age_info.txt', header = T, sep = '\t')
 stats$Role[which(stats$Role == "Father")] <- 'Parent'
 stats$Role[which(stats$Role == "Mother")] <- 'Parent'
@@ -97,11 +96,9 @@ parent_stats$Ratio <- parent_stats$Freq / sum(parent_stats$Freq)
 parent_stats$Role <- rep('Parent', nrow(parent_stats))
 
 stats_data <- rbind(child_stats, parent_stats)
-
 ```
 
 ```{r speaker_stats, fig.env="figure", fig.pos = "H", fig.align = "center", fig.width=3.5, fig.height=2.5, fig.cap = "Distribution of the number of utterances with negative morphemes in child and parent speech." }
-
 stats_data %>% 
   ggplot(aes(x = as.numeric(Age) + 12, y = round(Ratio, 2), group = Role, color = Role)) +
   geom_point(aes(color = Role, shape = Role)) +
@@ -114,7 +111,6 @@ stats_data %>%
   theme(legend.position="top") +
   xlab("child age (months)") + 
   ylab("ratio")
-
 ```
 
 ## Negation functions
@@ -124,7 +120,6 @@ In this section, we describe in details our automatic extraction of syntactic st
 After extracting all instances with negative morphemes, the developmental trajectory of each construction type as described in the previous section was analyzed. While the matter of interest here is child speech, we also compared patterns in child production to those in parent speech as references at the corresponding age of the child. Then we combined the development of all construction types for analysis as a whole.
 
 ```{r function}
-
 entropy <- function(data){
   start = 0
   for (i in 1:nrow(data)){
@@ -135,7 +130,6 @@ entropy <- function(data){
   
   return(start)
 }
-
 ```
 
 ### Rejection
@@ -144,7 +138,6 @@ Under the broader context of expressing emotion [@darwin1872expression], we focu
 
 
 ```{r emotiondata, include=FALSE}
-
 emotion <-read.csv('data/neg_emotion.txt', header = T, sep = '\t')
 # emotion <- subset(emotion, Subj == 'I' | Subj == 'NONE')
 emotion$Role[which(emotion$Role == "Father")] <- 'Parent'
@@ -181,7 +174,6 @@ parent_want$Ratio <- parent_want$Freq / sum(parent_want$Freq)
 
 emotion_data <- rbind(child_like, child_want, parent_like, parent_want)
 names(emotion_data) <- c('Age', 'Freq', 'Role', 'Head', 'Ratio')
-
 ```
 
 Additionally, other than expressions that the speaker used to describe their own emotion (e.g. (1)) or their (in)ability to do so (e.g. (2)), we also included cases that express rhetorical inquiries of emotions from one interlocutor addressed to another (e.g. (3)) as well as instances where the speaker is describing the emotion of somebody else (e.g. (4)).
