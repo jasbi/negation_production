@@ -52,7 +52,8 @@
 % \textwidth 16cm
 % \textheight 21cm
 
-\title{Combinatorial Capacity of English Negation in Early Child Language}
+\title{English Negative Constrctions and Communicative Functions in Early Child
+Language}
 
 
 \author{{\large \bf Morton Ann Gernsbacher (MAG@Macc.Wisc.Edu)} \\ Department of Psychology, 1202 W. Johnson Street \\ Madison, WI 53706 USA \AND {\large \bf Masoud Jasbi (jasbi@ucdavis.edu)} \\ Department of Linguistics, 469 Kerr Hall, One Shields Avenue \\ Davis, CA 95 USA}
@@ -63,23 +64,25 @@
 \maketitle
 
 \begin{abstract}
-How does negation develop in early child language? Previous work has
-hypothesized the concept of negation arises via conmbining negative
-morphemes with different communicative functions such as rejection.
-However, these specific functions have been challenging to assess given
-their abstract concepts. Here we examine the developmental trajectories
-of seven communicative functions served by negation in children's
-production. Going beyond previous studies that have mainly relied on
-manual annotations and small sample sizes, we used large-scale corpora
-of child speech in English. We automatically identified each function
-based on their distinct syntactic characteristics. Our analyses
+How does negation emerge in early conceptual and linguistic development?
+Previous research has hypothesized that negation develops to express
+different communicative functions such as rejection, non-existence, or
+prohibition. However, these functions have been challenging to detect
+and classify by human annotators using contextual cues. Consequently, in
+previous research we have been limited to relatively small number of
+children and small samples of their speech. In this study, we consider
+specific syntactic constructions as proxies for communicative functions
+and examine their developmental trajectories in children's speech. We
+used automatic annotation and identification of seven different
+functions in a large corpus of child-parent interactions. Our analyses
 demonstrated frequent usage of negation in all seven functions between
-the age of 24 - 36 months; yet there are notable differences in
+the ages of 24 - 36 months; yet there are notable differences in
 production variability of negation depending on the specifc function
 examined.
 
 \textbf{Keywords:}
-negation; combinatorial capacity; corpus anlysis.
+negation; acquisition; development, semantics, pragmatics, syntax, child
+language.
 \end{abstract}
 
 \hypertarget{introduction}{%
@@ -90,16 +93,15 @@ can help a coffee shop divide its menu into ``coffee'' and ``not
 coffee'' sections, with the ``not coffee'' section bringing together
 diverse items with no common label. It can inform us to regulate each
 others' actions in a sign like ``no mask, no entry''. It can also
-communicate our deepest wants and dislikes, for example when we say ``I
-don't like Mondays''. But how does this crucial abstract concept of
-negation emerge in the human mind? What are the specific communicative
-functions that negation combines with in early language development?
+communicate our deepest wants and dislikes as in ``I don't like
+Mondays''. But how does the abstract concept of negation emerge in the
+human mind? What are the specific communicative functions that negation
+combines with in early language development?
 
-Regarding these two questions, there have been several influential
-hypotheses. Starting a century and a half ago, Darwin (1872) thought
-that negation has roots in the expression of human emotions and desires.
-He hypothesized the earliest manifestation of negation and affirmation
-in infants is when they refuse food from parents, by withdrawing their
+Starting a century and a half ago, Darwin (1872) thought that negation
+has roots in the expression of human emotions and desires. He
+hypothesized the earliest manifestation of negation and affirmation in
+infants is when they refuse food from parents, by withdrawing their
 heads laterally, or when they accept the food, by inclining their heads
 forward. He suggested that head shaking and nodding as common gestures
 for negation and affirmation have developed from this early habit.
@@ -110,83 +112,78 @@ they are asked ``do you want juice?'', they may say ``no'', ``not want
 it'', or ``don't like it''. Pea (1978) proposed this negation function
 is the first to emerge in children's early speech.
 
-On the other hand, Bloom (1970) suggested that the use of negation to
-expresses ``non-existence'' emerges before rejection or refusal. For
-example, when an object that children expect to be present is not
-present, children may say: ``no window'', ``no fish in the bathroom'',
-or ``I do not have underpants''. Two close concepts to non-existence
-discussed in the literature are ``disappearance'' and ``non-occurrence''
-(Pea, 1978; Villiers \& Villiers, 1979). Disappearance refers to
-situations where an object disappears and children use negation to
-express it such as ``no food. all gone'' or ``no more noise''.
-Non-occurrence refers to cases when an expected action or event does not
-occur as in ``not working'' or ``doggie not barking''. Some researchers
-referred to these cases as ``failures'' and included examples like ``no
-fit in da box'' or ``it don't fit'' (Cameron-Faulkner, Lieven, \&
-Theakston, 2007; Choi, 1988). Non-existence can also be expressed by
-negation of locative prepositional phrases (e.g.~``no in there'' or
-``daddy was not on the phone''). While rejection was hypothesized to
-interact with human emotions and desires, non-existence (broadly
-construed to include ``disappearance'' and ``non-occurrence'') likely
-interacts with human perception. Choi (1988) proposed that children's
-early linguistic negation is used to express both rejection and
-non-existence.
+Bloom (1970) argued that the use of negation to expresses
+``non-existence'' emerges before rejection or refusal. For example, when
+an object that children expect to be present is not present, children
+may say: ``no window'', ``no fish in the bathroom'', or ``I do not have
+underpants''. Two close concepts to non-existence are ``disappearance''
+and ``non-occurrence'' (Pea, 1978; Villiers \& Villiers, 1979).
+Disappearance refers to situations where an object disappears and
+children use negation to express it (e.g.~``no food. all gone'' or ``no
+more noise''). Non-occurrence refers to cases when an expected action or
+event does not occur as in ``not working'' or ``doggie not barking''.
+Some researchers referred to these cases as ``failures'' and included
+examples like ``no fit in da box'' or ``it don't fit''
+(Cameron-Faulkner, Lieven, \& Theakston, 2007; Choi, 1988).
+Non-existence can also be expressed by negation of locative
+prepositional phrases (e.g.~``no in there'' or ``daddy was not on the
+phone''). While rejection was hypothesized to interact with human
+emotions and desires, non-existence (broadly construed to include
+``disappearance'' and ``non-occurrence'') likely interacts with human
+perception. Choi (1988) proposed that children's early linguistic
+negation is used to express both rejection and non-existence.
 
-Additionally, Choi (1988) introduced ``prohibition'' as one function of
-negation and suggested that it emerges as early as rejection and
-non-existence. In cases of prohibition, children use linguistic negation
-to stop others from performing some action. For example they may say:
-``don't go'' or ``do not spill milk''. A special case of prohibition is
-``self-prohibition''. For example, a child may approach prohibited food
-but immediately say ``no, don't eat'' to stop themselves from doing the
-prohibited action.
+Additionally, Choi (1988) introduced ``prohibition'' and suggested that
+it emerges as early as rejection and non-existence. In cases of
+prohibition, children use negation to stop others from performing
+actions; for example ``don't go'' or ``do not spill milk''. A special
+case of prohibition is ``self-prohibition''. For example, a child may
+approach prohibited food but immediately say ``no, don't eat'' to stop
+themselves. A function similar to prohibition is ``inability''
+(e.g.~\emph{I can't reach} / \emph{I cannot zip it}), in that both
+involve conceptualizing actions and negating them, possibly interacting
+with early development of motor control. Choi (1988) suggested that
+expression of inability emerges after the first phase, namely
+non-existence, rejection, and prohibition.
 
-A function similar to prohibition is ``inability'', in that both involve
-conceptualizing actions and negating them, possibly interacting with
-early development of motor control. As discussed in Choi (1988),
-children tend to communicate their own inability to perform an action
-with different negative morphemes (e.g.~\emph{I can't reach} / \emph{I
-cannot zip it}). It was suggested that utterances as such emerge after
-the first phase (i.e.~non-existence, rejection, prohibition).
-
-Another function of negation discussed in the literature is ``denial''.
-Bloom (1970) originally defined it as asserting that ``an actual or
-supposed predication was not the case''. For instance a child may say:
-``It's not sharp''. Later researchers formulated it as
-``truth-functional negation'' and suggested that it is used to negate
-the truth of a proposition (Cameron-Faulkner et al., 2007; Pea, 1978).
-This definition depends on the assumed logical system and its
-assumptions on what type of propositions receive truth values. A
-particular sub-function of denial is ``labeling'', which is often
-realized as the negation of nominal or adjectival predicates such as
+``Denial'' is another function of negation that is argued to be late in
+development. Bloom (1970) defined it as asserting that ``an actual or
+supposed predication was not the case'', for example ``It's not sharp''.
+Later researchers formulated it as ``truth-functional negation'' because
+it is used to negate the truth of a proposition (Cameron-Faulkner et
+al., 2007; Pea, 1978). However, this definition depends on the assumed
+logical system and its assumptions on what type of propositions receive
+truth values. A particular sub-function of denial is ``labeling'', which
+is realized as the negation of nominal or adjectival predicates such as
 ``this is not a bunny'' or ``not red''. These utterances are often used
-to introduce new linguistic labels and in turn would possibly facilitate
-word learning. Therefore, it is possible that labeling helps the
-development of abstract negation.
+to introduce new linguistic labels by parents and in turn may facilitate
+word learning (Clark, 2010). Conversely, labeling and word learning may
+aid the development of abstract negation.
 
-However, previous research on the origins and functions of negation has
-faced two major issues. First, it mainly relied on human annotation and
-identification of negative utterances in corpora which is costly and
-difficult. As a result, most studies focused on only a handful of
-children and a relatively small sample of their speech. This led to the
-second caveat, which is that the limited data sizes in previous
-experiments possibly influenced their claimed findings. For example,
-Nordmeyer \& Frank (2018) looked at the speech of five children in the
-Providence corpus (Demuth, Culbertson, \& Alter, 2006) and found a great
-deal of individual differences in how early a negative function is
-attested. It awaits to be seen whether similar results would hold in
-much larger sample sizes.
+Despite considerable research on early functions of negation, their
+developmental trajectories in children's productions have remained
+unclear. Different studies have claimed different order of acquisition
+(Pea, 1978). In a recent study, Nordmeyer \& Frank (2018) looked at the
+speech of five children in the Providence corpus (Demuth, Culbertson, \&
+Alter, 2006) and found a great deal of individual differences in how
+early a negative function is attested. This is partly because previous
+studies have had to rely on human annotation and identification of
+functions from corpus data, a time-consuming and difficult process that
+has limited previous studies to a handful of children and a relatively
+small sample of their speech.
 
-In this study, we investigate the development of negation in child
-speech of English, focusing on the utterance level. To address the
-issues raised above, we used of large-scale corpora of child utterances
-(MacWhinney, 2000). Specifically, we asked: (1) what communicative
-functions are negation combined with and to what extent? (2) within the
-same communicative function, does the developmental trajectory differ
-depending on particular lexical items that negation modifies
-(e.g.~\emph{like} or \emph{want} for rejection)? (3) taking all
-functions into account, do they share similar developmental
-characteristics, or would there be function-specific differences?
+Our study addresses this issue by using syntactic constructions as a
+proxy for communicative functions. We used a large collection of child
+language corpora (MacWhinney, 2000) with part of speech tags and
+syntactic dependency relations. We automatically selected constructions
+that conveyed the functions discussed in prior research and asked: (1)
+how early do these constructions emerge in children's speech and what's
+their trajectory? (2) within the same communicative function, does the
+developmental trajectory differ depending on particular lexical items
+that negation modifies (e.g.~\emph{like} or \emph{want} for rejection)?
+(3) taking all functions into account, do they share similar
+developmental characteristics, or would there be function-specific
+differences?
 
 \begin{table*}[h]
 \small
@@ -580,57 +577,54 @@ period. Children's negative utterances bear considerable resemblance to
 parent speech in terms of the overall production frequency. Early on,
 the most frequently applied function is non-existence, while the
 functions with relatively smaller number of occurrences include
-possession and inability. With that being said, there are a number of
-observable differences with respects to the production variability of
-individual function. Comparing across functions, the usage of negative
-morphemes for non-existence is the most variable or the least
-consistent, with there being more variability in child speech than
-parent speech (Child: 1.61; Parent: 1.08). On the other hand, the
-opposite patterns are observed for prohibitions (Child: 0.62; Parent:
-0.92) and labeling (Child: 0.49; Parent: 0.94).
+possession and inability. There are a number of observable differences
+with respects to the production variability of individual functions.
+Comparing across functions, the usage of negative morphemes for
+non-existence is the most variable, with considerable variability in
+child speech (Child: 1.61; Parent: 1.08). The opposite pattern is
+observed for prohibitions (Child: 0.62; Parent: 0.92) and labeling
+(Child: 0.49; Parent: 0.94).
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
-Previous research on the development of negation have used
-human-annotated small-scale corpora to study early communicative
-functions of negation in children's speech. By contrast, this study
-presented an automatic and large-scale approach using POS and syntactic
-dependency relations to define and extract relevant structures. In
-particular, we presented analyses on utterances combined with negation
-to convey rejection, non-existence, prohibition, inability, labeling,
-epistemic states and possession. Overall our results provided evidence
-that negation is frequently combined with all these functions between
-the age of 24 to 36 months, and that there are quantifiable differences
-in the production variability of the negative morphemes depending on the
-specific function.
+In this study, we used automatic and large-scale annotation and analysis
+of negative constructions in children's and parents' speech using POS
+tags and syntactic dependency relations. We presented analyses negative
+utterances that convey rejection, non-existence, prohibition, inability,
+labeling, epistemic states and possession. Overall our results show that
+negation is frequently used in constructions that convey these functions
+between the ages of 24 to 36 months.
 
-One important limitation of our approach is that we have used data from
-children's production to assess the development of negation as a
-concept. While it is possible that patterns in children's production
-reflect their comprehension and semantic development as well, this is
-not guaranteed. Most importantly, there are production-specific effects
-(e.g.~length of utterance, ease of pronunciation) that we have not taken
-into account yet. Thus, results from production data alone do not
-suffice to conclude that early development of negation is necessarily
-conceptual. Further experiments testing children's comprehension of
-negative utterances that serve different communicative functions are
-necessary in order to understand the origin of negation more thoroughly.
+It is important to note that similar to prior studies, our conclusions
+are limited to children's production. While it is possible that patterns
+in children's production reflect their comprehension and semantic
+development overall, this is not guaranteed. Most importantly, there are
+production-specific effects (e.g.~length of utterance, ease of
+pronunciation) that we have not taken into account yet. Thus, results
+presented here cannot support a specific order of acquisition
+hypothesis. We plan to take production-specific factors into account in
+the future. More importantly, experiments testing children's
+comprehension of negative utterances that serve different communicative
+functions are necessary in order to understand the origin of negation
+more thoroughly.
 
 In future work, we plan to investigate the production trajectory of
-positive counterparts to our negative structures (e.g.~\emph{I don't
-know} vs.~\emph{I know}). We intend to also apply our analyses to
-individual children in order to assess individual differences. Lastly,
-our experiments thus far have concentrated on multi-word syntactic
-structures at the utterance level, therefore cases where negations are
-used as discourse markers in single-word or few-word expressions were
-excluded. However, discourse markers as responses to a previous
-utterance(s) have important semantic and conceptual roles in the
-communication between children and parents (e.g.~Parent: \emph{do you
-want some bread?}; Child: \emph{no no no}). Inclusions of negative
-structures at the discourse level, along with more carefully manual
-inspections, would allow us to paint a more clear picture about the
-development of negation.
+positive counterparts to our negative structures (e.g.~\emph{I know} for
+\emph{I don't know}). This would allow us to compare the production of
+positive and negative constructions and control for the production
+trajectory of specific constructions regardless of whether negation is
+present. We also intend to focus on individual differences among
+children given our methods and analyses. Lastly, our experiments thus
+far have concentrated on multi-word syntactic structures at the
+utterance level, therefore cases where negations are used as discourse
+markers in single-word or few-word expressions were excluded. However,
+discourse markers as responses to previous utterances have important
+semantic and conceptual roles in the communication between children and
+parents (e.g.~Parent: \emph{do you want some bread?}; Child: \emph{no no
+no}). Inclusions of negative structures at the discourse level would
+allow us to paint a more clear picture about the development of
+negation.
 
 \hypertarget{references}{%
 \section{References}\label{references}}
@@ -654,6 +648,10 @@ negation. \emph{Journal of Child Language}, \emph{34}(2), 251.
 Choi, S. (1988). The semantic development of negation: A
 cross-linguistic longitudinal study. \emph{Journal of Child Language},
 \emph{15}(3), 517--531.
+
+\leavevmode\hypertarget{ref-clark2010adult}{}%
+Clark, E. V. (2010). Adult offer, word-class, and child uptake in early
+lexical acquisition. \emph{First Language}, \emph{30}(3-4), 250--269.
 
 \leavevmode\hypertarget{ref-cover_elements_1991}{}%
 Cover, T. M., \& Thomas, J. A. (1991). \emph{Elements of information
