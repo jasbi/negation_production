@@ -205,7 +205,6 @@ theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	do you not think she
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	45
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it goes in there	45
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	I do n't know how do you	45
-theory of mind	epistemic	think	not	NONE	NONE	we	we	Mother	is there something else we can do that a Mommy s not thinking of	13
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what to call it	13
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	13
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so	29
@@ -400,7 +399,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	sweetie I do n't know what yo
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where the fly went	18
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know why it 's falling down	37
 theory of mind	epistemic	know	n't	did	do	I	I	Target_Child	I did n't know we did n't need that	37
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Father	you 're not thinking about anything	39
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	39
 theory of mind	epistemic	know	n't	do	do	you	you	Father	you do n't know	39
 theory of mind	epistemic	know	n't	do	do	you	you	Father	well who knows if you do n't know	39
@@ -822,7 +820,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know whether you wil
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	38
 theory of mind	epistemic	know	not	do	do	do	do	Target_Child	do not know	38
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so	38
-theory of mind	epistemic	remember	not	NONE	NONE	we	we	Mother	but do you not remember we 've got different bags for garden rubbish	38
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	38
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	38
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	38
@@ -1151,7 +1148,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	28
 theory of mind	epistemic	think	n't	ca	can	I	I	Mother	I ca n't think what now	28
 theory of mind	epistemic	think	n't	ca	can	I	I	Mother	and I ca n't think what else they do	28
 theory of mind	epistemic	know	n't	do	do	we	we	Mother	there 's a lady and we do n't know who she is	28
-theory of mind	epistemic	think	n't	had	have	I	I	Mother	I had n't thought of that	28
 theory of mind	epistemic	think	n't	had	have	certainly	certain	Mother	but I certainly had n't thought of that	28
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think there are any more there	28
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we really need that leaflet	28
@@ -1317,7 +1313,6 @@ theory of mind	epistemic	think	n't	ca	can	I	I	Father	a I ca n't think of what el
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know why you would say that about our block you know	57
 theory of mind	epistemic	know	n't	do	do	you	you	Father	you do n't know anything about publications on your on your work right	57
 theory of mind	epistemic	know	n't	did	do	I	I	Child	I did n't know that you had a microphones	57
-theory of mind	epistemic	remember	no	NONE	NONE	we	we	Child	remember we got ta put our palms down if we 're gon na go no	57
 theory of mind	epistemic	know	n't	do	do	I	I	Child	I do n't know	57
 theory of mind	epistemic	know	n't	did	do	we	we	Child	we did n't know if that we had black block	57
 theory of mind	epistemic	know	n't	do	do	you	you	Target_Child	you do n't know that much about the secrets	57
@@ -1335,7 +1330,6 @@ theory of mind	epistemic	remember	n't	ca	can	I	I	Father	they were that that I co
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know maybe Howard	57
 theory of mind	epistemic	know	n't	do	do	you	you	Father	well you you you are laughing but these greens are delicious honey you just do n't know	57
 theory of mind	epistemic	know	n't	do	do	I	I	Child	I do n't know	57
-theory of mind	epistemic	think	n't	NONE	NONE	she	she	Father	she was probably playing and she was n't thinking about what she was doing	57
 theory of mind	epistemic	remember	n't	do	do	you	you	Mother	yes you do you do n't remember you have n't seem him for a long time	57
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so either	57
 theory of mind	epistemic	know	n't	do	do	I	I	Child	I do n't know	57
@@ -1561,7 +1555,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	36
 theory of mind	epistemic	know	n't	do	do	zero	zero	Target_Child	zero do n't know	36
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it goes there yet does it	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	36
-theory of mind	epistemic	remember	n't	do	do	I	I	Mother	but I do n't remember where	36
 theory of mind	epistemic	know	n't	do	do	you	you	Target_Child	you do n't know where he is either Lwww	36
 theory of mind	epistemic	remember	n't	does	do	Lwww	Lwww	Mother	Lwww does n't remember either	36
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it 's in here either	36
@@ -1571,7 +1564,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it does does 
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	but I do n't know it	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know it either	36
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	but I ca n't remember where	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know why are you standing on the pieces	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know I ca n't find it actually	36
 theory of mind	epistemic	think	n't	do	do	you	you	Mother	you do n't think it 's too small for you	36
@@ -1728,7 +1720,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	43
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	43
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	43
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know the name any more	43
-theory of mind	epistemic	remember	n't	do	do	shoes	shoe	Target_Child	I do n't remember where my new running shoes are	43
 theory of mind	epistemic	know	n't	does	do	she	she	Mother	the abstract stuff like she 's not seen she does n't know	24
 theory of mind	epistemic	know	n't	did	do	she	she	Mother	like she did n't know the kiwi fruit	24
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she 's not done that before yet	24
@@ -2569,7 +2560,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think that goes	39
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what they 're doing	39
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what it is	39
 theory of mind	epistemic	know	n't	do	do	she	she	Target_Child	she do n't know where to eat my dinner	34
-theory of mind	epistemic	remember	no	NONE	NONE	you	you	Mother	no remember when you go to bed at night what do we do to your teeth	24
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know what those are	24
 theory of mind	epistemic	know	n't	did	do	I	I	Father	I did n't know you could say that many	24
 theory of mind	epistemic	think	n't	do	do	I	I	Father	the last one did n't work I do n't think did it	24
@@ -3142,7 +3132,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	28
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know how to get it	28
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know how but he actually cut his foot	28
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know you had a blue dump truck	28
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	are you sure you 're not thinking about Jill's house	28
 theory of mind	epistemic	know	n't	does	do	Investigator	Investigator	Mother	Investigator does n't know who Bruce is you haf ta tell her	28
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it was naughty because it was an accident	28
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	well I do n't think he 's out of the car yet	32
@@ -3500,7 +3489,6 @@ theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think you do	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she 'd like us all descending	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Trevor's any good	30
 theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think we 've done that one yet have we	30
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember doing it	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Caroline wants to go upstairs just yet	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where to begin	30
@@ -5038,7 +5026,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	27
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	oh I do n't think that 's for the constructor truck I think the constructor truck can be out here with the loader	27
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know I do n't think I saw Ernie in there	27
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't know I do n't think I saw Ernie in there	27
-theory of mind	epistemic	think	n't	NONE	NONE	I	I	Mother	sorry sorry sorry sorry I did n't mean to touch your head I was n't thinking	27
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what it is	33
 theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think you 'd like my books	33
 theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think the hat fits on him does it	33
@@ -5511,7 +5498,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	54
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	54
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	54
 theory of mind	epistemic	remember	n't	do	do	I	I	Target_Child	I do n't remember	54
-theory of mind	epistemic	remember	n't	do	do	you	you	Mother	you do n't remember how we mixed em up and you got to put everything in	54
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	54
 theory of mind	epistemic	know	n't	does	do	mommy	mommy	Father	Emily's mommy does n't know what she 's in for does she	54
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	54
@@ -5567,7 +5553,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	and I do n't know if we 're p
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	42
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	42
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	42
-theory of mind	epistemic	remember	n't	ca	can	I	I	Target_Child	it was just like but like a bat but I ca n't remember the teachers but so many of them go downstairs because Linda's still gone to Florida	48
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	21
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	21
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	noise no I do n't think they make noise	21
@@ -5858,7 +5843,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what to tell yo
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	57
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where your bib is but how about the apron	30
-theory of mind	epistemic	remember	n't	ca	can	saying	say	Mother	I ca n't remember saying you could eat any	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you can hold it	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what 's in the bag	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think the flour and water smells or tastes quite as nice as the icing Thomas	30
@@ -6197,7 +6181,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know I was n't liste
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so	41
 theory of mind	epistemic	think	n't	do	do	it	it	Mother	but I do n't think it would be long enough	41
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know if we should make it or not	41
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Father	you 're not thinking about anything	46
 theory of mind	epistemic	think	n't	do	do	Mom	Mom	Father	did Mom tell you that we do n't think you should climb the volley ball pole anymore	54
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know Abe	54
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	cause I do n't know where my first one is	54
@@ -6205,7 +6188,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know where it 
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she has	17
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	17
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	why on earth you haf ta I do n't know	17
-theory of mind	epistemic	think	n't	had	have	Carol	Carol	Mother	but if she had n't thought Carol was coming	17
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know who was going to look after her obviously somebody	17
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it fits in there	19
 theory of mind	epistemic	know	n't	do	do	I	I	Father	well I do n't know if you know the story of what 's going on in the last day or two	48
@@ -6576,8 +6558,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Father	I do n't think so	46
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	if she thinks something's silly I do n't think it 's silly at all	46
 theory of mind	epistemic	think	n't	did	do	I	I	Target_Child	yeah but I did n't think it was	46
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know how I catched em	46
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	no I 'm not thinking anything	46
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Father	that you 're not thinking	46
 theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember	35
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know which one	35
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	35
@@ -7576,7 +7556,6 @@ theory of mind	epistemic	know	n't	does	do	NONE	NONE	Mother	who does n't know	57
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I think sometimes they do n't know and sometimes they do	57
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know how I know	57
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	57
-theory of mind	epistemic	remember	n't	do	do	I	I	Mother	I do n't remember seeing that on the Electric Company before	57
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	57
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	57
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	57
@@ -8432,7 +8411,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know who that belong
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think he will do you	33
 theory of mind	epistemic	know	not	NONE	NONE	I	I	Target_Child	I not know	33
 theory of mind	epistemic	think	n't	did	do	I	I	Mother	I did n't think it would really darling	33
-theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	do you not remembering wearing tshirts and shorts	33
 theory of mind	epistemic	know	not	do	do	do	do	Target_Child	I do not know	33
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	33
 theory of mind	epistemic	know	not	do	do	do	do	Target_Child	I do not know	33
@@ -8544,8 +8522,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	37
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what 's the matter with you	37
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	37
 theory of mind	epistemic	know	not	NONE	NONE	NONE	NONE	Target_Child	not know	37
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I 'm not thinking	37
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	you 're not thinking	37
 theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	in fact do you not remember I was going mad because you were getting everything all over the place	37
 theory of mind	epistemic	know	not	NONE	NONE	NONE	NONE	Target_Child	not know	37
 theory of mind	epistemic	remember	n't	ca	can	engine	engine	Mother	and the police sorry the fire engine came but I ca n't remember the policeman coming	30
@@ -8643,7 +8619,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	now that little girl I really
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	now that little girl I really do n't know her name I do n't know what school she 's gone to	53
 theory of mind	epistemic	think	n't	do	do	we	we	Mother	but I do n't think we can just leave Azair off Thomas	53
 theory of mind	epistemic	know	no	NONE	NONE	NONE	NONE	Target_Child	no know which one for Jane	53
-theory of mind	epistemic	think	n't	have	have	you	you	Mother	you have n't thought about it	53
 theory of mind	epistemic	think	n't	ca	can	I	I	Target_Child	need ta know from Mummy because I ca n't think about it	53
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know Mummy look my and looking	53
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she did Thomas	53
@@ -9317,7 +9292,6 @@ theory of mind	epistemic	think	n't	did	do	I	I	Mother	because I did n't think you
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know whether it 's his alarm	37
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we 'll make such a huge train track today	37
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	oh you 're not thinking about diddle dumpling my son John are you	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we 'll be having sweeties do you	37
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what toys I haf ta play with it	47
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	47
@@ -9326,7 +9300,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	47
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where the black horse has gone	29
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know it	30
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know it	30
-theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	obviously you 're not remembering	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	30
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	30
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	what do you mean you do n't know	30
@@ -10101,7 +10074,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know Bet	57
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	but I do n't know whether you remember	31
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what you 're playing at	31
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	because I do n't know	31
-theory of mind	epistemic	think	n't	had	have	I	I	Mother	I had n't thought about that	31
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	well I do n't think it 'll be Grandma and Granddad today Thomas	31
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what time it is Thomas	31
 theory of mind	epistemic	think	n't	do	do	we	we	Mother	I do n't think we really looked did we	31
@@ -10225,7 +10197,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	42
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	oh I do n't think it 's	42
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know who 's fighting	42
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	no I do n't think it would be Felix or Tiddles because they all live together do n't they	42
-theory of mind	epistemic	think	not	NONE	NONE	she	she	Mother	she 's not thinking of the sweetie shop	42
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so	42
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know what	42
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	42
@@ -10627,7 +10598,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know if that 's b
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	well I did n't know that trains could go on roads	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think the gorilla 's even seen the car has he	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	well I do n't think they do cakes	30
-theory of mind	epistemic	remember	n't	do	do	you	you	Mother	I do n't remember hearing you fall down the stairs	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	well I do n't think she has unless she 's got one in her bag	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think there are any tins with worms in	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	30
@@ -10639,7 +10609,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	48
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	57
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think the shoes come off sweetheart	32
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	and I do n't know where it came from	32
-theory of mind	epistemic	remember	n't	do	do	I	I	Mother	I just do n't remember seeing it before	32
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know where some more grapes are	32
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	32
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	35
@@ -11369,7 +11338,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think I can open th
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it 's going to snow Thomas	26
 theory of mind	epistemic	think	n't	do	do	think	think	Mother	I do n't think you 've come across a submarine before have you	26
 theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember whether she 's outside or upstairs Thomas	26
-theory of mind	epistemic	remember	n't	ca	can	saying	say	Mother	I ca n't remember saying you could have the whole thing	26
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	21
 theory of mind	epistemic	think	n't	do	do	think	think	Mother	I do n't think it will fit you	24
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what they 're called	64
@@ -12427,7 +12395,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Pippin's like
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	35
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	sometimes you can hear these sirens and you do n't know what it is do you	35
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	49
-theory of mind	epistemic	remember	n't	do	do	I	I	Mother	and she had said that it was I do n't remember but grandma said like if I went to do it I do n't like onions right	49
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what it is	49
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	35
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know darling	35
@@ -12461,7 +12428,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 've ever 
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 've ever seen a police motor bike	22
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think there	22
 theory of mind	epistemic	know	n't	did	do	spokesman	spokesman	Father	a spokesman for senator Kennedy said yesterday he did n't know police were trying to talk to him about the rape	66
-theory of mind	epistemic	remember	n't	could	could	I	I	Mother	and then when I was over there yesterday I could n't remember what part because I had read so much	66
 theory of mind	epistemic	remember	n't	could	could	I	I	Mother	I could n't remember	66
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know I had big black ears	66
 theory of mind	epistemic	know	n't	do	do	she	she	Mother	she has a gift for you I do n't know what it is but she said she 'll see us today	66
@@ -12490,7 +12456,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know his name	
 theory of mind	epistemic	know	n't	do	do	you	you	Father	you do n't know how silly you look	57
 theory of mind	epistemic	know	n't	do	do	they	they	Mother	they probably do n't know what you have in school	53
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	53
-theory of mind	epistemic	remember	no	NONE	NONE	NONE	NONE	Mother	no remember	53
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it moves down sweetheart	30
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	30
@@ -12671,7 +12636,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	39
 theory of mind	epistemic	know	n't	NONE	NONE	we	we	Mother	then we wo n't know it 's there	39
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	39
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know either	39
-theory of mind	epistemic	remember	n't	ca	can	NONE	NONE	Mother	ca n't remember where	39
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you should play with these	39
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	39
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	39
@@ -12768,7 +12732,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she 's bother
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	but I do n't think she 's bothered	34
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I was going to take you to the shops later but I do n't think I 'll bother	34
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	in real life I do n't think it would	34
-theory of mind	epistemic	think	n't	had	have	you	you	Mother	you had n't thought of that did you	34
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know where the other ones	34
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think there 's actually a bee in your mouth Thomas	28
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know whether to believe you Thomas	28
@@ -12913,7 +12876,6 @@ theory of mind	epistemic	know	n't	do	do	we	we	Mother	we do n't know if it 's a b
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know we have n't picked they have n't picked out names yet	27
 theory of mind	epistemic	know	n't	do	do	we	we	Mother	we do n't know yet	27
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I 'll suggest it I do n't know if they 're gon na go with that	27
-theory of mind	epistemic	think	n't	have	have	we	we	Mother	we have n't thought of a name	27
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know when you saw last	15
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	and maybe some banana I do n't think that was sweet at all	15
 theory of mind	epistemic	remember	n't	do	do	I	I	Mother	we met another little boy whose name I do n't remember	15
@@ -12971,7 +12933,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Caroline want
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	34
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	34
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	34
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember reading this one	34
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think the rabbit 's got a name	34
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it 's broken	34
 theory of mind	epistemic	think	n't	did	do	NONE	NONE	Mother	did n't think it did it that easily	34
@@ -13188,7 +13149,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	41
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	41
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	41
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	Daddy I do n't know where that little club is	41
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	well I 'm one of your parents and I ca n't remember telling you	41
 theory of mind	epistemic	remember	n't	ca	can	it	it	Mother	it does ring a bell but I ca n't remember what it is Thomas	41
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	41
 theory of mind	epistemic	remember	n't	do	do	I	I	Target_Child	I do n't remember	41
@@ -13346,7 +13306,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
-theory of mind	epistemic	remember	no	NONE	NONE	NONE	NONE	Mother	no remember Granny's party	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
@@ -13674,7 +13633,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you know what
 theory of mind	epistemic	know	n't	do	do	you	you	Target_Child	if you do n't know what you are do and I will come down	47
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I 've got all these pieces and I do n't know where to put them	47
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	ah now I do n't think that goes there	47
-theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know which one I like	47
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I can but I do n't think it 's really going to work very well Tom	47
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what as happened there	47
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	47
@@ -14159,9 +14117,7 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what I sa
 theory of mind	epistemic	know	n't	did	do	I	I	Father	oh I did n't know that	38
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	yeah maybe I should take a taxi though I do n't know if you can get a taxi	27
 theory of mind	epistemic	think	n't	do	do	you	you	Father	you do n't think	27
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I 'm not thinking	27
 theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	but I not think	27
-theory of mind	epistemic	think	no	NONE	NONE	NONE	NONE	Father	no thinking just drinking right	27
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	27
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know was supposed to call back and she did n't	27
 theory of mind	epistemic	think	n't	does	do	she	she	Mother	seems as_if she does n't think that 's the house	27
@@ -14439,7 +14395,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we did	30
 theory of mind	epistemic	remember	n't	do	do	I	I	Target_Child	I do n't remember	59
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	18
 theory of mind	epistemic	know	n't	did	do	I	I	Target_Child	I did n't know how	37
-theory of mind	epistemic	remember	n't	NONE	NONE	you	you	Mother	you are n't remembering how to do it	37
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know you were trying to make pretty designs	37
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	37
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know yet	37
@@ -15022,7 +14977,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think they are	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know quite what happened	30
 theory of mind	epistemic	know	n't	do	do	we	we	Mother	and she lives next to the lady whose name we do n't know with the little dog called Candy	30
-theory of mind	epistemic	remember	n't	ca	can	you	you	Mother	I ca n't remember telling you you could have crisps for breakfast	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know what he said	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think police cars tend to bite Thomas	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what that character is	30
@@ -15220,7 +15174,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where	52
 theory of mind	epistemic	think	n't	ca	can	NONE	NONE	Mother	ca n't think where it was now it was perhaps when we went on a coach trip somewhere	52
 theory of mind	epistemic	know	n't	do	do	it	it	Mother	and it use ta have an orange sign that use ta flash on and off and it use ta remind me of a Belisha beacon I do n't know why	52
 theory of mind	epistemic	think	n't	do	do	you	you	Mother	I do n't think it does you know that 's the thing it 's not a pelican crossing with a beepy is it	52
-theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	do you not remember that shop there 's one in York as well Peter_Rabbit and his friends shop	52
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know much about Jemima_Puddleduck do you	52
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	52
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I mean I do n't know whether he 's a toad or a frog	52
@@ -16269,7 +16222,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know the words	37
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	37
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	37
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know either	37
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Mother	I 'm not thinkin about Shayla	50
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know	50
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	well I do n't think there 's a tractor	28
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know how these go on	28
@@ -17539,7 +17491,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 're quite
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what	25
 theory of mind	epistemic	think	n't	did	do	I	I	Mother	oh Thomas I did n't think you liked eating sweets	36
 theory of mind	epistemic	remember	n't	do	do	you	you	Mother	you probably do n't remember now but we went about four weeks ago to buy her a birthday card	36
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	you 're not thinking of the Royal_Mail_Box where Mummy said the postman leaves his letters are you	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	ah well if it 's the station with Grandma and Granddad I do n't know which one that is you see	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where the jam as gone to but it 's not in the fridge	36
 theory of mind	epistemic	think	n't	do	do	think	think	Mother	I do n't think it will pop up quite like it does when I put ordinary bread in it	36
@@ -17890,7 +17841,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	31
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I just do n't know where they have gone	44
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	44
-theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	do you not remember who brought the train set to the house	44
 theory of mind	epistemic	remember	n't	ca	can	I	I	Target_Child	I ca n't remember it	44
 theory of mind	epistemic	remember	n't	ca	can	he	he	Mother	he ca n't remember the words	44
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	do you know a song about hurrah for Christmas day that I do n't know but your trying	44
@@ -18418,7 +18368,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know how old she was
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	28
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	28
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	28
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember who bought you the jigsaw	28
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	28
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	51
 theory of mind	epistemic	remember	n't	do	do	I	I	Father	I do n't remember	51
@@ -18968,7 +18917,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know why it was n't 
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we have any canoe berries	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we have any canoe berries	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think I 've taken Naima there	37
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I 'm not thinking anything	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	but I do n't think I 'd know	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	and even in Massachusetts I do n't think there 's any certified organic apples	37
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know if she actually sells them	37
@@ -19169,7 +19117,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	24
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it is	24
 theory of mind	epistemic	think	n't	did	do	I	I	Mother	I did n't think so noisy as that	24
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	no I do n't think it fits in there	46
-theory of mind	epistemic	think	n't	had	have	I	I	Mother	hm I had n't thought of that	18
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	yeah I do n't think so	18
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	but I do n't think that he has a favorite color yet	18
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	41
@@ -19272,7 +19219,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	34
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	34
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	34
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	34
-theory of mind	epistemic	think	n't	NONE	NONE	I	I	Mother	no I was n't thinking of a bright one	34
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	34
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what to do	34
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	34
@@ -20070,7 +20016,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	21
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what it is	55
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	55
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	I do n't think so	55
-theory of mind	epistemic	remember	not	NONE	NONE	I	I	Mother	and Grandma was panicking that I ad not remembered to lock the gate	26
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where it is sweetheart	26
 theory of mind	epistemic	know	n't	do	do	zero	zero	Target_Child	zero do n't know	27
 theory of mind	epistemic	know	n't	do	do	zero	zero	Target_Child	zero do n't know	27
@@ -20408,7 +20353,6 @@ theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think there 's 
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what it is said and Harold_the_Helicopter	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know how to play it	36
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	36
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	they were dangerous so we thought we ca n't have them in the box and so I put them somewhere safe and I ca n't remember where	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	36
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 'll be going to the park with us	36
@@ -20511,7 +20455,6 @@ theory of mind	epistemic	know	n't	do	do	it	it	Mother	it looks like I do n't know
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know let me see	33
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	but I do n't know if it would fit	33
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know which	42
-theory of mind	epistemic	remember	n't	ca	can	name	name	Mother	yeah cause at a year she was n't saying a lot of words so what we had gotten referred to get evaluated I ca n't remember the name of it infant and childrens 's I guess they came and evaluated and so they think everything is okay but a way to get her really talking is I guess kids start with the animal sounds	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what else we have here	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	and I do n't know like I said she did n't get a nap and the sitters she fell asleep in the car she got a twenty minute nap and I woke her up	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	so I do n't know if that 's part of it and then part of it too I think everything's just unfamiliar	24
@@ -20717,7 +20660,6 @@ theory of mind	epistemic	remember	n't	do	do	I	I	Father	I do n't remember	28
 theory of mind	epistemic	remember	n't	ca	can	I	I	Father	I ca n't remember	28
 theory of mind	epistemic	remember	n't	ca	can	I	I	Target_Child	I ca n't member	28
 theory of mind	epistemic	know	n't	do	do	I	I	Father	oh I do n't know	28
-theory of mind	epistemic	think	not	NONE	NONE	Mummy	Mummy	Mother	Mummy was not thinking	22
 theory of mind	epistemic	think	n't	do	do	think	think	Mother	I do n't think it 'll bother you	22
 theory of mind	epistemic	know	n't	do	do	we	we	Mother	we do n't know	22
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	that looked like a starling's baby but I do n't know where the nest is	19
@@ -21315,7 +21257,6 @@ theory of mind	epistemic	remember	n't	do	do	I	I	Target_Child	oh I do n't remembe
 theory of mind	epistemic	remember	n't	do	do	you	you	Mother	you do n't remember goin to the birthday party	59
 theory of mind	epistemic	remember	n't	do	do	I	I	Mother	I do n't remember	59
 theory of mind	epistemic	remember	n't	did	do	I	I	Target_Child	I wan na tell you first cause you did n't remember	59
-theory of mind	epistemic	remember	n't	do	do	I	I	Target_Child	well I do n't remember it all	59
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what their names	59
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what else to talk about	59
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what that is	13
@@ -22331,7 +22272,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	53
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	53
 theory of mind	epistemic	think	n't	do	do	you	you	Mother	you do n't think he can go to the moon	53
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	53
-theory of mind	epistemic	remember	n't	do	do	you	you	Mother	we 've got one of those but you do n't remember what that is	53
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	uhhuh I do n't think they in there	53
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	people no I do n't think so	53
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	53
@@ -22476,7 +22416,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Nick the hair
 theory of mind	epistemic	know	n't	did	do	she	she	Mother	and she said they did n't know whether to get a car or a tricycle	57
 theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	do you not think so	57
 theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	and I know you do still use your bicycle occasionally inside but I ca n't remember the last time I saw you using it	57
-theory of mind	epistemic	think	n't	had	have	I	I	Mother	I had n't thought of that	57
 theory of mind	epistemic	think	n't	ca	can	they	they	Mother	I think they were called something else and I ca n't think what they were	57
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	I 've had Frosties before I do n't think	57
 theory of mind	epistemic	think	n't	ca	can	I	I	Mother	I ca n't think what they were called	57
@@ -23063,11 +23002,9 @@ theory of mind	epistemic	know	n't	does	do	she	she	Mother	she does n't know what 
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know what floats are	71
 theory of mind	epistemic	think	n't	do	do	I	I	Father	I do n't think we 're going to be able	23
 theory of mind	epistemic	think	n't	do	do	I	I	Father	I do n't think you have have you	23
-theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	do you not remember going in the car	25
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what we 're going to have for tea	25
 theory of mind	epistemic	know	n't	did	do	she	she	Mother	she did n't know what it was	25
 theory of mind	epistemic	know	n't	did	do	Lulu	Lulu	Mother	and Lulu did n't know what it was	25
-theory of mind	epistemic	think	not	NONE	NONE	she	she	Mother	and she 's not thinking what she 's doing	25
 theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think I can fit it on there	24
 theory of mind	epistemic	think	n't	did	do	I	I	Mother	I did n't think you 'd recognize it	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	but I do n't know what you 've done with it	24
@@ -23075,7 +23012,6 @@ theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think they need
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it is	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know about a yellow car	30
-theory of mind	epistemic	remember	n't	do	do	I	I	Mother	I do n't remember seeing one	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think he likes that	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 've got a tractor	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what it actually is	30
@@ -23701,7 +23637,6 @@ theory of mind	epistemic	know	n't	do	do	we	we	Child	but sometimes we do n't know
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you know what this one is	19
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think so	19
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 've ever seen that either	19
-theory of mind	epistemic	remember	n't	ca	can	if	if	Mother	I ca n't remember what if feels like to be two and a half	30
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	32
 theory of mind	epistemic	think	n't	did	do	NONE	NONE	Mother	did n't think you could read	32
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	32
@@ -24223,7 +24158,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	28
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	28
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	28
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	28
-theory of mind	epistemic	remember	n't	do	do	you	you	Mother	well you 've woken me up a few times but I do n't remember you ever telling me it was a big dragon but I believe you	65
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	27
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	32
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	32
@@ -24265,7 +24199,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think there are any
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think there are any more eggs	28
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think that 's dog food	28
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 'd make a good storekeeper giving all your stuff away	28
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Mother	I hope you 're not thinking of coming out here without paying for this	28
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	41
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know what this thing is	36
@@ -24627,7 +24560,6 @@ theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know this Thomas	4
 theory of mind	epistemic	know	n't	did	do	she	she	Mother	that she works in the Oxfam shop in Didsbury and I did n't know that until I went in the other day	45
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	why Auntie_Frank I do n't know	45
 theory of mind	epistemic	know	n't	did	do	you	you	Mother	Nana asked why you called them both Auntie_Frank and you did n't know did you	45
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	we 've wrapped these two presents up and I ca n't remember which is which	45
 theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think I 've got any gift tags to go with that but never mind	45
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we 'd find the word telephant in the dictionary	45
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	so I do n't think really	45
@@ -24666,7 +24598,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where he is	21
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	29
 theory of mind	epistemic	remember	n't	do	do	you	you	Mother	and you do n't remember him	48
 theory of mind	epistemic	know	n't	did	do	NONE	NONE	Mother	Jack had found a new little mouse who did n't know Cinderella	48
-theory of mind	epistemic	think	not	NONE	NONE	NONE	NONE	Mother	Jack who was hiding in a hole with Lucifer watching him saw Gus carrying his load of cheese across the kitchen not thinking about the cat at all	48
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think he saw you actually Thomas	37
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	37
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think they 're going to wave Thomas	37
@@ -25789,10 +25720,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know why but it look
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I think the puppy did n't know there were so many things in the closet that were going to come falling out when he opened the door	32
 theory of mind	epistemic	know	n't	did	do	NONE	NONE	Target_Child	did n't know shape is dirty	32
 theory of mind	epistemic	know	n't	do	do	we	we	Target_Child	and we do n't know it	32
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I was not thinking	32
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I was not thinking	32
-theory of mind	epistemic	think	not	NONE	NONE	you	you	Mother	you were not thinking	32
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I was not thinking about	32
 theory of mind	epistemic	remember	n't	do	do	I	I	Mother	what 's that doll's name I do n't remember	32
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	actually I do n't think so let 's look	32
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	fourteen fifteen I do n't know what that goes to	32
@@ -25862,7 +25789,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	Mommy Mommy I do n't kn
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know if we really have room for a chase game in here	44
 theory of mind	epistemic	know	n't	did	do	he	he	Target_Child	he he just did n't know but he 's already died	44
 theory of mind	epistemic	know	not	did	do	you	you	Mother	look he 's gon na hide behind let 's say that this was that you guys were coming behind and you did not know that he was there waiting	44
-theory of mind	epistemic	think	n't	had	have	you	you	Mother	you know I had n't thought about that but	44
 theory of mind	epistemic	think	n't	ca	can	NONE	NONE	Mother	ca n't think of anything else	12
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know how to open zippers yet	12
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	I 'm glad you do n't know how to	12
@@ -26009,7 +25935,6 @@ theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	do you not rememb
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where it was going to or coming from	49
 theory of mind	epistemic	remember	n't	NONE	NONE	you	you	Mother	you wo n't remember Nana's Mini	49
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she can really make her mind up Thomas	49
-theory of mind	epistemic	know	not	NONE	NONE	she	she	Mother	she kept wandering around not knowing whether she wanted	49
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she knows what she wants	49
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I just do n't think she knows what she wants to do do you	49
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know what you 're saying	49
@@ -26851,7 +26776,6 @@ theory of mind	epistemic	know	n't	did	do	I	I	Target_Child	I did n't know some sh
 theory of mind	epistemic	know	n't	do	do	I	I	Father	seeing as to how you got that card yesterday I do n't know what 's going though your head	57
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	I do n't think so	57
 theory of mind	epistemic	know	n't	NONE	NONE	I	I	Target_Child	I o n't know	57
-theory of mind	epistemic	think	n't	NONE	NONE	I	I	Father	no we I was n't thinking right I just said eight forty for you	57
 theory of mind	epistemic	know	n't	did	do	I	I	Father	I did n't know	57
 theory of mind	epistemic	know	n't	did	do	I	I	Father	when you said eight forty seven I did n't know it had gotten so late	57
 theory of mind	epistemic	know	n't	does	do	I	I	Father	I guess he just does n't know oh no but the older kids get go in later I think	57
@@ -27015,7 +26939,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	well I really do n't know whe
 theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember	30
 theory of mind	epistemic	think	n't	do	do	think	think	Mother	I do n't think it will fit you	30
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think they fit you	30
-theory of mind	epistemic	remember	n't	ca	can	NONE	NONE	Mother	ca n't remember when	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what was wrong	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know what you 're talking about Thomas	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what you 're meaning	30
@@ -27155,7 +27078,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	67
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	67
 theory of mind	epistemic	know	n't	did	do	I	I	Target_Child	I did n't know that	45
 theory of mind	epistemic	know	n't	did	do	you	you	Father	oh you did n't know until you tasted it	45
-theory of mind	epistemic	think	not	NONE	NONE	I	I	Target_Child	I 'm not thinking about anything	45
 theory of mind	epistemic	know	n't	does	do	Momma	Momma	Target_Child	Momma does n't know where the saw is	45
 theory of mind	epistemic	know	n't	do	do	you	you	Target_Child	and you do n't know where my saw is	45
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	and I do n't know where my saw is	45
@@ -28147,7 +28069,6 @@ theory of mind	epistemic	know	n't	does	do	Luke	Luke	Target_Child	but Luke does n
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	71
 theory of mind	epistemic	know	n't	do	do	you	you	Father	you do n't know his name when he was a young man	71
 theory of mind	epistemic	know	n't	do	do	you	you	Father	do you remember the story of Star Wars you do n't know Star Wars very well you just know Return of the Jedi and Empire Strikes Back right	71
-theory of mind	epistemic	remember	n't	do	do	Ewoks	Ewoks	Father	you do n't remember Ewoks were	71
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	71
 theory of mind	epistemic	know	n't	do	do	you	you	Target_Child	the the person that 's that has the rules of the game you do n't know the rules the rules are that he can call anyone what name he wants and then they haf ta act it out and if you cry you 're out	71
 theory of mind	epistemic	remember	n't	do	do	they	they	Mother	it because sometimes they do n't remember who 's that	71
@@ -28370,7 +28291,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	42
 theory of mind	epistemic	know	n't	did	do	NONE	NONE	Mother	did n't know	53
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	53
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	now I must tell you this is when I was worried about Thomas not eating his school lunch and I did n't know whether I should give him a packed lunch	53
-theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember which is	53
 theory of mind	epistemic	know	n't	did	do	I	I	Target_Child	I did n't know	53
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know where it is	53
 theory of mind	epistemic	know	n't	do	do	people	person	Mother	people do n't know	53
@@ -28410,7 +28330,6 @@ theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember	34
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	it 's just so good girl I do n't know how you do it	52
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I 'm telling you I do n't know how you do it	52
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	zzz no no I do n't think that would be	52
-theory of mind	epistemic	remember	no	NONE	NONE	I	I	Target_Child	no remember I haf ta sit right there in the middle	52
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	oh I do n't know whether you 're being good enough	27
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know if you did that no	27
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you weed on Mummy's knee	27
@@ -29121,7 +29040,6 @@ theory of mind	epistemic	remember	n't	ca	can	I	I	Mother	I ca n't remember seeing
 theory of mind	epistemic	remember	n't	do	do	I	I	Mother	oh I 'm surprised you do n't remember it	71
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	oh I do n't know	71
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know I ca n't read lips	71
-theory of mind	epistemic	think	not	NONE	NONE	NONE	NONE	Mother	not thinking that there are about forty other Easter Seal tote bags at your school	71
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what you 're trying to say	13
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	38
 theory of mind	epistemic	think	n't	did	do	I	I	Mother	I did n't think you had a truck	38
@@ -29576,7 +29494,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	29
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know how much	49
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	49
 theory of mind	epistemic	think	n't	does	do	he	he	Target_Child	he does n't think yet	49
-theory of mind	epistemic	think	not	NONE	NONE	Marky	Marky	Father	Marky is not thinking he 's too busy eating	49
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	I do n't think there any are witches	49
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	39
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	oh I do n't know	39
@@ -29632,7 +29549,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	39
 theory of mind	epistemic	think	n't	do	do	daddy	daddy	Mother	hm daddy came home but he went in the back I do n't think he 's coming inside yet	39
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	actually I do n't know if I can wrap you this way	39
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	39
-theory of mind	epistemic	remember	n't	ca	can	they	they	Father	when you were a little baby when you were first learning to walk we got you some white shoes that they called I ca n't remember they have a name for them any rate so_that the parents know where the baby is you tie these onto the shoelaces so when you walk around they go	36
 theory of mind	epistemic	think	n't	could	could	I	I	Father	blue Gobot right I could n't think of it	36
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know where they are	36
 theory of mind	epistemic	know	n't	do	do	you	you	Father	you know that I do n't know where they are	36
@@ -30034,7 +29950,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	37
 theory of mind	epistemic	know	n't	did	do	you	you	Target_Child	you did n't know that they can jump	37
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know they could	37
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	37
-theory of mind	epistemic	remember	not	NONE	NONE	you	you	Mother	do you not remember seeing her	37
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	37
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	37
 theory of mind	epistemic	know	n't	did	do	they	they	Mother	and they all said they did n't know it but they did	37
@@ -30539,7 +30454,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	32
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where Duck is	32
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where Little_Bear is either	32
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	32
-theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know where he is	32
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	32
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	32
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know	32
@@ -31338,7 +31252,6 @@ theory of mind	epistemic	know	n't	did	do	I	I	Mother	oh my gosh I did n't know th
 theory of mind	epistemic	know	n't	did	do	I	I	Mother	I did n't know little puppy liked the heart too	18
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know why she usually says like if you say was a cow she says go moo what does a cow say honey	18
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think we 'll be able to see it	23
-theory of mind	epistemic	think	n't	NONE	NONE	NONE	NONE	Mother	was n't thinking	23
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where the d is	23
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	24
@@ -31435,7 +31348,6 @@ theory of mind	epistemic	know	not	NONE	NONE	you	you	Mother	you not know what the
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know that she 's ever seen an eel before	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	which I do n't know that she knows really the difference between all the different you_know dolphins and whales and sharks and	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know that we 're really working on any of them	24
-theory of mind	epistemic	remember	n't	do	do	it	it	Mother	ah and I do n't remember which department it was in	24
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know if they need ta be your books	24
 theory of mind	epistemic	think	n't	do	do	I	I	Target_Child	I do n't think so	54
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know	54
@@ -31470,7 +31382,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	29
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think it does	29
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	29
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	36
-theory of mind	epistemic	remember	n't	ca	can	I	I	Target_Child	I ca n't remember this	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	36
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	36
@@ -31486,7 +31397,6 @@ theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	67
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	67
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	67
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what she 's doing	67
-theory of mind	epistemic	remember	n't	do	do	I	I	Target_Child	I do n't remember so much	66
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	39
 theory of mind	epistemic	know	n't	did	do	you	you	Target_Child	no hey you almost did n't know when to stop	39
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	39
@@ -32179,7 +32089,6 @@ theory of mind	epistemic	know	n't	do	do	it	it	Mother	you know where the mouse pa
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	where 's the koala I do n't know where the koala is	16
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	16
 theory of mind	epistemic	know	n't	do	do	what	what	Mother	what is that thing I do n't know for sure	16
-theory of mind	epistemic	think	n't	have	have	I	I	Mother	I have n't thought of this	16
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know where that is	16
 theory of mind	epistemic	know	n't	do	do	NONE	NONE	Mother	do n't know what they 're all doing in there	26
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she wants that for dinner does she	26
@@ -32550,7 +32459,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Caroline 'll 
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think she wants lipstick on when she 's going to sleep	31
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know	31
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	31
-theory of mind	epistemic	think	n't	NONE	NONE	I	I	Mother	I was n't thinking of one of those medicine spoons actually	31
 theory of mind	epistemic	know	n't	did	do	I	I	Target_Child	sorry I did n't know you	31
 theory of mind	epistemic	think	n't	do	do	NONE	NONE	Mother	do n't think it was you Becky	31
 theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think you 'd like it	31
@@ -32568,7 +32476,6 @@ theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know	40
 theory of mind	epistemic	know	n't	do	do	you	you	Mother	you do n't know	40
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	40
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what you 're asking me love	40
-theory of mind	epistemic	know	n't	do	do	NONE	NONE	Target_Child	do n't know why it says cajun	40
 theory of mind	epistemic	know	n't	do	do	I	I	Target_Child	I do n't know why it 's mean cajun	40
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what cajun means	40
 theory of mind	epistemic	know	not	do	do	do	do	Target_Child	do not know	40
@@ -32662,7 +32569,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Mother	I do n't think Purdie would 
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know	35
 theory of mind	epistemic	know	not	do	do	do	do	Target_Child	I do not know	35
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know why	35
-theory of mind	epistemic	think	n't	NONE	NONE	I	I	Mother	I was n't thinking of going to Sainsburys	35
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know what you 've gone for	35
 theory of mind	epistemic	think	n't	do	do	he	he	Mother	well I think for a start he thought you were older than you were because when the lady who was well serving me said something I said oh he 's not three yet I do n't think he understands	35
 theory of mind	epistemic	know	not	do	do	do	do	Target_Child	I do not know	35
@@ -32716,7 +32622,6 @@ theory of mind	epistemic	think	n't	do	do	I	I	Father	I I do n't think that one co
 theory of mind	epistemic	know	n't	do	do	I	I	Father	gee I do n't know	30
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know if it matters	30
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know where that went I think you can screw	30
-theory of mind	epistemic	remember	n't	do	do	I	I	Father	and I do n't remember where this went	30
 theory of mind	epistemic	know	n't	do	do	I	I	Father	I do n't know how to work this thing	30
 theory of mind	epistemic	think	n't	did	do	I	I	Father	I did n't think you knew what a dime was	30
 theory of mind	epistemic	know	n't	do	do	I	I	Mother	I do n't know why	34

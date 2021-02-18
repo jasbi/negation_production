@@ -1,5 +1,5 @@
 ---
-title: "English Negative Constrctions and Communicative Functions in Early Child Language"
+title: "English Negative Constructions and Communicative Functions in Early Child Language"
 bibliography: library.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
